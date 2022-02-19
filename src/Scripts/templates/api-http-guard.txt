@@ -1,0 +1,18 @@
+<?php
+namespace $Api\Http;
+
+use Phpnv\Api\Response;
+
+class Guard
+{
+    public static function autenticate():callable
+    {
+        return function(){
+            if (random_int(1,2) == 1){
+                return null;
+            }else{
+                return new Response('No access',  401);
+            }
+        };
+    }
+}

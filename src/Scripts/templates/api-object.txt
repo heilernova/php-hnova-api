@@ -1,0 +1,10 @@
+<?php
+namespace $Api\Objects;
+
+class $Class
+{
+    public function __construct()
+    {
+        
+    }
+}

@@ -1,0 +1,19 @@
+<?php
+namespace $Api\Http\Controllers;
+
+use $Api\Http\BaseController;
+use Phpnv\Api\Response;
+
+class $ClassController extends BaseController
+{
+    /** Método constructor */
+    function __construct()
+    {
+        parent::__construct();
+    }
+
+    function get():Response
+    {
+        return new Response('Hola Mundo');
+    }
+}

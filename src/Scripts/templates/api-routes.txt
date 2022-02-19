@@ -1,0 +1,8 @@
+<?php
+namespace $Api\Http\Controllers;
+
+use $Api\Http\Guard;
+use Phpnv\Api\Response;
+use Phpnv\Api\Routes\Routes;
+
+Routes::get('test', function(){ return new Response("Hola mundo"); });

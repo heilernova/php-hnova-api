@@ -1,0 +1,13 @@
+<?php
+namespace $Api\Http\Models;
+
+use $Api\Http\BaseModel;
+use Phpnv\Api\Response;
+
+class $ClassModel extends BaseModel
+{
+    function __construct()
+    {
+        parent::__construct($Table);
+    }
+}

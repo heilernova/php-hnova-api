@@ -1,0 +1,13 @@
+<?php
+namespace $Api\Http;
+
+use Phpnv\Api\Api;
+use Phpnv\Api\Http\Model;
+
+class BaseModel extends Model
+{
+    public function __construct(string $table, string $database = null)
+    {
+        parent::__construct($table, $database);
+    }
+}
