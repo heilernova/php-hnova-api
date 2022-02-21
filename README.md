@@ -29,9 +29,8 @@ Scrits
     "nv":"Phpnv\\Api\\Scripts\\Script::execute"
 }
 ```
-## Pasos para la creación del entorno de trabajo
-* Paso 1
-Abrimos la consola en el directorio raiz y ejecutamos el siguiente comando.
+## Creación del entorno de trabajo
+Abrir la consola en el directorio raiz y ejecutamos el siguiente comando.
 ```
 composer nv install
 ```
@@ -39,7 +38,7 @@ Una ves ejecutado el script nos preguntara si el proyecto es de multi api, al da
 se crearan ramas independiente para el acceso a la api.
 Una vez escojido no se podra modificar el desarrollo del proyecto.
 
-Importante actualizar el autoload de composer
+Importante actualizar el autoload de composer una vez terminado el proceso acterior
 ```
 composer dump-autoload
 ```
@@ -48,7 +47,7 @@ composer dump-autoload
 
 Las rutas se deben de definir en el archivo api-routes.php, en caso de utilizar multi api cada directorio tendra un archivo similar que inia con el nombre ejm. [ name-routes.php ]
 
-* Definir una ruta que ejecuta una función.
+### Definir una ruta que ejecuta una función.
 ```PHP
 use Phpnv\Api\Response;
 use Phpnv\Api\Routes\Routes;
@@ -56,7 +55,7 @@ use Phpnv\Api\Routes\Routes;
 Routes::get('test', function(){ return new Response('Hola mundo'); });
 ```
 
-* Definir un ruta que ejecuta un controlador.
+### Definir un ruta que ejecuta un controlador.
 En este caso tendremos que definir un array con el namespace de la clase y el método a ejecutar, en caso de no definir
 el método buscara si la clase contiene un método que se llame igual que la peticion http [ get, post, put, pacth, delete ].
 En caso no encontrar el método retornara un error 404.
@@ -69,7 +68,7 @@ use Phpnv\Api\Routes\Routes;
 Routes::get('test', [TestController::class, 'get']);
 ```
 
-* Definir una ruta con parametros.
+### Definir una ruta con parametros.
 Para definir un parametro se debera escribir entre parentecios el nombre del parametro y separado por ":" el tipo de dato esperado
 int, string, float. en caso de no definirse se asignara por defecto se tomara como string.
 en caso de que tipo de dato del parametro con concuerde con el tipo de dato esperado la función que ejecuta la acción retornara
@@ -131,8 +130,7 @@ se encuentra alojdada en la carpeta Http/BaseController.php y que a su vez herda
 la clase Phpnv\Api\Http\Controller
 
 Entre lo metodos que contiene por defector encontramos
-* getBody()
-
+#### getBody()
 que retorna el contenido del body envido en la petición http, este contenido debe ser enviado en formato JSON, este contendo se decoficia en un objeto o un array asositaivo, en caso de que no se pueda decodificar el contenido retornara null.
 
 Ejemplo de uso.
@@ -158,14 +156,14 @@ class TestController extends BaseController
     }
 }
 ```
-* objeto database
+#### objeto database
+
 Clase utilizada para interactuar con la base de datos, en ella encontraremos métodos que no ayudara a realizar consultas 
 preparadas a fin de mejorar la seguridad evitando inyección sql, todos los métodos estan documentado para facilitar su uso.
 
-En esta clase el auto commit esta desactivado por lo tanto par hacer efectivos los cambios en la base de datos
-se debe ejecuta el commit de la clase database, "database->commit()".
+Cabe recalcar que en esta clase el auto commit esta desactivado por lo tanto par hacer efectivos los cambios en la base de datos se debe ejecuta el commit de la clase database, "database->commit()".
 
-Ejmplo.
+Ejemplo de uso.
 ```php
 <?php
 namespace Api\Http\Controllers;
@@ -200,25 +198,28 @@ class TestController extends BaseController
     }
 }
 ```
+#### Objecto ResponseBody.
+Clase para implementar respuestas estructuras para el fronted.
 
+Varibales de la clase:
+* stutus: bool, sierve para responder si la solicitud de ejeucto rectamente.
+* statusCode: int, en caso estadarizar respuesta pude utilizar código númerios
+* data: contiene el valor a responder por defecto es null.
+* message: es un objeto con que representa un mensaje del sistema para ser mostrador por le fronted, este objeto contiene: title, type, content.
 
+## Funcionalidades
+
+### ApiFunctions
+Clase estatica la cual contiene algunas funciones utilies para el desarrollo de al aplicación
 
 ## Comandos de consola
 
-* composer nv intall.
-Inicia el procesos de creación de los directorio y componentes necesarios para el funcionamiento de la api
+* [ composer nv intall ] : Inicia el procesos de creación de los directorio y componentes necesarios para el funcionamiento de la api
 
-* composer nv c api (name).
+* [ composer nv c api (name) ] : Crea una nueva nueva rama de la api en caso de que se halla seleccionado el tipo multi api
 
-crea una nueva nueva rama de la api en caso de que se halla seleccionado el tipo multi api
+* [ composer nv g c (name) (api name) ] : Crea un controlador para asignar a una ruta. en caso de que sea multi api debe espificapar a cual api hace referencia.
 
-* composer nv g c (name) (api name).
+* [ composer nv g m (name) (name_table) (api name) ] : Crea un modelo para el manejo de datos. en caso de que sea multi api debe espificapar a cual api hace referencia.
 
-crea un controlador para asignar a una ruta. en caso de que sea multi api debe espificapar a cual api hace referencia.
-
-* composer nv g m (name) (name_table) (api name).
-
-crea un modelo para el manejo de datos. en caso de que sea multi api debe espificapar a cual api hace referencia.
-
-* composer nv g o (name) (api name solo si es multi api).
-Crea un objecto o clase en la carpeta objects de cada api.
+* [ composer nv g o (name) (api name solo si es multi api) ] : Crea un objecto o clase en la carpeta objects de cada api.
