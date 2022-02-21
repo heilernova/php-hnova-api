@@ -74,6 +74,11 @@ class ApiException extends Exception
         $content = json_encode($content);
 
         $file_path = Api::getDir() . "/nv-panel/errors/list.txt";
+        $dir_name = dirname($file_path);
+        
+        if (!file_exists(dirname($dir_name))) mkdir(dirname($dir_name));
+        if (!file_exists($dir_name)) mkdir($dir_name);
+
         $file = fopen($file_path, 'a+');
         fputs($file, "$content,\n");
         fclose($file);
