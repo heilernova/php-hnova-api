@@ -81,9 +81,9 @@ class Api
     {
         if (str_starts_with($url, 'nv-panel')){
             Api::$currentApi = new ApiInfo('nv-error','Phpnv\\Errors','','',
-            (object)['origin'=>'*', 'methods'=>null, 'methods'=>null]
+            (object)['origin'=>'*', 'headers'=>'*', 'methods'=>'*']
             );
-            ApiCors::load('*');
+            ApiCors::load('*', '*', '*');
             require __DIR__.'/Panel/PanelRoutes.php';
         }else{
             if (Api::getConfig()->isMultiApi()){
