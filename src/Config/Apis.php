@@ -69,6 +69,7 @@ class Apis
 
         if (array_key_exists($name, $listApis)){
             $this->data->$name->disable = true;
+            return true;
         }else{
             return false;
         }
@@ -82,6 +83,7 @@ class Apis
 
         if (array_key_exists($name, $listApis)){
             $this->data->$name->disable = true;
+            return true;
         }else{
             return false;
         }
