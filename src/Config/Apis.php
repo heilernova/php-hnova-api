@@ -29,7 +29,7 @@ class Apis
 
         if (array_key_exists($name, $listApis)){
             $d = $listApis[$name];
-            return new ApiInfo($name, $d->namespace, $d->resourcesDir, $d->defaultDatabase, $d->cors);
+            return new ApiInfo($name, $d->namespace, $d->resourcesDir, $d->defaultDatabase, $d->cors, $d->disable);
         }else{
             return null;
         }
@@ -59,5 +59,31 @@ class Apis
      */
     public function getAll():array{
         return (array)$this->data->apis;
+    }
+
+    /**
+     * Desactiva la api, esto negaria el acceso a todas peticiones realizadas.
+     */
+    public function disableApi(string $name):bool{
+        $listApis = (array)$this->data->apis;
+
+        if (array_key_exists($name, $listApis)){
+            $this->data->$name->disable = true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * Activa el accesoa  todas las peticion realizadas.
+     */
+    public function eneableApi(string $name):bool{
+        $listApis = (array)$this->data->apis;
+
+        if (array_key_exists($name, $listApis)){
+            $this->data->$name->disable = true;
+        }else{
+            return false;
+        }
     }
 }

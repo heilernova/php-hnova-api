@@ -30,13 +30,15 @@ class ApiInfo
         private string $namespace,
         private string $resourcesDir,
         private string $defaultDatabase,
-        private object $cors
+        private object $cors,
+        private bool $disable = false
     ){}
 
     public function getObject():object
     {
         return (object)[
             "namespace"=>$this->namespace,
+            "disable"=>$this->disable,
             "resourcesDir"=>$this->resourcesDir,
             "defaultDatabase"=>$this->defaultDatabase,
             "cors"=>$this->cors
@@ -97,5 +99,9 @@ class ApiInfo
     public function getCors():object
     {
         return $this->cors;
+    }
+
+    public function getDisable():bool{
+        return $this->disable;
     }
 }

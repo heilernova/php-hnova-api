@@ -100,6 +100,9 @@ class Api
             }
             // En caso de que no encuentre una api asociada a la url.
             if (!$api) return new Response("Not Found - api", 404);
+
+            // Validamos que la api no se encuetre desactivada.
+            if ($api->getDisable()) return new Response("api - disable", 404);
     
             self::$currentApi = $api;
     
