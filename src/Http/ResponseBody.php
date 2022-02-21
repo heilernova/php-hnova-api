@@ -11,10 +11,29 @@ namespace Phpnv\Api\Http;
 
 class ResponseBody
 {
-    public function __construct(
-        public bool $status = false,
-        public int $statusCode = 0,
-        public array $messages = [],
-        public mixed $data = null
-    ){}
+    /**
+     * Estado de resultado de la cosulta. true para una consulta exitosa
+     * @var bool por default es false
+     */
+    public bool $status = false;
+
+    /**
+     * Código de respuesta
+     */
+    public int $statusCode = 0;
+
+    /**
+     * Información a enviar al frontend el valor se codificara a formato JSON,
+     * por default es null
+     */
+    public mixed $data = null;
+
+    public MessageBody $message;
+
+    /**
+     * Método contructor.
+     */
+    public function __construct(){
+        $this->message = new MessageBody();
+    }
 }
