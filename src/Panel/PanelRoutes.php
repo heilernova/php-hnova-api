@@ -10,14 +10,17 @@
 
 namespace Phpnv\Api\Panel\Controllers;
 
+use Phpnv\Api\Panel\PanelGuard;
 use Phpnv\Api\Response;
 use Phpnv\Api\Routes\Routes;
 
 Routes::parents('nv-panel/api');
 Routes::post('auth', [AuthController::class]);
 
+Routes::parents('nv-panel/api', [PanelGuard::authenticate()]);
 Routes::get('user', [UserController::class, 'getUsername']);
-Routes::get('user/change-username', [UserController::class, 'changeUsername']);
+Routes::put('user/change-username', [UserController::class, 'changeUsername']);
+Routes::put('user/change-password', [UserController::class, 'changePassword']);
 
 Routes::get('errors', [ErrorsController::class]);
 Routes::delete('errors', [ErrorsController::class, 'clear']);

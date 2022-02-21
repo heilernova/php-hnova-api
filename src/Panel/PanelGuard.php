@@ -21,7 +21,17 @@ class PanelGuard
             $headers = apache_request_headers();
             if (array_key_exists('nv-panel-access', $headers)){
                 // Api::getDir();
-                return null;
+                $path = Api::getDir() . "/nv-panel/.token-access.txt";
+                if (file_exists($path)){
+                    $token = file_get_contents($path);
+                    if ($headers['nv-panel-access'] == $token){
+                        return null;
+                    }else{
+                        return new Response('No access', 401);
+                    }
+                }else{
+                    return new Response('No access', 401);
+                }
             }else{
                 return new Response('No access', 401);
             }

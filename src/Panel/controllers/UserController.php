@@ -28,18 +28,28 @@ class UserController
 
     function changeUsername():Response
     {
-        $username = json_decode(file_get_contents('php://input'));
+        $username =  json_decode(file_get_contents('php://input'));
         Api::getConfig()->setUser($username, Api::getConfig()->getUser()->password);
         Api::getConfig()->salve();
         return new Response(true);
     }
 
-    /**
-     * Elimina todos los registro de errrores
-     */
-    function clear():Response
+    function changePassword():Response
     {
-        unlink($this->errorsDir);
-        return new Response(true);
+        $data = json_decode(file_get_contents('php://input'));
+        $password = $data->password;
+        $new_password = $data->newPassword;
+
+        $res = new ResponseBody();
+
+        if (password_verify($password, Api::getConfig()->getUser()->password)){
+            $passwrod_hash = password_hash($new_password, PASSWORD_DEFAULT, ['cost'=>3]);
+            Api::getConfig()->setUser(Api::getConfig()->getUser()->username, $passwrod_hash);
+            Api::getConfig()->salve();
+        }else{
+            $res->message->content[] = "Contraseña incorrecta.";
+        }
+
+        return new Response($res);
     }
 }

@@ -26,7 +26,7 @@ class ErrorsController
     function get():Response
     {
         $list = rtrim(file_get_contents($this->errorsDir), ",\n");
-        $list = json_decode("[$list]");
+        $list = "[$list]";
         return new Response($list);
     }
 

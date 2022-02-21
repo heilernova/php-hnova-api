@@ -19,7 +19,6 @@ use Phpnv\Api\Response;
 class AuthController
 {
     function post():Response{
-        // $data = $this->getBody();
         $data = json_decode(file_get_contents('php://input'));
         $res = new ResponseBody();
         
@@ -27,6 +26,7 @@ class AuthController
             if (password_verify($data->password, Api::getConfig()->getUser()->password)){
                 $token = ApiFunctions::generateToken(50);
                 $token_file_path = Api::getDir() . "/nv-panel/.token-access.txt";
+                if (!file_exists(dirname($token_file_path))) mkdir(dirname($token_file_path));
                 $file = fopen($token_file_path, 'a');
                 fputs($file, $token);
                 fclose($file);
@@ -34,10 +34,10 @@ class AuthController
                 $res->status = true;
                 $res->data = $token;
             }else{
-                $res->messages[] = "Contraseña incorrecta.";
+                $res->message->content[] = "Contraseña incorrecta.";
             }
         }else{
-            $res->messages[] = "Usuario incorrecto.";
+            $res->message->content[] = "Usuario incorrecto.";
         }
         $dir = Api::getDir() . "/nv-panel/token-access.txt";
         
