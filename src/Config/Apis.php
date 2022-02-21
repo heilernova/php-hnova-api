@@ -53,4 +53,11 @@ class Apis
         return count((array)$this->data->apis);
     }
 
+    /**
+     * Retrona un array de las apis de la aplicación
+     * @return object[]
+     */
+    public function getAll():array{
+        return (array)$this->data->apis;
+    }
 }
