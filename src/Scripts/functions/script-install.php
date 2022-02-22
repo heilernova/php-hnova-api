@@ -45,7 +45,7 @@ try {
 
     Script::getApiConfig()->setMultiApi($multi_api == 's');
 
-    $api_config->getDevelopers()->add("Heiler Nova", "heilernova@gmail.com");
+    $api_config->getDevelopers()->add("Name developer", "developer@email.com");
     Script::addFile("$dir_src/index.php", "<?php\nrequire __DIR__ .'/../vendor/autoload.php';\n\nuse Phpnv\Api\Api;\n\n" . 'Api::run($_GET["url"],__DIR__);');
 
     // Llamamos el escript para la cración de una api.
