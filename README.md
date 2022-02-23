@@ -86,7 +86,7 @@ Para protejer la rutas y evitar el acceso a cualquir dispositivo utilizaremos la
 El guard es una clase con métodos estaticos que retornan un callable para ser ejecutadas en la rutas antes de ralizar la acción
 si callable retorna null se dara acceso a la ruta, en caso contrario retornara un objeto Response.
 
-Ejemplo del método autenticado del Guard. todos las rutas que lo utilece solo daran acceso a la ruta cuando el resultado del random_int sea igual a 1.
+Ejemplo del método authenticate del Guard. todos las rutas que lo utilicen solo daran acceso a la ruta cuando el resultado del random_int sea igual a 1.
 ```php
 <?php
 namespace Api\Http;
@@ -95,7 +95,7 @@ use Phpnv\Api\Response;
 
 class Guard
 {
-    public static function autenticate():callable
+    public static function authenticate():callable
     {
         return function(){
             if (random_int(1,2) == 1){
