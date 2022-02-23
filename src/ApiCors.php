@@ -12,7 +12,7 @@ namespace Phpnv\Api;
 
 class ApiCors
 {
-    public static function load($string_origin = null, $string_headers = null, $string_methods = null)
+    public static function load(string $string_origin = null, string $string_headers = null, string $string_methods = null)
     {
         try {
 
@@ -81,6 +81,6 @@ class ApiCors
                 $string_methods = $cors->methods;
             }
         }
-        self::load($cors->origin, $cors->headers, $cors->methods);
+        self::load($string_origin, $string_headers, $string_methods);
     }
 }
