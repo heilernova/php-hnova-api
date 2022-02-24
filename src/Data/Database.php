@@ -99,14 +99,14 @@ class Database
         if ($sql == $this->lastCommand){
             $stmt = $this->stmt;
         }else{
+            $stmt = $this->getConnection()->prepare($sql);
             try {
-                $stmt = $this->getConnection()->prepare($sql);
                 $this->stmt = $stmt;
             } catch (\Throwable $th) {
                 throw new ApiException([
                     'Error con la prepación de la consulta sql.',
-                    "Sql command: " . $sql,
-                    $this->dbMysql->error
+                    "Sql command:   " . $sql,
+                    "Error:         " . ($this->dbMysql->error ?? 'null')
                 ], $th);
             }
         }
