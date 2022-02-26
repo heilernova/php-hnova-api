@@ -3,7 +3,7 @@ Librería para el desarrollo de api rest en php
 
 # Requerimientos
 * xammp
-* PHP 8.0.13 en adelante
+* PHP ^8.0.13
 * Instalar composer en el equipo
 
 # Recomendaciones
@@ -122,12 +122,12 @@ Routes::get('test', [TestController::class, 'get'], [Guard::autenticates()]);
 
 ## Controladores
 Son la clases que contienen las acciones a ejecutar por la ruta ingresada en la api.
-Se encuentran alojadas en la carpeta Http/Controllers de cada api quenerada.
+Se encuentran alojadas en la carpeta `Http/Controllers` de cada api quenerada.
 
 ### Utilidades
 Cada clase controlador herdad la propiedades y métodos que la clase BaseController de cada api la cual
 se encuentra alojdada en la carpeta Http/BaseController.php y que a su vez herdad todas las funcionalidades de
-la clase Phpnv\Api\Http\Controller
+la clase `Phpnv\Api\Http\Controller`
 
 Entre lo metodos que contiene por defector encontramos
 #### getBody()
@@ -205,21 +205,34 @@ Varibales de la clase:
 * stutus: bool, sierve para responder si la solicitud de ejeucto rectamente.
 * statusCode: int, en caso estadarizar respuesta pude utilizar código númerios
 * data: contiene el valor a responder por defecto es null.
-* message: es un objeto con que representa un mensaje del sistema para ser mostrador por le fronted, este objeto contiene: title, type, content.
+* message: es un objeto con que representa un mensaje del sistema para ser mostrador por le fronted, este objeto contiene: title, type, content, y type.
 
 ## Funcionalidades
 
 ### ApiFunctions
 Clase estatica la cual contiene algunas funciones utilies para el desarrollo de al aplicación
 
+### ClientInfo
+Clase estatica la cual contiene 3 método:
+* `ClientInfo::getIp()`: retorna la Ip del cliente.
+* `ClientInfo::getPlatform()`: retorna la plataforma desde la cual se realiza la solicituda HTTP (windows, mac-os, ios, android).
+* `ClientInfo::getDevice()`: retorna el tipo de dispositivo desde el cual se raliza la solicitud HTTP, pc, movil, table
+
 ## Comandos de consola
 
-* [ composer nv intall ] : Inicia el procesos de creación de los directorio y componentes necesarios para el funcionamiento de la api
+* [ `composer nv intall` ] : Inicia el procesos de creación de los directorio y componentes necesarios para el funcionamiento de la api
 
-* [ composer nv c api (name) ] : Crea una nueva nueva rama de la api en caso de que se halla seleccionado el tipo multi api
+* [ `composer nv c api (name)` ] : Crea una nueva nueva rama de la api en caso de que se halla seleccionado el tipo multi api
 
-* [ composer nv g c (name) (api name) ] : Crea un controlador para asignar a una ruta. en caso de que sea multi api debe espificapar a cual api hace referencia.
+* [ `composer nv g c (name) (api name)` ] : Crea un controlador para asignar a una ruta. en caso de que sea multi api debe espificapar a cual api hace referencia.
 
-* [ composer nv g m (name) (name_table) (api name) ] : Crea un modelo para el manejo de datos. en caso de que sea multi api debe espificapar a cual api hace referencia.
+* [` composer nv g m (name) (name_table) (api name)` ] : Crea un modelo para el manejo de datos. en caso de que sea multi api debe espificapar a cual api hace referencia.
 
-* [ composer nv g o (name) (api name solo si es multi api) ] : Crea un objecto o clase en la carpeta objects de cada api.
+* [ ` composer nv g o (name) (api name solo si es multi api)` ] : Crea un objecto o clase en la carpeta objects de cada api.
+
+# Licencia
+
+GNU GENERAL PUBLIC LICENSE
+
+---
+> Github [@heilernova](https://github.com/heilernova)
