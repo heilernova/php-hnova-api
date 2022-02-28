@@ -151,66 +151,77 @@ class Route
     }
 
     /**
-     * Ejecuta la acción asignada a la ruta de acceso. y retorna un objeto response
+     * Ejecuta la acción asignada a la ruta de acceso. y retorna un objeto response.
+     * @throws Throwable en coso de ocurrir un error en la ejución.
      */
     public function callAction():Response
     {
-        $http_method = Router::getMethod();
+        try {
+            
+            $http_method = Router::getMethod();
+    
+            // Validamos lo canActivates;
+            foreach ($this->canActivate as $canActivate)
+            {
+                $result = $canActivate();
 
-        // Validamos lo canActivates;
-        foreach ($this->canActivate as $canActivate)
-        {
-            $result = $canActivate();
-            if ($result){
-                return $result;
-            }
-        }
-
-        if (is_callable($this->action)){
-            $reflection = new ReflectionFunction($this->action);
-        }else{
-            // Inicalizamos el controlador
-            $namespace = $this->action[0];
-            $controller_method = $this->action[1] ?? $http_method;
-
-            $controller = new $namespace();
-
-            if (!method_exists($controller, $controller_method)){
-                throw new ApiException(
-                    [
-                        'No se encontrol el metodo ha ejecutar en el controladro', 
-                        "$namespace::$controller_method"
-                    ],
-                    null,
-                    'Error controller'
-                );
-            }
-
-            $reflection = new ReflectionMethod($controller, $controller_method);
-        }
-
-        $params = $this->getHttpParams();
-        $params_count = count($params);
-        $num_params = $reflection->getNumberOfParameters();
-        $num_params_require = $reflection->getNumberOfRequiredParameters();
-
-        if ($num_params == 0 && $params_count > 0){
-            return new Response("Method not allowed for URL - params > required", 404);
-        }else{
-            if ($num_params_require <= $params_count){
-
-                if ($reflection::class == ReflectionFunction::class){
-                    return $reflection->invokeArgs($params);
-                }else{
-                    return $reflection->invokeArgs($controller, $params);
+                // Si el canActivate retorna un objeto Response. detenemos la acción.
+                if ($result){
+                    return $result;
                 }
-
-
-            }else{
-                return new Response("Error - params - url", 400);
             }
+    
+            if (is_callable($this->action)){
+                $reflection = new ReflectionFunction($this->action);
+            }else{
+                // Inicalizamos el controlador
+                $namespace = $this->action[0];
+                $controller_method = $this->action[1] ?? $http_method;
+    
+                // Inicializamos la case del controlador.
+                $controller = new $namespace();
+    
+                // En caso de que el método no existe en la clase controlador
+                // retornamos un error
+                if (!method_exists($controller, $controller_method)){
+                    throw new ApiException(
+                        [
+                            'No se encontrol el metodo ha ejecutar en el controladro', 
+                            "$namespace::$controller_method"
+                        ],
+                        null,
+                        'Error controller'
+                    );
+                }
+    
+                $reflection = new ReflectionMethod($controller, $controller_method);
+            }
+    
+            $params = $this->getHttpParams();
+            $params_count = count($params);
+            $num_params = $reflection->getNumberOfParameters();
+            $num_params_require = $reflection->getNumberOfRequiredParameters();
+    
+            if ($num_params == 0 && $params_count > 0){
+                return new Response("Method not allowed for URL - params > required", 404);
+            }else{
+                if ($num_params_require <= $params_count){
+    
+                    if ($reflection::class == ReflectionFunction::class){
+                        return $reflection->invokeArgs($params);
+                    }else{
+                        return $reflection->invokeArgs($controller, $params);
+                    }
+    
+    
+                }else{
+                    return new Response("Error - params - url", 400);
+                }
+            }
+    
+            return new Response([$params, $num_params, $num_params_require]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
-
-        return new Response([$params, $num_params, $num_params_require]);
     }
 }
