@@ -230,9 +230,6 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { catchError, map, Observable, throwError } from 'rxjs';
-import { ApiMessage } from './interfaces/api-message';
-import { ApiResponse } from './interfaces/api-response';
-import { NvMessageBoxService } from './nv-message-box.service';
 
 @Injectable()
 export class NvApiInterceptor implements HttpInterceptor {
