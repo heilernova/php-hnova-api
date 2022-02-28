@@ -56,8 +56,7 @@ Routes::get('test', function(){ return new Response('Hola mundo'); });
 ```
 
 ### Definir un ruta que ejecuta un controlador.
-En este caso tendremos que definir un array con el namespace de la clase y el método a ejecutar, en caso de no definir
-el método buscara si la clase contiene un método que se llame igual que la peticion http [ get, post, put, pacth, delete ].
+En este caso tendremos que definir un array con el namespace de la clase y el método a ejecutar, en caso de no definir el método buscara si la clase contiene un método que se llame igual que la peticion http [ get, post, put, pacth, delete ].
 En caso no encontrar el método retornara un error 404.
 ```php
 namespace Api\Http\Controllers;
@@ -71,8 +70,8 @@ Routes::get('test', [TestController::class, 'get']);
 ### Definir una ruta con parametros.
 Para definir un parametro se debera escribir entre parentecios el nombre del parametro y separado por ":" el tipo de dato esperado
 int, string, float. en caso de no definirse se asignara por defecto se tomara como string.
-en caso de que tipo de dato del parametro con concuerde con el tipo de dato esperado la función que ejecuta la acción retornara
-un error.
+
+en caso de que tipo de dato del parametro con concuerde con el tipo de dato esperado la función que ejecuta la acción retornara un error.
 ```PHP
 use Phpnv\Api\Response;
 use Phpnv\Api\Routes\Routes;
@@ -217,6 +216,9 @@ Clase estatica la cual contiene 3 método:
 * `ClientInfo::getIp()`: retorna la Ip del cliente.
 * `ClientInfo::getPlatform()`: retorna la plataforma desde la cual se realiza la solicituda HTTP (windows, mac-os, ios, android).
 * `ClientInfo::getDevice()`: retorna el tipo de dispositivo desde el cual se raliza la solicitud HTTP, pc, movil, table
+
+## Frontend
+Para validar las respuesta en Angular se recomienda utilizar un interceptor. 
 
 ## Comandos de consola
 

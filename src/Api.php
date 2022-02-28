@@ -20,6 +20,9 @@ class Api
     private static ApiInfo $currentApi;
     private static ApiConfig $config;
 
+    /**
+     * establece el directorio donde esta alojado los script de la api.
+     */
     public static function setDir(string $dir):void
     {
         self::$dir = $dir;
@@ -62,7 +65,7 @@ class Api
     }
 
     /**
-     * Retorna la cofiguración del archivo api.json
+     * Retorna la configuración del archivo api.json
      */
     public static function getConfig():ApiConfig
     {
@@ -77,16 +80,31 @@ class Api
         return self::$currentApi;
     }
 
+    /**
+     * Valida la url y ejecuta la api correspondiente.
+     */
     private static function loadApi(string $url):Response
     {
         if (str_starts_with($url, 'nv-panel')){
-            Api::$currentApi = new ApiInfo('nv-error','Phpnv\\Errors','','',
-            (object)['origin'=>'*', 'headers'=>'*', 'methods'=>'*']
+
+            // En caso de que la url inicie por "nv-panel"
+            Api::$currentApi = new ApiInfo(
+                'nv-error',
+                'Phpnv\\Errors','',
+                '',
+                (object)['origin'=>'*', 'headers'=>'*', 'methods'=>'*']
             );
+
+            // Habilitamos los CORS para el acceso.
             ApiCors::load('*', '*', '*');
+
             require __DIR__.'/Panel/PanelRoutes.php';
         }else{
+            
+            // Verificamos si es multi api
             if (Api::getConfig()->isMultiApi()){
+
+                // extraemos el nombre de la api con el inicio de la api.
                 $index_char = strpos($url, '/');
                 if ($index_char){
                     $name_api = $index_char ? substr($url,0, $index_char) : $url;
@@ -94,10 +112,12 @@ class Api
                 }else{
                     $name_api = $url;
                 }
+
                 $api = self::$config->getApis()->find($name_api);
             }else{
                 $api = self::$config->getApis()->find('api');
             }
+
             // En caso de que no encuentre una api asociada a la url.
             if (!$api) return new Response("Not Found - api", 404);
 
@@ -122,15 +142,12 @@ class Api
 
         // Buscamos la ruta 
         $route = Router::find($url);
-        // echo json_encode([$url,$route, Router::getRoutes()]); exit;
+        
         if ($route){
-            try {
-                //code...
-                return $route->callAction();
-            } catch (\Throwable $th) {
-                throw $th;
-            }
+            // Ejecutamos la acción de la ruta.
+            return $route->callAction();
         }else{
+            // En caso de no encontras la ruta retornamos un 404
             return new Response("Not Found - path", 404);
         }
     }
