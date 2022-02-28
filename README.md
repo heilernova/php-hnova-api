@@ -2,7 +2,7 @@
 Librería para el desarrollo de api rest en php
 
 # Requerimientos
-* xammp
+* Xammp
 * PHP ^8.0.13
 * Instalar composer en el equipo
 
@@ -218,7 +218,125 @@ Clase estatica la cual contiene 3 método:
 * `ClientInfo::getDevice()`: retorna el tipo de dispositivo desde el cual se raliza la solicitud HTTP, pc, movil, table
 
 ## Frontend
-Para validar las respuesta en Angular se recomienda utilizar un interceptor. 
+Para validar las respuesta en Angular se recomienda utilizar un interceptor.
+```ts
+import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse,
+  HttpResponse
+} from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
+import { ApiMessage } from './interfaces/api-message';
+import { ApiResponse } from './interfaces/api-response';
+import { NvMessageBoxService } from './nv-message-box.service';
+
+@Injectable()
+export class NvApiInterceptor implements HttpInterceptor {
+
+  urlDefault:string = "http://localhost/test-api"; // ruta de la api
+
+  constructor() {}
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
+    let url:string = request.url;
+    
+    if (NvApiInterceptor.urlDefault){
+      if (!url.match(/^http(s)?:\/\/(.*)$/)){
+        url = `${this.urlDefault}/${url}`;
+      }
+    }
+
+    let requestClone:HttpRequest<unknown> = request.clone({url});
+
+    return next.handle(requestClone).pipe(
+      map((event:HttpEvent<any>)=>{
+          if (event instanceof HttpResponse ){
+            let bodyObject:ApiResponse|null = this.getBodyResponse(event.body);
+
+            if (bodyObject){
+
+              if (bodyObject.status){
+                
+                if (bodyObject.message.content.length > 0){
+                  // Si hay mensajes del servidor
+                  console.log(bodyObject.message);
+                }
+
+                // En caso de ser true establecemos el body con el contenido de la data.
+                event = event.clone({body: bodyObject.data});
+              }else{
+                
+                // En caso de retornar false devolvemos un error
+                throw new HttpErrorResponse({error: bodyObject.message, url: event.url ?? '', status: event.status});
+              }
+            }
+          }
+        return event;
+      }),
+      catchError((e:HttpErrorResponse)=>{
+        
+        let text:string = "Error inesperado";
+        let ms = this.getMessage(e.error);
+        if (ms){
+          if (ms.content.length > 0){
+            
+            // Aqui el código para el  manejo del mensaje de la api.
+            console.log(ms);
+
+          }
+        }else{
+          if (typeof e.error == 'object'){
+
+            text = e.message;
+            console.log("Error con la petición HTTP");
+
+          }else if (typeof e.error == "string"){
+            text = e.error;
+            
+            console.log(text);
+          }
+        }
+        
+        return throwError(()=>e);
+      })
+    );
+  }
+
+  private getMessage(data:any):{title:string, content:(string|string[])[], type:number}|null{
+    try {
+      if ('title' in data && 'content' in data && 'type' in data){
+        return data;
+      }else{
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private getBodyResponse(data:any):{
+    status:boolean,
+    statusCode:number,
+    message:{title:string, content:(string|string[])[], type:number},
+    data:any
+  }|null{
+    try {
+      if ('status' in data && 'statusCode' in data && 'message' in data && 'data' in data){
+        return data;
+      }else{
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+}
+```
 
 ## Comandos de consola
 
