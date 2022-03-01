@@ -55,10 +55,12 @@ class Install
 
         // // Cramos las archivos de la carpeta www
         Script::fileAdd("www/.htaccess","RewriteEngine On\nRewriteRule ^(.*) index.php?url=$1 [L,QSA]");
-        Script::fileAdd("www/index.php","<?php\nrequire __DIR__.'./../app/app-index.php'");
+        Script::fileAdd("www/index.php","<?php\nrequire __DIR__.'./../app/app-index.php';");
         Script::fileAdd("api.json", str_replace('\/', '/', json_encode($api_config->getObject(), 128)));
         Script::fileCreate();
 
+        console::log("  Importante actualizar el autoload de composer [ composer dump-autoload ]");
         // echo json_encode($api_config->salve(), 128);
+        // Script::getEvent()->getComposer()->getAutoloadGenerator()->dump();
     }
 }
