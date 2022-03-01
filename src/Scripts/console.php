@@ -33,4 +33,13 @@ class console
         }
         echo "\e[1;32mCREATE:\e[0m $name ( $zise bytes )\n";
     }
+    public static function fileUpdate(string $name):void
+    {
+        if (file_exists($name)){
+            $zise = filesize($name);
+        }else{
+            $zise = 0;
+        }
+        echo "\e[1;36mUPDATE:\e[0m $name ( $zise bytes )\n";
+    }
 }

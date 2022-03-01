@@ -25,6 +25,13 @@ class Script
      */
     private static array $files = [];
 
+
+    /**
+     * Alamacen la información de los archivos ha crear.
+     * @var object[]
+     */
+    private static array $filesUpdate = [];
+
     /**
      * retorna el evento de composer.
      */
@@ -80,7 +87,7 @@ class Script
             console::error("");
             console::error("Error de ejecución");
             console::error("File:       " . $th->getFile());
-            console::error("Line:       " . $th->getFile());
+            console::error("Line:       " . $th->getline());
             console::error("Message:    " . $th->getMessage());
             console::error("");
         }
@@ -92,6 +99,10 @@ class Script
     public static function fileAdd(string $name, string $content):void
     {
         self::$files[] = (object)["name" => $name, "content" => $content ];
+    }
+
+    public static function fileUpdate(string $name, string $content):void{
+        self::$filesUpdate[] = (object)["name" => $name, "content" => $content ];
     }
 
     /**
@@ -118,7 +129,27 @@ class Script
 
             }
         }
+        foreach (self::$filesUpdate as $file){
+            $name = $file->name;
+            if (!file_exists($name)){
+                console::error("No se encotro el archivo para acutalizar [ $name ]");
+            }else{
+ 
+                // Abrimos el archivo.
+                $f = fopen($file->name, 'w+');
+                fputs($f, $file->content);
+                fclose($f);
+
+                console::fileUpdate($file->name);
+
+            }
+        }
+
+
+
     }
+
+
 
 
 }

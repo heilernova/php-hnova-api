@@ -10,6 +10,8 @@
  */
 namespace HNova\Api\Settings;
 
+use HNova\Api\Api;
+
 class AppConfig
 {
     public function __construct(private string $name, private $config = null)
@@ -22,6 +24,12 @@ class AppConfig
     public function getName():string 
     { 
         return $this->name;
+    }
+
+
+    public function getNamespace():string
+    {
+        return $this->config->namespace;
     }
 
     /**
@@ -49,6 +57,13 @@ class AppConfig
         return new CorsConfig($this->config->cors);
     }
 
+
+    public function loadRoutes():bool
+    {
+        $name = $this->getNamespace();
+        require Api::getDir() . "\\app\\$name\\$name-routes.php";
+        return true;
+    }
 
 
 

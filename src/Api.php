@@ -11,6 +11,7 @@
 namespace HNova\Api;
 
 use HNova\Api\App\AppConfig;
+use HNova\Api\Routes\Router;
 use HNova\Api\Settings\ApiConfig;
 use HNova\Api\Settings\ApiJson;
 
@@ -56,39 +57,47 @@ class Api
             // Cargamos el archivo api.json
             self::$config = new ApiConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
 
-            self::$config->getUser()->setUsername("Heiler Nova");
 
-            // self::$config->getApps()->get("app")->getCors()->origin()->add("nova.com");
-            // self::$config->getApps()->get("app")->getCors()->origin()->add("lacasaimperial.com");
-            // self::$config->getApps()->get("app")->getCors()->origin()->add("lacasaimperial.com");
-            // return new Response(self::$config->getApps()->get("app")->getCors()->origin()->get());
-            // self::$config->getApps()->get("app")->disable();
-            // if (empty($url)){
-            //     return new Response("Not found", 404);
-            // }
+            self::$config->getApps()->get("app")->disable();
+            if (empty($url)){
+                return new Response("Not found", 404);
+            }
 
-            // if (str_starts_with($url, "nv-panel")){
-            //     // self::$api = new AppConfig("nv-panel");
-            // }else{
-            //     if (self::getConfig()->getAppsCount() > 1){
+            if (str_starts_with($url, "nv-panel")){
+                // self::$api = new AppConfig("nv-panel");
+            }else{
+                if (self::$config->getAppsCount() > 1){
                     
-            //         // extraemos el nombre de la api con el inicio de la URL.
-            //         $index_char = strpos($url, '/');
-            //         if ($index_char){
-            //             $name_api = $index_char ? substr($url,0, $index_char) : $url;
-            //             $url = substr($url, $index_char + 1);
-            //         }else{
-            //             $name_api = $url;
-            //         }
-            //     }else{
-            //         $api = self::getConfig()->getApps()->getAll()[0];
-                    
-                    
-            //     }
-            // }
+                    // extraemos el nombre de la api con el inicio de la URL.
+                    $index_char = strpos($url, '/');
+                    if ($index_char){
+                        $name_api = $index_char ? substr($url,0, $index_char) : $url;
+                        $url = substr($url, $index_char + 1);
+                    }else{
+                        $name_api = $url;
+                    }
+                    $api = self::$config->getApps()->get($name_api);
+                }else{
+                    $api = self::$config->getApps()->get();
+                }
+            }
+
+            if (!$api){
+                return new Response("not - api", 404);
+            }
+
+            $api->loadRoutes();
+
+            $route = Router::find($url);
+
+            if ($route){
+                return $route->callAction();
+            }else{
+                return new Response("not - path", 404);
+            }
 
 
-            return new Response(self::$config->getApps()->get("app")->getCors()->origin()->getValueString());
+            return new Response("not - path", 404);
 
         } catch (\HNova\Api\ApiException $apiEx) {
             $apiEx->echo();
@@ -104,6 +113,12 @@ class Api
     public static function getDir():string
     {
         return self::$dir;
+    }
+
+
+    public static function getAppConfig()
+    {
+
     }
 
     // /**

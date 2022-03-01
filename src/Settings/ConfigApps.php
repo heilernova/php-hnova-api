@@ -38,14 +38,26 @@ class ConfigApps
 
     /**
      * Retorna la configuración de un app, retorna null en caso de que no se encuentre la app
+     * @param string|null $name En caso de ser null retorna la primera app en la lista.
      */
-    public function get(string $name):?AppConfig
+    public function get(string $name = null):?AppConfig
     {
-        if (isset($this->apps->$name)){
-            $app = new AppConfig($name, $this->apps->$name);
-            return $app;
+        if ($name){
+            if (isset($this->apps->$name)){
+                $app = new AppConfig($name, $this->apps->$name);
+                return $app;
+            }else{
+                return null;
+            }
         }else{
-            return null;
+            $app = null;
+
+            foreach ($this->apps as $key=>$value){
+                $app = new AppConfig($key, $value);
+                break;
+            }
+
+            return $app;
         }
     }
 

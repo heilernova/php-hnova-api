@@ -28,9 +28,7 @@ class ApiConfig
         $config = (object)[
             "name" => "Applicaction name",
             "user" => (object)["username"=>"admin", "password"=>""],
-            "developers" => [
-                (object)["name"=>"name", "email"=>"email@email"]
-            ],
+            "developers" => [],
             "debug" =>false,
             "databases"=>(object)[],
             "apps"=>(object)[]
@@ -54,6 +52,15 @@ class ApiConfig
     }
 
     /**
+     * retorna la configuraciones de los developers
+     */
+    public function getDevelopers():ConfigDevelopers
+    {
+        return new ConfigDevelopers($this->config);
+    }
+
+
+    /**
      * Establece y retorna es estado del debug, establecerlo es opcional.
      * Si el debug es true, la api retornara el error al body de la cosulta HTTP.
      */
@@ -63,6 +70,9 @@ class ApiConfig
         return $this->config->debug;
     }
 
+    /**
+     * Retorna la configuracion de las base de datos.
+     */
     public function getDatabases():ConfigDatabases
     {
         return new ConfigDatabases($this->config->databases);

@@ -1,0 +1,38 @@
+{
+    "name": "Applicaction name",
+    "user": {
+        "username": "admin",
+        "password": "$2y$04$xL1wh12tiQt2Skc3Awg2heY/b45tBdtCImheM5hdEXEmGsjgwpM8a"
+    },
+    "developers": [
+        {
+            "name": "Name developer",
+            "email": "email@email",
+            "homepage": null
+        }
+    ],
+    "debug": false,
+    "databases": {
+        "test": {
+            "type": "mysql",
+            "dataConnection": {
+                "hostname": "localhost",
+                "username": "root",
+                "password": "",
+                "database": "test"
+            }
+        }
+    },
+    "apps": {
+        "app": {
+            "namespace": "App",
+            "disable": false,
+            "dirResource": "",
+            "cors": {
+                "origin": null,
+                "headers": null,
+                "methods": null
+            }
+        }
+    }
+}

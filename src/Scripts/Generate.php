@@ -12,6 +12,7 @@ namespace HNova\Api\Scripts;
 
 use HNova\Api\Scripts\console;
 use HNova\Api\Scripts\Script;
+use HNova\Api\Settings\AppConfig;
 
 class Generate
 {
@@ -46,6 +47,42 @@ class Generate
      */
     private static function class():void
     {
+
+    }
+
+    public static function app(AppConfig $app){
+
+        $namespace = $app->getNamespace();
+
+        // Routes
+        $content = file_get_contents( __DIR__.'./../../template/example/example-routes.php' );
+        $content = str_replace("Example", $namespace, $content);
+        Script::fileAdd("app/$namespace/$namespace-routes.php", $content);
+        
+        //  Base controller
+        $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseController.php');
+        $content = str_replace("Example", $namespace, $content);
+        Script::fileAdd("app/$namespace/$namespace" . "BaseController.php", $content);
+
+        //  Base model
+        $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseModel.php');
+        $content = str_replace("Example", $namespace, $content);
+        Script::fileAdd("app/$namespace/$namespace" . "BaseModel.php", $content);
+        
+        // Guards
+        $content = file_get_contents(__DIR__.'./../../template/example/ExampleGuards.php');
+        $content = str_replace("Example", $namespace, $content);
+        Script::fileAdd("app/$namespace/$namespace" . "Guards.php", $content);
+
+        // Script::getEvent()->getComposer()
+        $composer_json = json_decode(file_get_contents("composer.json"), true);
+
+        $composer_json['autoload']['psr-4']["$namespace\\"] = "app/$namespace/";
+
+        Script::fileUpdate("composer.json", str_replace('\/', '/',json_encode($composer_json, 128)));
+        // echo json_encode($composer_json, 128); exit;
+
+        
 
     }
 }
