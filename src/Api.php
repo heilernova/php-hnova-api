@@ -10,8 +10,9 @@
  */
 namespace HNova\Api;
 
+use HNova\Api\App\AppConfig;
 use HNova\Api\Settings\ApiConfig;
-use HNova\Api\Settings\AppInfo;
+use HNova\Api\Settings\ApiJson;
 
 class Api
 {
@@ -23,12 +24,12 @@ class Api
     /**
      * Contiene un objeto que represent la configuraciones del api.json.
      */
-    private static object $apiJson;
+    private static ApiConfig $config;
 
     /**
      * Alamacena la información de la api en ejecución
      */
-    private static ApiConfig $api;
+    private static AppConfig $api;
 
     /**
      * Inicia la app
@@ -53,32 +54,41 @@ class Api
             }
 
             // Cargamos el archivo api.json
-            self::$apiJson = json_decode(file_get_contents(self::$dir . "/api.json"));
+            self::$config = new ApiConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
 
-            if (empty($url)){
-                return new Response("Not found", 404);
-            }
+            self::$config->getUser()->setUsername("Heiler Nova");
 
-            if (str_starts_with($url, "nv-panel")){
-                self::$api = new ApiConfig("nv-panel", (object)[]);
-            }else{
-                if (self::getConfig()->getAppsCount() > 1){
+            // self::$config->getApps()->get("app")->getCors()->origin()->add("nova.com");
+            // self::$config->getApps()->get("app")->getCors()->origin()->add("lacasaimperial.com");
+            // self::$config->getApps()->get("app")->getCors()->origin()->add("lacasaimperial.com");
+            // return new Response(self::$config->getApps()->get("app")->getCors()->origin()->get());
+            // self::$config->getApps()->get("app")->disable();
+            // if (empty($url)){
+            //     return new Response("Not found", 404);
+            // }
+
+            // if (str_starts_with($url, "nv-panel")){
+            //     // self::$api = new AppConfig("nv-panel");
+            // }else{
+            //     if (self::getConfig()->getAppsCount() > 1){
                     
-                    // extraemos el nombre de la api con el inicio de la URL.
-                    $index_char = strpos($url, '/');
-                    if ($index_char){
-                        $name_api = $index_char ? substr($url,0, $index_char) : $url;
-                        $url = substr($url, $index_char + 1);
-                    }else{
-                        $name_api = $url;
-                    }
-                }else{
-                    // self::getConfig()->getApps()
-                }
-            }
+            //         // extraemos el nombre de la api con el inicio de la URL.
+            //         $index_char = strpos($url, '/');
+            //         if ($index_char){
+            //             $name_api = $index_char ? substr($url,0, $index_char) : $url;
+            //             $url = substr($url, $index_char + 1);
+            //         }else{
+            //             $name_api = $url;
+            //         }
+            //     }else{
+            //         $api = self::getConfig()->getApps()->getAll()[0];
+                    
+                    
+            //     }
+            // }
 
 
-            return new Response("Hola mundo");
+            return new Response(self::$config->getApps()->get("app")->getCors()->origin()->getValueString());
 
         } catch (\HNova\Api\ApiException $apiEx) {
             $apiEx->echo();
@@ -96,19 +106,19 @@ class Api
         return self::$dir;
     }
 
-    /**
-     * Retorna un objeto con la configuración del archivo api.json
-     */
-    public static function getConfig():AppInfo
-    {
-        return new AppInfo(self::$apiJson);
-    }
+    // /**
+    //  * Retorna un objeto con la configuración del archivo api.json
+    //  */
+    // public static function getConfig():AppConfig
+    // {
+    //     return new AppConfig();
+    // }
 
-    /**
-     * Retorna un objeto con la información de la api en ejecución.
-     */
-    public static function getApi():ApiConfig
-    {
-        return self::$api;
-    }
+    // /**
+    //  * Retorna un objeto con la información de la api en ejecución.
+    //  */
+    // public static function getApi():AppInfoClass
+    // {
+    //     return self::$api;
+    // }
 }

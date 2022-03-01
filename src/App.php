@@ -8,12 +8,11 @@
  * file that was distributed with this source code.
  * 
  */
-namespace HNova\Api\Classes;
+namespace HNova\Api\Settings;
 
-class UserClass
+use HNova\Api\Data\DatabaseInfo;
+
+class App
 {
-    public function __construct(public $username, public $password)
-    {
-        
-    }
+
 }

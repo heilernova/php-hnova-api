@@ -8,16 +8,18 @@
  * file that was distributed with this source code.
  * 
  */
-namespace HNova\Api\Classes;
+namespace HNova\Api\Data;
 
-class DatabaseInfoClass
+class DatabaseInfo
 {
+    /** Tipo de la base de datos */
     public string $type = "";
-    public object|array $dataConnection;
+    /** Datos de conexión */
+    public object $dataConnection;
 
-    public function __construct(string $type, array $dataConnection)
+    public function __construct($type, $data_conncetion)
     {
         $this->type = $type;
-        $this->dataConnection = $dataConnection;
+        $this->dataConnection = $data_conncetion;
     }
 }
