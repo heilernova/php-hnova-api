@@ -1,12 +1,11 @@
 {
-    "name": "phpnv/api",
+    "name": "hnova/api",
     "description": "Herramientas para el desarrollo de apis rest en php",
     "type": "library",
     "license": "GPL-3.0",
     "autoload": {
         "psr-4": {
-            "Phpnv\\Api\\": "src/",
-            "Api\\": "api/"
+            "HNova\\Api\\": "src/"
         }
     },
     "authors": [
@@ -20,6 +19,6 @@
         "composer/composer": "^2.2"
     },
     "scripts": {
-        "nv": "Phpnv\\Api\\Scripts\\Script::execute"
+        "nv": "HNova\\Api\\Scripts\\Script::execute"
     }
 }
