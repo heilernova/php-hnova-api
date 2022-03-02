@@ -1,3 +1,5 @@
 /vendor/
-/api/
+/app/
 /www/
+api.json
+/nv-panel/

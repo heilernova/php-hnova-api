@@ -1,34 +1,34 @@
-# Phpnv-Api
-Librería para el desarrollo de api rest en php
+# HNova - Api
 
+<<<<<<< HEAD
 # Requerimientos
 * Xammp
 * PHP ^8.0.13
 * Instalar composer en el equipo
+=======
+Librería de PHP para el desarrollo de apis
+>>>>>>> pro
 
-# Recomendaciones
-Trabajar namespace en las clases, importante que el namespace con concuerde con ruta donde esta alojada la clase
-para que el autoload de composer la pueda utilizar.
+## Requerimientos
 
-Instalar PHP Intelephense, cualquier otra extención para php que ayuda en la lectura y escritura de código
+* `XAMMP` https://www.apachefriends.org/es/download.html Instalar la versión con php 8.0.13 o superior
+* `Composer` https://getcomposer.org/download/
 
-# Instalción
+## Intalación
 
-En el directorio raíz del proyecto abrimos la consala y ejecutamos el siguiente comando
+Para instalar la librería en tu proyecto debe ejecutar el siguiente comando en la consola de composer, aun no hay primara versión por lo tanto de debe instalar la versión en desarrollo con dev-main
+```powershell
+composer require hnova/api dev-main
 ```
-composer require phpnv/api
-```
-Una vez ejecutado de descagaran los paquetes necesarios para el desarrollo de la api.
+Una vez terminada la ejecución del comando anterior se debe agregar los scripts al composer.json de su proyecto para acceder a los script de la libreria HNova/api.
 
-# Creación del proyecto
-Antes de iniciar debemos agregar los scripts del Phpnv/Api al composer.json del proyecto.
-
-Scrits
-```JSON
-"scripts":{
-    "nv":"Phpnv\\Api\\Scripts\\Script::execute"
+Pegue el siguiente código el su archivo composer.json.
+```json
+"scripts": {
+    "nv":"HNova\\Api\\Scripts\\Script::execute"
 }
 ```
+<<<<<<< HEAD
 ## Creación del entorno de trabajo
 Abrir la consola en el directorio raiz y ejecutamos el siguiente comando.
 ```
@@ -91,33 +91,23 @@ Ejemplo del método authenticate del Guard. todos las rutas que lo utilicen solo
 namespace Api\Http;
 
 use Phpnv\Api\Response;
+=======
+>>>>>>> pro
 
-class Guard
-{
-    public static function authenticate():callable
-    {
-        return function(){
-            if (random_int(1,2) == 1){
-                return null; // Accesso permitido
-            }else{
-                // Denega el acceso y reponse no access.
-                return new Response('No access - random_int no es 1',  401);
-            }
-        };
-    }
-}
+Debería quiedar de la siguiete manera.
+![img](Ejemplo-script-composer.png)
+
+### Script disponibles
+
+* `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la api
+* `composer nv g c` => crea un controldor en la app
+* `composer nv g m` => crea un modelo en la app
+* `composer nv g api` => crea una nueva app de acceso a la api
+
+## Creación del entro de trabajo.
+Para iniciar con el desarrollo de la api debe ejecutar el siguiente comando mediente consola ne la raiz del proyecto
 ```
-
-Implementación del guard en la ruta
-```php
-namespace Api\Http\Controllers;
-
-use Api\Http\Guard;
-use Phpnv\Api\Response;
-use Phpnv\Api\Routes\Routes;
-
-Routes::get('test', [TestController::class, 'get'], [Guard::autenticates()]);
-```
+<<<<<<< HEAD
 
 ## Controladores
 Son la clases que contienen las acciones a ejecutar por la ruta ingresada en la api.
@@ -154,16 +144,18 @@ class TestController extends BaseController
         return new Response($data);
     }
 }
+=======
+composer nv i
+>>>>>>> pro
 ```
-#### objeto database
+El script preguntara que nombre que desae darle a la primera api por defecto de asigna el nombre de `app`, una vez terminado el proceso entraremos en la cartea `app` los archivos PHP para el funcionamiento de la api y el el directorio princiapal un archivo json llamado `api.json` el cual contiene las configuraciones del sistema.
 
-Clase utilizada para interactuar con la base de datos, en ella encontraremos métodos que no ayudara a realizar consultas 
-preparadas a fin de mejorar la seguridad evitando inyección sql, todos los métodos estan documentado para facilitar su uso.
+### Rutas de acceso
+Las rutas de acceso a la api de deberan definir en el archivo ``App-routes.php`` encontrado en la carpeta de cada app, cabe recalcar el nombre del archivo hace referencia al nombre de app por lo tanto el nombre biene definido por el namespace mas -routes.php.
 
-Cabe recalcar que en esta clase el auto commit esta desactivado por lo tanto par hacer efectivos los cambios en la base de datos se debe ejecuta el commit de la clase database, "database->commit()".
-
-Ejemplo de uso.
+#### Definir un ruta que ejecuta una función
 ```php
+<<<<<<< HEAD
 <?php
 namespace Api\Http\Controllers;
 
@@ -353,3 +345,16 @@ GNU GENERAL PUBLIC LICENSE
 
 ---
 > Github [@heilernova](https://github.com/heilernova)
+=======
+namespace HNova\Api\Panel\Controllers;
+
+use HNova\Api\Api;
+use HNova\Api\Http\ResponseApi;
+use HNova\Api\Response;
+use HNova\Api\Routes;
+
+Routes::get("test", function(){
+    return new Response("Hola mundo");
+});
+```
+>>>>>>> pro
