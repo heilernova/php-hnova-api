@@ -2,6 +2,8 @@
 /**
  * En esta clase puede agregar las restrcicioines de aceceso a las rutas del sistema
  * mediante el uso del los guard almacenso el calse estatica.
+ * 
+ * todos los método deverar retorna un callable
  */
 
 namespace Example;
@@ -21,8 +23,12 @@ class ExampleGuards
          */
         return function(){
             if (random_int(1,2) == 1){
+
+                // Retornamos null para que dar acceso.
                 return null;
             }else{
+
+                // Retornameos un Response para negar el acceso.
                 return new Response('No access',  401);
             }
         };

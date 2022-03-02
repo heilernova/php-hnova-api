@@ -5,10 +5,12 @@
 
 namespace Example;
 
-class ExampleBaseController
+use HNova\Api\ApiController;
+
+class ExampleBaseController extends ApiController
 {
     public function __construct()
     {
-        
+        parent::__construct();
     }
 }

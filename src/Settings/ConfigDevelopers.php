@@ -21,19 +21,22 @@ class ConfigDevelopers
     }
 
     /**
-     * 
+     * Retorna un array con trodos los desarrolladores
+     * @return object[]
      */
     public function getAll():array
     {
         return $this->cofig;
     }
 
-    public function add($name, $email, $homepage){
+    /**
+     * Agrega la información de un desarrollador.
+     */
+    public function add(string $name, string $email, string $homepage){
         $this->cofig->developers[] = (object)[
             "name" => $name,
             "email" => $email,
             "homepage" => $homepage
         ];
-        // echo json_encode($this->cofig, 128); exit;
     }
 }

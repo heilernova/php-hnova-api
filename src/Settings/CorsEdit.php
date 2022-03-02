@@ -18,12 +18,16 @@ class CorsEdit
         
     }
 
+    /**
+     * Le da full acceso asignado " * "
+     */
     public function fullAccess():void
     {
         $this->data = "*";
     }
 
     /**
+     * Retorna un la configuracion del cors
      * @return string[]|string|null
      */
     public function get():array|string|null
@@ -31,6 +35,9 @@ class CorsEdit
         return $this->data;
     }
 
+    /**
+     * Agrega un item a cors
+     */
     public function add(string $value):void
     {
         $edit = $this->edit;
@@ -40,6 +47,9 @@ class CorsEdit
         $this->data->$edit[] = $value;
     }
 
+    /**
+     * Devulve un string de valor
+     */
     public function getValueString():?string
     {
         $edit = $this->edit;

@@ -60,6 +60,10 @@ class Router
         return array_shift($routes);
     }
 
+    /**
+     * Retorna un array de las rutas establecidas.
+     * @return Route[]
+     */
     public static function getRoutes():array
     {
         return self::$routes;
