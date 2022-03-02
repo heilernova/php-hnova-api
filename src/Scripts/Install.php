@@ -28,39 +28,33 @@ class Install
             exit;
         }
 
-
         // Creamo el objeto de api json
-        $api_config = ApiConfig::init();
 
         $io = Script::getEvent()->getIO();
         $api_name = $io->ask("¿Nombre de tu primera api (nombre por default: [ app ] ) ?: ", 'app');
 
-        $api_config->getUser()->setUsername("admin");
-        $api_config->getUser()->setPassword("admin");
+        Script::getConfig()->getUser()->setUsername("admin");
+        Script::getConfig()->getUser()->setPassword("admin");
 
-        $api_config->getDevelopers()->add("Name developer", "email@email", null);
+        Script::getConfig()->getDevelopers()->add("Name developer", "email@email", null);
 
         $api_namespace = ucfirst($api_name);
-        $api_config->getApps()->add($api_name, $api_namespace);
-        $api_config->getDatabases()->add("test", "mysql", ["hostname"=>"localhost", "username"=>"root", "password"=>"", "database"=>"test" ]);
-
-
+        Script::getConfig()->getApps()->add($api_name, $api_namespace);
+        Script::getConfig()->getDatabases()->add("test", "mysql", ["hostname"=>"localhost", "username"=>"root", "password"=>"", "database"=>"test" ]);
         
         // Creamos los directorios.
         Script::fileAdd("app/app-index.php", file_get_contents(__DIR__.'./../../template/app-index.php'));
-
         
-        
-        Generate::app($api_config->getApps()->get($api_name));
+        Generate::app(Script::getConfig()->getApps()->get($api_name), false);
 
         // // Cramos las archivos de la carpeta www
         Script::fileAdd("www/.htaccess","RewriteEngine On\nRewriteRule ^(.*) index.php?url=$1 [L,QSA]");
         Script::fileAdd("www/index.php","<?php\nrequire __DIR__.'./../app/app-index.php';");
-        Script::fileAdd("api.json", str_replace('\/', '/', json_encode($api_config->getObject(), 128)));
+        Script::fileAdd("api.json", str_replace('\/', '/', json_encode(Script::getConfig()->getObject(), 128)));
         Script::fileCreate();
 
-        console::log("  Importante actualizar el autoload de composer [ composer dump-autoload ]");
-        // echo json_encode($api_config->salve(), 128);
-        // Script::getEvent()->getComposer()->getAutoloadGenerator()->dump();
+        $dir = Script::getDirXammp();
+        console::alert("\n  Enlace de acceso: ** http://localhost/$dir/www/  **\n" );
+        console::log("  Importante actualizar el autoload de composer [ composer dump-autoload ]\n");
     }
 }

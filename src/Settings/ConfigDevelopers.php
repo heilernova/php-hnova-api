@@ -26,13 +26,13 @@ class ConfigDevelopers
      */
     public function getAll():array
     {
-        return $this->cofig;
+        return $this->cofig->developers;
     }
 
     /**
      * Agrega la información de un desarrollador.
      */
-    public function add(string $name, string $email, string $homepage){
+    public function add(string $name, string $email, string $homepage = null){
         $this->cofig->developers[] = (object)[
             "name" => $name,
             "email" => $email,

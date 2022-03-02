@@ -12,30 +12,47 @@ namespace HNova\Api\Scripts;
 
 use HNova\Api\Scripts\console;
 use HNova\Api\Scripts\Script;
+use HNova\Api\Settings\ApiConfig;
 use HNova\Api\Settings\AppConfig;
 
 class Generate
 {
+    private static ApiConfig $config;
     public static function execute():void
     {
         $arg = Script::getArgument();
+
+        $json = json_decode(file_get_contents("api.json"));
+        self::$config = new ApiConfig($json);
+
         if ($arg){
+            // echo $arg;
             switch ($arg){
                 case "class":
                     // Crea una clase.
-                    
+                    echo "Class";
                     break;
-                case ("c" || "controller"):
+                case "c":
                     // crea un controlador
-                    echo "Controller";
+                    self::controller();
                     break;
-                case ("m" || "model");
-                    // Crea un modelo
+                case "controller":
+                    // Creamo un controlador
+                    self::controller();
+                    break;
+                case "m";
+                    // Creación de un modelo
+                    self::model();
+                    break;
+                case "model";
+                    // Creación de un modelo
+                    self::model();
                     break;
                 case "api":
                     break;
                 default:
-                    console::error("Comando invalido");
+                    console::error("Comando generate invalido");
+                    break;
             }
         }else{
             console::error("Falta ingresar comandos");
@@ -50,7 +67,75 @@ class Generate
 
     }
 
-    public static function app(AppConfig $app){
+    public static function controller(){
+
+        $name = Script::getArgument();
+        if ($name){
+            $name = ucfirst($name);
+            if (self::$config->getAppsCount() > 1){
+                // Se debe espeficiara a cual app se le creara el controlador.
+                echo "Espeficiacar el controlador.";
+            }else{
+                $app = self::$config->getApps()->get();
+            }
+
+            $dir = "app/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
+
+            if (file_exists($dir)){
+                console::error("El nombre del controlador ya esta en uso."); exit;
+            }
+
+            $content = file_get_contents(__DIR__.'./../../template/example/Controllers/Controller.php');
+            $content = str_replace("Example", $app->getNamespace(), $content);
+            $content = str_replace("NameController", $name, $content);
+
+            Script::fileAdd($dir, $content);
+            Script::fileCreate();
+        }else{
+            console::error("Falta ingresar el nombre de comtrolador [ composer nv g c <name> ]");
+        }
+    }
+
+    public static function model()
+    {
+        $name = Script::getArgument();
+
+        if ($name){
+            $name = ucfirst($name);
+            if (self::$config->getAppsCount() > 1){
+                // Se debe espeficiara a cual app se le creara el controlador.
+                $app = Script::getArgument();
+                if ($app){
+                    $app = self::$config->getApps()->get($app);
+                }else{
+                    console::error("Espeficiacar el controlador."); exit;
+                }
+            }else{
+                $app = self::$config->getApps()->get();
+            }
+
+            $dir = "app/" . $app->getNamespace() . "/Models/$name" . "Model.php";
+
+            if (file_exists($dir)){
+                console::error("El nombre del modelo ya esta en uso."); exit;
+            }
+
+            
+            $content = file_get_contents(__DIR__.'./../../template/example/Models/Model.php');
+            $content = str_replace("Example", $app->getNamespace(), $content);
+            $content = str_replace("Name", $name, $content);
+
+            Script::fileAdd($dir, $content);
+            Script::fileCreate();
+
+
+
+        }else{
+            console::error("Falta ingresar el nombre del modelo [ composer nv g m <name> ]");           
+        }
+    }
+
+    public static function app(AppConfig $app, bool $auto_sale = true){
 
         $namespace = $app->getNamespace();
 
@@ -80,9 +165,7 @@ class Generate
         $composer_json['autoload']['psr-4']["$namespace\\"] = "app/$namespace/";
 
         Script::fileUpdate("composer.json", str_replace('\/', '/',json_encode($composer_json, 128)));
-        // echo json_encode($composer_json, 128); exit;
 
-        
-
+        if ($auto_sale) Script::fileCreate();
     }
 }

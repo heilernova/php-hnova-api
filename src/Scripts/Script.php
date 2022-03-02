@@ -11,6 +11,7 @@ namespace HNova\Api\Scripts;
 
 use Composer\Script\Event;
 use HNova\Api\Scripts\Generate;
+use HNova\Api\Settings\ApiConfig;
 
 class Script
 {
@@ -32,6 +33,10 @@ class Script
      */
     private static array $filesUpdate = [];
 
+    private static array $args = [];
+
+    private static ApiConfig $config;
+
     /**
      * retorna el evento de composer.
      */
@@ -40,13 +45,29 @@ class Script
         return self::$event;
     }
 
+    public static function getConfig():ApiConfig
+    {
+        return self::$config;
+    }
+
+    /**
+     * Retorna el nombre del directorio htdost.
+     */
+    public static function getDirXammp():string
+    {
+
+        $v = Script::getEvent()->getComposer()->getConfig()->getConfigSource()->getName();
+        $n =  strpos($v, 'htdocs');
+        return dirname(substr($v, $n + 7));
+    }
+
     /**
      * Rertona el primer argumento enviado por consola, en caso de retorna null es porqur no hay argumentos.
      */
     public static function getArgument():?string
     {
-        $args = self::$event->getArguments();
-        return array_shift($args);
+        $arg = array_shift(self::$args);
+        return $arg ? strtolower($arg) : null;
     }
 
     /**
@@ -57,22 +78,28 @@ class Script
         self::$event = $event;
         try {
             // Cargamos el primer argumento
-            $arg = self::getArgument();
+            self::$args = $event->getArguments();
+
+            $arg = self::getArgument(); 
 
             switch ($arg) {
                 case null:
                     console::error("Falta ingresar comandos en el script");
                     break;
                 case "g":
+                    self::$config = new ApiConfig(json_decode(file_get_contents("composer.json")));
                     Generate::execute();
                     break;
-                case "generate":
+                    case "generate":
+                    self::$config = new ApiConfig(json_decode(file_get_contents("composer.json")));
                     Generate::execute();
                     break;
                 case "i":
+                    self::$config = ApiConfig::init();
                     Install::run();
                     break;
-                case "install":
+                    case "install":
+                    self::$config = ApiConfig::init();
                     Install::run();
                     break;
                 case "test":

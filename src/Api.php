@@ -60,7 +60,12 @@ class Api
 
             self::$config->getApps()->get("app")->disable();
             if (empty($url)){
-                return new Response("Not found", 404);
+                if ($_SERVER['REQUEST_METHOD'] == "GET"){
+                    require __DIR__.'./Views/homepage.php';
+                    exit;
+                }else{
+                    return new Response("Not found", 404);
+                }
             }
 
             if (str_starts_with($url, "nv-panel")){

@@ -1,8 +1,12 @@
 <?php
 
-use HNova\Api\Classes\ApiJsonClass;
+use HNova\Api\Scripts\Script;
 
-$json = json_decode(file_get_contents("api.json"));
-$d = new ApiJsonClass($json);
+$v = Script::getEvent()->getComposer()->getConfig()->getConfigSource()->getName();
 
-// echo json_encode($d->user->username , 128);
+echo  $v . "\n";
+$n =  strpos($v, 'htdocs');
+echo $n . "\n";
+echo dirname(substr($v, $n + 7)) . "\n";
+
+// echo json_encode(basename(dirname($v)));

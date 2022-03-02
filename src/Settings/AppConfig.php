@@ -50,7 +50,12 @@ class AppConfig
             if (!$db){
                 throw new ApiException(["No se encuentra la información de la base de datos [ $db_name ] solicitada."]);
             }
-            return $db;
+
+            if ($db->type != "mysql"){
+                throw new ApiException(["Actualmento no se cuenta soporte para las bases de datos de MYSQL"]);
+            }
+
+            return new Database((array)$db->dataConnection);
         }else{
             return null;
         }

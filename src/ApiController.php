@@ -13,7 +13,7 @@ use HNova\Api\Data\Database;
 
 class ApiController
 {
-    private Database $database;
+    protected Database $database;
     public function __construct()
     {
         $db = Api::getAppConfig()->getDatabase();

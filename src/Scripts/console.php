@@ -21,7 +21,12 @@ class console
 
     public static function error(string $text):void
     {
-        echo "\e[0;31m$text\e[0m\n";
+        echo "\e[1;31m$text\e[0m\n";
+    }
+
+    public static function alert(string $text):void
+    {
+        echo "\e[1;33m$text\e[0m\n";
     }
 
     public static function fileCreate(string $name):void
