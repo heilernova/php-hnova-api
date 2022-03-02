@@ -70,6 +70,7 @@ class ConfigApps
             "namespace"=>$namespace,
             "disable"=>false,
             "dirResource"=>"",
+            "database"=> null,
             "cors"=> (object)[
                 "origin"  => null,
                 "headers" => null,

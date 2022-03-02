@@ -11,6 +11,7 @@
 namespace HNova\Api\Settings;
 
 use HNova\Api\Api;
+use HNova\Api\ApiException;
 use HNova\Api\Data\Database;
 
 class AppConfig
@@ -38,14 +39,33 @@ class AppConfig
 
     /**
      * Retorna la base de datos.
+     * @return null|Database Retorna el objeto Database o null en caso de que no tenga una base de datos establecida.
+     * @throws ApiException retorna una exception en caso de no encontrarse las base de datos solicitada al api.json.
      */
     public function getDatabase():?Database
     {
-        return Api::getConfig()->getDatabases()->get($this->config->database);
+        $db_name = $this->config->database;
+        if ($db_name){
+            $db = Api::getConfig()->getDatabases()->get($this->config->database);
+            if (!$db){
+                throw new ApiException(["No se encuentra la información de la base de datos [ $db_name ] solicitada."]);
+            }
+            return $db;
+        }else{
+            return null;
+        }
     }
 
     /**
-     * Desactiva la aplicación
+     * Estable la base de datos por defecto a utilizar en la app.
+     */
+    public function setDatabase(string $name):void
+    {
+        $this->config->database = $name;
+    }
+
+    /**
+     * Desactiva el acceso la aplicación
      */
     public function disable():void
     {
@@ -53,12 +73,11 @@ class AppConfig
     }
     
     /**
-     * Habilita la aplicación
+     * Habilita el acceso la aplicación
      */
     public function eneble():void
     {
         $this->config->disable = false;
-
     }
 
     /**

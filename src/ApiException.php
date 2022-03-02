@@ -28,19 +28,24 @@ class ApiException extends Exception
 
     /**
      * @param (string|string[])[] $messages_developer
-     * @param Throwable $th exection del cath
+     * @param Throwable $th exception del cath
      */
     public function __construct(array $messages_developer, ?Throwable $th = null, $text_body = 'Error - code', private $responeCode = 500)
     {
-        $this->messageDeveloper = $messages_developer;
-        $this->textBody = $text_body;
-
-        parent::__construct('', 0, $th);
-        if ($th){
-            $this->message = $th->getMessage();
-            $this->code = $th->getCode();
-            $this->line = $th->getLine();
-            $this->file = $th->getFile();
+        try {
+            
+            $this->messageDeveloper = $messages_developer;
+            $this->textBody = $text_body;
+    
+            parent::__construct('', 0, $th);
+            if ($th){
+                $this->message = $th->getMessage();
+                $this->code = $th->getCode();
+                $this->line = $th->getLine();
+                $this->file = $th->getFile();
+            }
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 
