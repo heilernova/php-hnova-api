@@ -41,7 +41,8 @@ class Install
         $api_namespace = ucfirst($api_name);
         Script::getConfig()->getApps()->add($api_name, $api_namespace);
         Script::getConfig()->getDatabases()->add("test", "mysql", ["hostname"=>"localhost", "username"=>"root", "password"=>"", "database"=>"test" ]);
-        
+        Script::getConfig()->getApps()->get($api_name)->setDatabase("test");
+
         // Creamos los directorios.
         Script::fileAdd("app/app-index.php", file_get_contents(__DIR__.'./../../template/app-index.php'));
         

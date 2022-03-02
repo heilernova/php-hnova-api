@@ -27,6 +27,7 @@ class ApiConfig
     {
         $config = (object)[
             "name" => "Applicaction name",
+            "timezone"=>"UTC",
             "user" => (object)["username"=>"admin", "password"=>""],
             "developers" => [],
             "debug" =>false,
@@ -42,6 +43,11 @@ class ApiConfig
      */
     public function getName():string{
         return $this->config->name;
+    }
+
+    public function getTimezone():string
+    {
+        return $this->config->timezone;
     }
 
     /**

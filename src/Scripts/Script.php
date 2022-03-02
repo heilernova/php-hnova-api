@@ -87,11 +87,13 @@ class Script
                     console::error("Falta ingresar comandos en el script");
                     break;
                 case "g":
-                    self::$config = new ApiConfig(json_decode(file_get_contents("composer.json")));
+                    if (!file_exists("api.json")) console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install"); exit;
+                    self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
                     Generate::execute();
                     break;
-                    case "generate":
-                    self::$config = new ApiConfig(json_decode(file_get_contents("composer.json")));
+                case "generate":
+                    if (!file_exists("api.json")) console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install"); exit;
+                    self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
                     Generate::execute();
                     break;
                 case "i":

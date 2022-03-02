@@ -39,8 +39,9 @@ class Api
     public static function run(string $url):Response
     {
         try {
+            
             $url = strtolower(trim($url, "/"));
-
+            
             // Obtenemos el direcotrio principal dende esta alojada en vendor de composer.
             foreach (get_required_files() as $require){
                 if (str_ends_with( $require, "autoload.php")){
@@ -48,15 +49,17 @@ class Api
                     break;
                 }
             }
-
+            
             // Validamos que se encuentre el archivo api.json
             if (!file_exists(self::$dir . "/api.json")){
                 throw new ApiException(['no se encontrol el archivo: ' . self::$dir . "/api.json"]);
             }
-
+            
             // Cargamos el archivo api.json
             self::$config = new ApiConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
-
+            
+            // Definimos la zona horaria
+            date_default_timezone_set(self::getConfig()->getTimezone());
 
             self::$config->getApps()->get("app")->disable();
             if (empty($url)){
@@ -70,6 +73,18 @@ class Api
 
             if (str_starts_with($url, "nv-panel")){
                 // self::$api = new AppConfig("nv-panel");
+                $api = new AppConfig("nv-panel", (object)[
+                    "cors"=>(object)[
+                        "origin"=> "*",
+                        "methods"=>"*",
+                        "headers"=>"*"
+                    ]
+                ]);
+
+                $url = ltrim(str_replace("nv-panel", "", $url), "/");
+                // Requerimos las rutas.
+                require __DIR__."./Panel/Panel-routes.php";
+
             }else{
                 if (self::$config->getAppsCount() > 1){
                     
@@ -91,6 +106,7 @@ class Api
                 return new Response("not - api", 404);
             }
             self::$api = $api;
+            $api->loadCORS();
             $api->loadRoutes();
 
             $route = Router::find($url);

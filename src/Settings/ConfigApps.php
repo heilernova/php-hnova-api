@@ -42,6 +42,7 @@ class ConfigApps
      */
     public function get(string $name = null):?AppConfig
     {
+        // echo json_encode($this->apps, 128); exit;
         if ($name){
             if (isset($this->apps->$name)){
                 $app = new AppConfig($name, $this->apps->$name);
@@ -66,10 +67,11 @@ class ConfigApps
      */
     public function add($name, $namespace):void
     {
+        $namespace = ucfirst($namespace);
         $this->apps->$name = (object)[
             "namespace"=>$namespace,
             "disable"=>false,
-            "dirResource"=>"",
+            "dirResources"=>"",
             "database"=> null,
             "cors"=> (object)[
                 "origin"  => null,

@@ -17,13 +17,9 @@ use HNova\Api\Settings\AppConfig;
 
 class Generate
 {
-    private static ApiConfig $config;
     public static function execute():void
     {
         $arg = Script::getArgument();
-
-        $json = json_decode(file_get_contents("api.json"));
-        self::$config = new ApiConfig($json);
 
         if ($arg){
             // echo $arg;
@@ -72,11 +68,11 @@ class Generate
         $name = Script::getArgument();
         if ($name){
             $name = ucfirst($name);
-            if (self::$config->getAppsCount() > 1){
+            if (Script::getConfig()->getAppsCount() > 1){
                 // Se debe espeficiara a cual app se le creara el controlador.
                 echo "Espeficiacar el controlador.";
             }else{
-                $app = self::$config->getApps()->get();
+                $app = Script::getConfig()->getApps()->get();
             }
 
             $dir = "app/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
@@ -102,16 +98,16 @@ class Generate
 
         if ($name){
             $name = ucfirst($name);
-            if (self::$config->getAppsCount() > 1){
+            if (Script::getConfig()->getAppsCount() > 1){
                 // Se debe espeficiara a cual app se le creara el controlador.
                 $app = Script::getArgument();
                 if ($app){
-                    $app = self::$config->getApps()->get($app);
+                    $app = Script::getConfig()->getApps()->get($app);
                 }else{
                     console::error("Espeficiacar el controlador."); exit;
                 }
             }else{
-                $app = self::$config->getApps()->get();
+                $app = Script::getConfig()->getApps()->get();
             }
 
             $dir = "app/" . $app->getNamespace() . "/Models/$name" . "Model.php";
