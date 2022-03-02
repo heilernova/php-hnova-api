@@ -10,7 +10,7 @@
  */
 namespace HNova\Api;
 
-use HNova\Api\App\AppConfig;
+use HNova\Api\Settings\AppConfig;
 use HNova\Api\Routes\Router;
 use HNova\Api\Settings\ApiConfig;
 use HNova\Api\Settings\ApiJson;
@@ -85,7 +85,7 @@ class Api
             if (!$api){
                 return new Response("not - api", 404);
             }
-
+            self::$api = $api;
             $api->loadRoutes();
 
             $route = Router::find($url);
@@ -115,19 +115,21 @@ class Api
         return self::$dir;
     }
 
-
-    public static function getAppConfig()
+    /**
+     * Retorna al AppConfig en uso.
+     */
+    public static function getAppConfig():AppConfig
     {
-
+        return self::$api;
     }
 
-    // /**
-    //  * Retorna un objeto con la configuración del archivo api.json
-    //  */
-    // public static function getConfig():AppConfig
-    // {
-    //     return new AppConfig();
-    // }
+    /**
+     * Retorna un objeto con la configuración del archivo api.json
+     */
+    public static function getConfig():ApiConfig
+    {
+        return self::$config;
+    }
 
     // /**
     //  * Retorna un objeto con la información de la api en ejecución.

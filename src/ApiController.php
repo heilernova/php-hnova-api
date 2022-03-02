@@ -9,10 +9,24 @@
  */
 namespace HNova\Api;
 
+use HNova\Api\Data\Database;
+
 class ApiController
 {
+    private Database $database;
     public function __construct()
     {
-        // Api::getAppConfig()
+        // Api::getAppConfig()->get
+        
+    }
+
+    /**
+     * Obtiene el contenido del body decodificado
+     * El contenido del body debe estar en formato json.
+     * @param bool $assoc Si es true retornara un array asositivo en caso controlario un objeto
+     */
+    public function getBody(bool $assoc = false):object|array
+    {
+        return json_decode(file_get_contents("php://input"), $assoc);
     }
 }

@@ -11,6 +11,7 @@
 namespace HNova\Api\Settings;
 
 use HNova\Api\Api;
+use HNova\Api\Data\Database;
 
 class AppConfig
 {
@@ -27,9 +28,20 @@ class AppConfig
     }
 
 
+    /**
+     * Retorna le namespace de la app
+     */
     public function getNamespace():string
     {
         return $this->config->namespace;
+    }
+
+    /**
+     * Retorna la base de datos.
+     */
+    public function getDatabase():?Database
+    {
+        return Api::getConfig()->getDatabases()->get($this->config->database);
     }
 
     /**
