@@ -22,9 +22,10 @@ Pegue el siguiente código el su archivo composer.json.
 }
 ```
 
-Debería quiedar de la siguiete manera.
+Debería quedar de la siguiete manera.
 
-![img](img/ejemplo-script.png)
+
+<img src="img/ejemplo-script.png" width="400px">
 
 ### Script disponibles
 
