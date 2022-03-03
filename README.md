@@ -193,3 +193,117 @@ Routes::get("test/hello", [TestController::class, "hello"]);
 // Buscara el método post de la clas TesController
 Routes::post("test/hello", [TestController::class]);
 ```
+
+## Utilidades para Angular
+En caso de validar los mensaje del sistema en Angular, se recomienta utilizar un interceptor para el manejo de errores
+
+Código para el interceptor
+```ts
+import { Injectable } from '@angular/core';
+import {
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpInterceptor,
+  HttpErrorResponse,
+  HttpResponse
+} from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
+
+@Injectable()
+export class NvApiInterceptor implements HttpInterceptor {
+
+  static urlDefault:string|undefined = undefined;
+
+  constructor(
+    private _message:NvMessageBoxService
+  ) {}
+
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+
+    let url:string = request.url;
+    
+    if (NvApiInterceptor.urlDefault){
+      if (!url.match(/^http(s)?:\/\/(.*)$/)){
+        url = `${NvApiInterceptor.urlDefault}/${url}`;
+      }
+    }
+
+    let requestClone:HttpRequest<unknown> = request.clone({url});
+
+    return next.handle(requestClone).pipe(
+      map((event:HttpEvent<any>)=>{
+          if (event instanceof HttpResponse ){
+            let bodyObject = this.getBodyResponse(event.body);
+            
+            // Validas si la repuesta concuerda con ResponseApi de la libreria HNova/api
+            if (bodyObject){
+
+              if (bodyObject.status){
+                // En caso de ser true establecemos el body con el contenido de la data.
+                if (bodyObject.message.content.length > 0){
+                  
+                  // Aquí el codigo par al manejo del mensaje.
+                }
+                event = event.clone({body: bodyObject.data});
+              }else{
+                // En caso de retornar false devolvemos un error
+                throw new HttpErrorResponse({error: bodyObject.message, url: event.url ?? '', status: event.status});
+              }
+
+            }
+          }
+        return event;
+      }),
+      catchError((e:HttpErrorResponse)=>{
+        
+        let text:string = "Error inesperado";
+        let ms = this.getMessage(e.error);
+
+        if (ms){
+          if (ms.content.length > 0){
+            // Aquí el codigo par al manejo del mesaje del servidror.
+            
+          }
+        }else{
+          if (typeof e.error == 'object'){
+            text = e.message;
+            
+          }else if (typeof e.error == "string"){
+            text = e.error;
+
+            // Aquí el codigo par al manejo del mensjaer de error del servidor.
+          }
+        }
+        
+        return throwError(()=>e);
+      })
+    );
+  }
+
+  private getMessage(data:any):{title:string, content:(string|string[])[], type:number}|null{
+    try {
+      if ('title' in data && 'content' in data && 'type' in data){
+        return data;
+      }else{
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  private getBodyResponse(data:any):{status:string, statusCode:number, message:{title:string, content:(string|string[])[], type:number}, data:any}|null{
+    try {
+      if ('status' in data && 'statusCode' in data && 'message' in data && 'data' in data){
+        return data;
+      }else{
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+}
+
+```
