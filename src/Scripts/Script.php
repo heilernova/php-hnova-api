@@ -88,20 +88,11 @@ class Script
                     console::error("Falta ingresar comandos en el script");
                     break;
                 case "g":
-                    if (!file_exists("api.json")){
-                        console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install");
-                        exit;
-                    }
-                    self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
-                    
+                    self::loadConfig();
                     Generate::execute();
                     break;
                 case "generate":
-                    if (!file_exists("api.json")) {
-                        console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install");
-                        exit;
-                    }
-                    self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
+                    self::loadConfig();
                     Generate::execute();
                     break;
                 case "i":
@@ -128,6 +119,21 @@ class Script
             console::error("Message:    " . $th->getMessage());
             console::error("");
         }
+    }
+
+    /**
+     * Cargar la configuración de api.json
+     * en caso de no encotrarse el api.json se detendera la ejecución de escript
+     */
+    private static function loadConfig():void
+    {
+        if (!file_exists("api.json")){
+            console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install");
+            exit;
+        }
+
+        // Cargamos la configuración
+        self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
     }
 
     /**
