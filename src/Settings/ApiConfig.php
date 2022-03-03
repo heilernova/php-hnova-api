@@ -28,7 +28,7 @@ class ApiConfig
         $config = (object)[
             "name" => "Applicaction name",
             "timezone"=>"UTC",
-            "user" => (object)["username"=>"admin", "password"=>""],
+            "user" => (object)["username"=>"admin", "password"=>"", "email"=>null],
             "developers" => [],
             "debug" =>false,
             "databases"=>(object)[],
