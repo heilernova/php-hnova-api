@@ -25,7 +25,7 @@ Pegue el siguiente código el su archivo composer.json.
 Debería quedar de la siguiete manera.
 
 
-<img src="img/ejemplo-script.png" width="400px">
+<img src="img/ejemplo-script.png" width="600px">
 
 ### Script disponibles
 
