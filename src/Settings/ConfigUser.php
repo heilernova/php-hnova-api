@@ -37,4 +37,20 @@ class ConfigUser
     {
         return password_verify($password, $this->user->password);
     }
+
+    /**
+     * Retorna el correo electronico del usuario
+     */
+    public function getEmail():?string
+    {
+        return $this->user->email;
+    }
+
+    /**
+     * Estable el correo eletrónico del usuario.
+     */
+    public function setEmail(string $email):void
+    {
+        $this->user->emial = $email;
+    }
 }
