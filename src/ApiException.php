@@ -30,7 +30,7 @@ class ApiException extends Exception
      * @param (string|string[])[] $messages_developer
      * @param Throwable $th exception del cath
      */
-    public function __construct(array $messages_developer, ?Throwable $th = null, $text_body = 'Error - code', private $responeCode = 500)
+    public function __construct(array $messages_developer, ?Throwable $th = null, $text_body = 'Error - server', private $responeCode = 500)
     {
         try {
             
@@ -66,24 +66,33 @@ class ApiException extends Exception
         return $this->responeCode;
     }
 
+    /**
+     * Obtiene el texto que se retornara el error en la petición HTTP encaso de que 
+     * el debug de API Config este el false
+     */
     public function getTextBody():string
     {
         return $this->textBody;
     }
 
+    /**
+     * Imprime el error en el body
+     */
     public function echo():void
     {
+        // Carmaso la informacion del errro a un array asosiativo
         $content = [
             "api"=>"",
             "date"=> date('Y-m-d H:i:s',time()) . "z",
             "messageDeveloper"=>$this->messageDeveloper,
-            "MensajeError"=>$this->message,
+            "mensajeError"=>$this->message,
             "code"=>$this->getCode(),
             "file"=>$this->getFile(),
             "line"=>$this->getLine(),
             "trace"=>$this->getTrace()
         ];
 
+        // Códigicamos al formato JSON
         $content = json_encode($content);
 
         $file_path = Api::getDir() . "/nv-panel/errors/list.txt";
@@ -97,7 +106,7 @@ class ApiException extends Exception
         fclose($file);
 
         header('content-type: text');
-        if (true){
+        if (Api::getConfig()->debug()){
             echo "Mensaje del desarrollador:\n";
             foreach($this->getMessageDeveloper() as $item){
                 if (is_string($item)){
@@ -109,14 +118,15 @@ class ApiException extends Exception
                 }
             }
             echo "\n\nMessaje error: " . $this->getMessage() . "\n";
-            echo "Code:    " . $this->getCode() . "\n";
-            echo "File:    " . $this->getFile() . "\n";
-            echo "Line:    " . $this->getLine() . "\n";
-            echo "\n\n";
+            echo "-----------------------------------------------------\n";
+            echo "Código:    " . $this->getCode() . "\n";
+            echo "Archivo:    " . $this->getFile() . "\n";
+            echo "Linea:    " . $this->getLine() . "\n";
+            echo "\n-----------------------------------------------------\n";
             echo "Rastro:";
             echo json_encode($this->getTrace(), 128);
         }else{
-            echo "Error - api - server";
+            echo $this->textBody;
         }
         http_response_code($this->responeCode);
         exit;
