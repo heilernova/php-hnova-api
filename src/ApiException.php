@@ -105,7 +105,7 @@ class ApiException extends Exception
         fputs($file, "$content,\n");
         fclose($file);
 
-        header('content-type: text charset=utf-8');
+        header('content-type: text, charset=utf-8');
         if (Api::getConfig()->debug()){
             echo "Mensaje del desarrollador:\n";
             foreach($this->getMessageDeveloper() as $item){
