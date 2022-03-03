@@ -77,22 +77,30 @@ class Script
     {
         self::$event = $event;
         try {
+            
             // Cargamos el primer argumento
             self::$args = $event->getArguments();
 
             $arg = self::getArgument(); 
-
+            
             switch ($arg) {
                 case null:
                     console::error("Falta ingresar comandos en el script");
                     break;
                 case "g":
-                    if (!file_exists("api.json")) console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install"); exit;
+                    if (!file_exists("api.json")){
+                        console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install");
+                        exit;
+                    }
                     self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
+                    
                     Generate::execute();
                     break;
                 case "generate":
-                    if (!file_exists("api.json")) console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install"); exit;
+                    if (!file_exists("api.json")) {
+                        console::error("No se encontro el archivo api.json, revise el fichero o ejecute el install");
+                        exit;
+                    }
                     self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
                     Generate::execute();
                     break;
