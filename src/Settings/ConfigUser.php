@@ -23,6 +23,14 @@ class ConfigUser
     }
 
     /**
+     * Retror el nombre del usuario
+     */
+    public function getUsername():string
+    {
+        return $this->user->username;
+    }
+
+    /**
      * Establece la contraseña del usaruio
      */
     public function setPassword(string $password):void
