@@ -6,7 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
  */
 namespace HNova\Api;
 
@@ -33,7 +32,7 @@ class Api
     private static AppConfig $api;
 
     /**
-     * Inicia la app
+     * Inicia la app y procesa la URL
      * @param string $url URL de la petición HTTP realizada.
      */
     public static function run(string $url):Response
@@ -42,7 +41,10 @@ class Api
             
             $url = strtolower(trim($url, "/"));
             
-            // Obtenemos el direcotrio principal dende esta alojada en vendor de composer.
+            /**
+             * Obtenemos el direcotrio principal donde esta alojada en vendor de composer.
+             * con el fin de obtener el directorio princial del proyecto.
+             */
             foreach (get_required_files() as $require){
                 if (str_ends_with( $require, "autoload.php")){
                     self::$dir = dirname($require, 2);
@@ -50,7 +52,7 @@ class Api
                 }
             }
             
-            // Validamos que se encuentre el archivo api.json
+            // Validamos que se encuentre el archivo api.json en caso de no encontrarse retoranamos un exception
             if (!file_exists(self::$dir . "/api.json")){
                 throw new ApiException(['no se encontrol el archivo: ' . self::$dir . "/api.json"]);
             }
@@ -61,18 +63,22 @@ class Api
             // Definimos la zona horaria
             date_default_timezone_set(self::getConfig()->getTimezone());
 
-            self::$config->getApps()->get("app")->disable();
             if (empty($url)){
                 if ($_SERVER['REQUEST_METHOD'] == "GET"){
+
+                    /**
+                     * En caso de que la URL este vacia y la petición sea de tipo GET retornamos 
+                     * la páguina de inico de la API
+                     */
                     require __DIR__.'./Views/homepage.php';
                     exit;
                 }else{
-                    return new Response("Not found", 404);
+                    return new Response("Not found - empy URL", 404);
                 }
             }
 
             if (str_starts_with($url, "nv-panel")){
-                // self::$api = new AppConfig("nv-panel");
+
                 $api = new AppConfig("nv-panel", (object)[
                     "cors"=>(object)[
                         "origin"=> "*",
@@ -86,6 +92,8 @@ class Api
                 require __DIR__."./Panel/Panel-routes.php";
 
             }else{
+
+
                 if (self::$config->getAppsCount() > 1){
                     
                     // extraemos el nombre de la api con el inicio de la URL.
@@ -103,8 +111,11 @@ class Api
             }
 
             if (!$api){
+
+                /** en caso de no encontrase la API en el api.json */
                 return new Response("not - api", 404);
             }
+
             self::$api = $api;
             $api->loadCORS();
             $api->loadRoutes();
@@ -114,7 +125,7 @@ class Api
             if ($route){
                 return $route->callAction();
             }else{
-                return new Response("not - path", 404);
+                return new Response("not - path - routes", 404);
             }
 
 
@@ -129,7 +140,7 @@ class Api
     }
 
     /**
-     * Retorna el direcotorio principal del proyecto.
+     * Retorna el directorio principal del proyecto.
      */
     public static function getDir():string
     {
@@ -151,12 +162,4 @@ class Api
     {
         return self::$config;
     }
-
-    // /**
-    //  * Retorna un objeto con la información de la api en ejecución.
-    //  */
-    // public static function getApi():AppInfoClass
-    // {
-    //     return self::$api;
-    // }
 }
