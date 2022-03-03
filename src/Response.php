@@ -30,7 +30,7 @@ class Response
     {
         switch ($this->type){
             case "json":
-                header('content-type: application/json');
+                header('content-type: application/json, charset=utf-8');
                 echo str_replace('\/', '/', json_encode($this->body));
                 break;
             case "file":
