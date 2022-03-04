@@ -1,8 +1,8 @@
 <?php
 /**
- * Clase controlador que contiene los metodos a ser ejecutados
+ * Clase controlador que contiene los metodos a ser ejecutados por las rutas.
  * 
- * todos lo métodos debe retornar un HNova\Api\Response
+ * todos lo métodos deben retornar un HNova\Api\Response
  */
 namespace Example\Controllers;
 
@@ -11,7 +11,6 @@ use HNova\Api\Response;
 
 class NameControllerController extends ExampleBaseController
 {
-
     function get():Response
     {
         /**
