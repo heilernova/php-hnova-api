@@ -110,8 +110,13 @@ use App\AppGuards;
 use HNova\Api\Response;
 use HNova\Api\Routes;
 
-Routes::get("test", function(){ return new Response("Hola mundo tetst"); });
-Routes::get("test/saludo/{nombre:string}", function(string $nombre){ return new Response("Hola mundo  $nombre"); });
+Routes::get("test", function(){ 
+  return new Response("Hola mundo tetst"); 
+});
+
+Routes::get("test/saludo/{nombre:string}", function(string $nombre){ 
+  return new Response("Hola mundo  $nombre");
+});
 ```
 
 ## Protección de rutas
