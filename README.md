@@ -4,10 +4,20 @@ Librería de PHP para el desarrollo de apis
 
 package compsoser: https://packagist.org/packages/hnova/api
 
-* `XAMMP` https://www.apachefriends.org/es/download.html Instalar la versión con php 8.0.13 o superior
-* `Composer` https://getcomposer.org/download/
+## Requerimientos para el desarollo
+### Programas requeridos
+* [`XAMMP`](https://www.apachefriends.org/es/download.html) Instalar la versión con php 8.0.13 o superior
+* [`Composer`](https://getcomposer.org/download/)
+### Programas opcionales
+* `Postman` : Applicación para testear las rutas de la API, pude descargarla  [aqui](https://www.postman.com/downloads/)
 
-## Intalación
+## Recomendaciones
+En caso de utilizar Visual Studio Code, pude utilizar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
+* [`Bracket Pair Colorizer 2`](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+* [`Material Icon Theme` ](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+* [`PHP Intelephense`](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client)
+
+## Instalación
 
 Para instalar la librería en tu proyecto debe ejecutar el siguiente comando en la consola de composer, aun no hay primara versión por lo tanto de debe instalar la versión en desarrollo con dev-main
 ```powershell
@@ -33,6 +43,9 @@ Debería quedar de la siguiete manera.
 * `composer nv g c <name>` => Crea un controldor en la app
 * `composer nv g m <name>` => Crea un modelo en la app
 * `composer nv g api <name>` => Crea una nueva app de acceso a la api
+
+#### composer nv install / composer nv i
+Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta app donde alojara las api
 
 ## Creación del entorno de trabajo.
 Para iniciar con el desarrollo de la api debe ejecutar el siguiente comando mediente consola ne la raiz del proyecto
@@ -98,7 +111,7 @@ Ejemplo del archivo routes: allí podremos detallar el el nombre hacer referenci
 
 <img src="img/ejemplo-routes.png"  width="600px">
 
-En este archivo entraremos el siguiene código.
+En este archivo entraremos el siguiente código.
 
 ```php
 /**
