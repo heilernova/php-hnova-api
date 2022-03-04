@@ -1,12 +1,6 @@
 <?php
-
+/**
+ * Aqui el código parar realizar pruebas de comandos de consola
+ * llamado " composer nv test " 
+ */
 use HNova\Api\Scripts\Script;
-
-$v = Script::getEvent()->getComposer()->getConfig()->getConfigSource()->getName();
-
-echo  $v . "\n";
-$n =  strpos($v, 'htdocs');
-echo $n . "\n";
-echo dirname(substr($v, $n + 7)) . "\n";
-
-// echo json_encode(basename(dirname($v)));
