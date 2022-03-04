@@ -28,10 +28,20 @@ class Install
             exit;
         }
 
+        // Validamos si la carpeta existe y tiene contenido
+        if (file_exists("src")){
+            
+            if (filesize("src") > 0){
+                // En caso de tener contenido detenemos la ejecución de la instalación
+                console::error("El directorio [ src ] ya se encuetra el uso.");
+                exit;
+            }
+        }
+
         // Creamo el objeto de api json
 
         $io = Script::getEvent()->getIO();
-        $api_name = $io->ask("¿Nombre de tu primera api (nombre por default: [ app ] ) ?: ", 'app');
+        $api_name = $io->ask("¿Nombre de tu primera API (nombre por default: [ app ] ) ?: ", 'app');
 
         Script::getConfig()->getUser()->setUsername("admin");
         Script::getConfig()->getUser()->setPassword("admin");
@@ -44,7 +54,7 @@ class Install
         Script::getConfig()->getApps()->get($api_name)->setDatabase("test");
 
         // Creamos los directorios.
-        Script::fileAdd("app/app-index.php", file_get_contents(__DIR__.'./../../template/app-index.php'));
+        Script::fileAdd("src/app-index.php", file_get_contents(__DIR__.'./../../template/app-index.php'));
         
         Generate::app(Script::getConfig()->getApps()->get($api_name), false);
 

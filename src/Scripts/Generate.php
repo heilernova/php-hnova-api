@@ -138,27 +138,27 @@ class Generate
         // Routes
         $content = file_get_contents( __DIR__.'./../../template/example/example-routes.php' );
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("app/$namespace/$namespace-routes.php", $content);
+        Script::fileAdd("src/$namespace/$namespace-routes.php", $content);
         
         //  Base controller
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseController.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("app/$namespace/$namespace" . "BaseController.php", $content);
+        Script::fileAdd("src/$namespace/$namespace" . "BaseController.php", $content);
 
         //  Base model
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseModel.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("app/$namespace/$namespace" . "BaseModel.php", $content);
+        Script::fileAdd("src/$namespace/$namespace" . "BaseModel.php", $content);
         
         // Guards
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleGuards.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("app/$namespace/$namespace" . "Guards.php", $content);
+        Script::fileAdd("src/$namespace/$namespace" . "Guards.php", $content);
 
         // Script::getEvent()->getComposer()
         $composer_json = json_decode(file_get_contents("composer.json"), true);
 
-        $composer_json['autoload']['psr-4']["$namespace\\"] = "app/$namespace/";
+        $composer_json['autoload']['psr-4']["$namespace\\"] = "src/$namespace/";
 
         Script::fileUpdate("composer.json", str_replace('\/', '/',json_encode($composer_json, 128)));
 
