@@ -28,7 +28,7 @@ Routes::post("auth", function(){
     $data = json_decode(file_get_contents("php://input"));
 
     $res = new ResponseApi();
-    $res->message->title = "Acceso no permitido";
+    $res->message->title = "Credenciales incorrectas";
 
     if (Api::getConfig()->getUser()->getUsername() == $data->username){
         if (Api::getConfig()->getUser()->passwordVerify($data->password)){
@@ -53,8 +53,53 @@ Routes::post("auth", function(){
     return new Response($res);
 });
 
+
+
 # -------------------------------------------------------------------
-# ----------------- Manejor de las api
+# ----------------- Manejo de las base de datos
+# -------------------------------------------------------------------
+
+// Retorna la lista de las bases de datos.
+Routes::get("databases", function(){
+    
+    return new Response([]);
+});
+
+// Actualiza la información de la base de datos.
+Routes::put("databases/{name}", function(string $name){
+    return new Response(true);
+});
+
+// Elimina una base de datos.
+Routes::delete("database/{name}", function(string $name){
+    return new Response(true);
+});
+
+// Verifica el estado de conexión de la base de datos
+Routes::get("database/{name}/test", function(string $name){
+    return new Response("");
+});
+
+// Verifica si los datos son validos para una conexión MySql
+Routes::post("database/test-connection", function(){
+    $data = json_decode(file_get_contents("php://input"));
+
+    $res = new ResponseApi();
+    try {
+        $co = mysqli_connect($data->hostname, $data->username, $data->password, $data->database);
+        $res->status = true;
+    } catch (\Throwable $th) {
+
+        $res->message->title = "Datos de conexión incorrectos";
+        $res->message->content = $th->getMessage();
+
+    }
+
+    return new Response([]);
+});
+
+# -------------------------------------------------------------------
+# ----------------- Manejo de las api
 # -------------------------------------------------------------------
 
 // Retornamos la lista de apis
@@ -62,13 +107,14 @@ Routes::get("apis", function(){
     return new Response([]);
 });
 
+// Retronamos la información de la api.
 Routes::get("apis/{name}", function($name){
     $info = Api::getConfig()->getApps()->get($name);
     
     return new Response($info ? $info->getInfo() : null);
 });
 
-// Desabiluita el acceso a una api
+// Deshabilita el acceso a una api
 Routes::patch("apis/{name}/disable", function(string $name){
     $re = Api::getConfig()->getApps()->get($name);
     return new Response($re);
