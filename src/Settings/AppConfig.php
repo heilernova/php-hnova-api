@@ -93,11 +93,17 @@ class AppConfig
         return new CorsConfig($this->config->cors);
     }
 
+    /**
+     * Retorna un object con la infromación de la APP
+     */
     public function getInfo():object
     {
         return $this->config;
     }
 
+    /**
+     * Carga la rutas de la APP
+     */
     public function loadRoutes():bool
     {
         $name = $this->getNamespace();
@@ -107,6 +113,9 @@ class AppConfig
         return true;
     }
 
+    /**
+     * Carga los CORS de la APP
+     */
     public function loadCORS()
     {
         try {
