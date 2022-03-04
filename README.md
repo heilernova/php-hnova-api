@@ -12,7 +12,7 @@ package de compsoser [Aquí](https://packagist.org/packages/hnova/api)
 * [Postman](https://www.postman.com) : Applicación para testear las rutas de la API, pude realizar la descarga [aquí](https://www.postman.com/downloads/)
 
 ## Recomendaciones
-En caso de utilizar Visual Studio Code, pude utilizar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
+En caso de utilizar [Visual Studio Code](https://code.visualstudio.com/), pude utilizar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
 * [Bracket Pair Colorizer 2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
 * [Material Icon Theme ](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 * [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client)
