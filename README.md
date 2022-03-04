@@ -2,15 +2,14 @@
 
 Librería de PHP para el desarrollo de apis
 
-package compsoser: https://packagist.org/packages/hnova/api
+package de compsoser [Aquí](https://packagist.org/packages/hnova/api)
 
-## Requerimientos para el desarollo
 ### Programas requeridos
 * [XAMMP](https://www.apachefriends.org/es/download.html) Instalar la versión con php 8.0.13 o superior
 * [Composer](https://getcomposer.org/download/)
 * Editor de código puede ser [Visual Studio Code](https://code.visualstudio.com/);
 ### Programas opcionales
-* [Postman](https://www.postman.com) : Applicación para testear las rutas de la API, pude descargarla  [aqui](https://www.postman.com/downloads/)
+* [Postman](https://www.postman.com) : Applicación para testear las rutas de la API, pude realizar la descarga [aquí](https://www.postman.com/downloads/)
 
 ## Recomendaciones
 En caso de utilizar Visual Studio Code, pude utilizar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
@@ -40,25 +39,38 @@ Debería quedar de la siguiete manera.
 
 ### Script disponibles
 
-* `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la api
+* `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
 * `composer nv g c <name>` => Crea un controldor en la app
 * `composer nv g m <name>` => Crea un modelo en la app
-* `composer nv g api <name>` => Crea una nueva app de acceso a la api
+* `composer nv g api <name>` => Crea una nueva app de acceso a la API
 
 #### composer nv install / composer nv i
-Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta app donde alojara las api
+Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta src donde alojara el código para gestion de la API.
+
+Nota: En caso de la carpeta src este creada y tenga contenido no se ejecutara la instalación.
+
+Importante: Una vez ejecutado el script de debe actualar el autoload de composer ejecutando el comando `composer dump-autoload`
+
+#### composer nv g c <name>
+Crea un controlador para ser accedito por la ruta. al ejecutar este comando creara un archivo con el nombre ingredado en caso de que el controlador ya se encuentre creado retornara un error informando que le nombre del controlador ya esta en uso
+
+Nota: En caso de que de hallan creado mas una pai debera agregar en el script el nombre de la API a la cual se le crearar el controlador.
+
+Informacion: el nombre del controladro se definira el formato "PascalCase" donde cada palabra inicia con una mayuscula, recomienda que los nombre se lo mas cortos posibles y que hagan referencias a su acción, por defecto se le agregara la palabra Controller al nombre. 
+
+Ejemplos: `TestController`, `PersonsController` , `UsersLocksController`
 
 ## Creación del entorno de trabajo.
 Para iniciar con el desarrollo de la api debe ejecutar el siguiente comando mediente consola ne la raiz del proyecto
 ```
 composer nv i
 ```
-El script preguntara que nombre que desae darle a la primera api por defecto de asigna el nombre de `app`, una vez terminado el proceso entraremos en la cartea `app` los archivos PHP para el funcionamiento de la api y el el directorio princiapal un archivo json llamado `api.json` el cual contiene las configuraciones del sistema.
+El script preguntara que nombre que desae darle a la primera api por defecto de asigna el nombre de `app`, una vez terminado el proceso en la cartea `src` encontraremos los archivos PHP para el funcionamiento de la API y el el directorio princiapal un archivo json llamado `api.json` el cual contiene las configuraciones del sistema.
 
 Importante actualizar el autoload de composer mediante el siguiente comando `composer dump-autoload`
 
 ## Configuración de api.json
-En el fichero `api.json` contiene un objeto JSON con las configuraciones para el funcionamiento de app con el siguiente formato.
+En el fichero `api.json` contiene un objeto JSON con las configuraciones para el funcionamiento de la API con el siguiente formato.
 ```json
 {
     "name": "Applicaction name",
@@ -102,6 +114,8 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
     }
 }
 ```
+
+En este archivo podremos 
 
 ## Rutas
 Las rutas de acceso a la api de deberan definir en el archivo `App-routes.php` encontrado en la carpeta de cada app, cabe recalcar el nombre del archivo hace referencia al nombre de app por lo tanto el nombre biene definido por el namespace mas -routes.php.
