@@ -40,9 +40,9 @@ Debería quedar de la siguiete manera.
 ### Script disponibles
 
 * `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
-* `composer nv g c <name>` => Crea un controldor en la app
-* `composer nv g m <name>` => Crea un modelo en la app
-* `composer nv g api <name>` => Crea una nueva app de acceso a la API
+* `composer nv g c (name)` => Crea un controldor en la app
+* `composer nv g m (name) (name)` => Crea un modelo en la app
+* `composer nv g api (name)` => Crea una nueva app de acceso a la API
 
 #### composer nv install / composer nv i
 Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta src donde alojara el código para gestion de la API.
@@ -51,7 +51,7 @@ Nota: En caso de la carpeta src este creada y tenga contenido no se ejecutara la
 
 Importante: Una vez ejecutado el script de debe actualar el autoload de composer ejecutando el comando `composer dump-autoload`
 
-#### composer nv g c <name>
+#### composer nv g c (name)
 Crea un controlador para ser accedito por la ruta. al ejecutar este comando creara un archivo con el nombre ingredado en caso de que el controlador ya se encuentre creado retornara un error informando que le nombre del controlador ya esta en uso
 
 Nota: En caso de que de hallan creado mas una pai debera agregar en el script el nombre de la API a la cual se le crearar el controlador.
@@ -59,6 +59,11 @@ Nota: En caso de que de hallan creado mas una pai debera agregar en el script el
 Informacion: el nombre del controladro se definira el formato "PascalCase" donde cada palabra inicia con una mayuscula, recomienda que los nombre se lo mas cortos posibles y que hagan referencias a su acción, por defecto se le agregara la palabra Controller al nombre. 
 
 Ejemplos: `TestController`, `PersonsController` , `UsersLocksController`
+
+#### composer nv g m (name) (table)
+Crea un modelo para interactuar con la base de datos, el script costa del cuerpo princiapal `composer nv g m` y dos parametros `name` y `table`, en cado de haber mas de una API debe especificar el nombre a la cual se le creara el modelo.
+
+Nota: Por defecto la conexión de la base de datos utilizara la de la API ejecuta. en caso de personalizar la conexión a la base datos utilize los flaz en en la base de datos --db:name_databse
 
 ## Creación del entorno de trabajo.
 Para iniciar con el desarrollo de la api debe ejecutar el siguiente comando mediente consola ne la raiz del proyecto
