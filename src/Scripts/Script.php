@@ -15,6 +15,19 @@ use HNova\Api\Settings\AppConfig;
 
 class Script
 {
+    private static string $src_dir = "src";
+    /**
+     * Retorna el el directorio donde se intalaran los paquetes.
+     */
+    public static function getSRC():string
+    {
+        return self::$src_dir; // Para producción final debe ser "src"
+    }
+
+    public static function test()
+    {
+        return self::$src_dir = "app";
+    } 
     /**
      * Almacena el envento de composer
      */

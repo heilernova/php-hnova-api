@@ -28,10 +28,12 @@ class Install
             exit;
         }
 
+        $dir = Script::getSRC();
+
         // Validamos si la carpeta existe y tiene contenido
-        if (file_exists("src")){
+        if (file_exists($dir)){
             
-            if (filesize("src") > 0){
+            if (filesize($dir) > 0){
                 // En caso de tener contenido detenemos la ejecución de la instalación
                 console::error("El directorio [ src ] ya se encuetra el uso.");
                 exit;
@@ -54,13 +56,13 @@ class Install
         Script::getConfig()->getApps()->get($api_name)->setDatabase("test");
 
         // Creamos los directorios.
-        Script::fileAdd("src/app-index.php", file_get_contents(__DIR__.'./../../template/app-index.php'));
+        Script::fileAdd("$dir/api-index.php", file_get_contents(__DIR__.'./../../template/api-index.php'));
         
         Generate::app(Script::getConfig()->getApps()->get($api_name), false);
 
         // // Cramos las archivos de la carpeta www
         Script::fileAdd("www/.htaccess","RewriteEngine On\nRewriteRule ^(.*) index.php?url=$1 [L,QSA]");
-        Script::fileAdd("www/index.php","<?php\nrequire __DIR__.'./../app/app-index.php';");
+        Script::fileAdd("www/index.php","<?php\nrequire __DIR__.'./../$dir/api-index.php';");
         Script::fileAdd("api.json", str_replace('\/', '/', json_encode(Script::getConfig()->getObject(), 128)));
         Script::fileCreate();
 

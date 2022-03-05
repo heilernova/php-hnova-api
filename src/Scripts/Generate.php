@@ -64,6 +64,7 @@ class Generate
     public static function controller(){
 
         $name = Script::getArgument();
+        $dir = Script::getSRC();
         if ($name){
             $name = ucfirst($name);
             if (Script::getConfig()->getAppsCount() > 1){
@@ -73,7 +74,7 @@ class Generate
                 $app = Script::getConfig()->getApps()->get();
             }
 
-            $dir = "src/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
+            $dir = "$dir/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
 
             if (file_exists($dir)){
                 console::error("El nombre del controlador ya esta en uso."); exit;
@@ -93,6 +94,7 @@ class Generate
     public static function model()
     {
         $name = Script::getArgument();
+        $dir = Script::getSRC();
 
         if ($name){
             $name = ucfirst($name);
@@ -108,7 +110,7 @@ class Generate
                 $app = Script::getConfig()->getApps()->get();
             }
 
-            $dir = "app/" . $app->getNamespace() . "/Models/$name" . "Model.php";
+            $dir = "$dir/" . $app->getNamespace() . "/Models/$name" . "Model.php";
 
             if (file_exists($dir)){
                 console::error("El nombre del modelo ya esta en uso."); exit;
@@ -132,31 +134,32 @@ class Generate
     public static function app(ApiConfig $app, bool $auto_sale = true){
 
         $namespace = $app->getNamespace();
+        $dir = Script::getSRC();
 
         // Routes
         $content = file_get_contents( __DIR__.'./../../template/example/example-routes.php' );
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("src/$namespace/$namespace-routes.php", $content);
+        Script::fileAdd("$dir/$namespace/$namespace-routes.php", $content);
         
         //  Base controller
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseController.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("src/$namespace/$namespace" . "BaseController.php", $content);
+        Script::fileAdd("$dir/$namespace/$namespace" . "BaseController.php", $content);
 
         //  Base model
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleBaseModel.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("src/$namespace/$namespace" . "BaseModel.php", $content);
+        Script::fileAdd("$dir/$namespace/$namespace" . "BaseModel.php", $content);
         
         // Guards
         $content = file_get_contents(__DIR__.'./../../template/example/ExampleGuards.php');
         $content = str_replace("Example", $namespace, $content);
-        Script::fileAdd("src/$namespace/$namespace" . "Guards.php", $content);
+        Script::fileAdd("$dir/$namespace/$namespace" . "Guards.php", $content);
 
         // Script::getEvent()->getComposer()
         $composer_json = json_decode(file_get_contents("composer.json"), true);
 
-        $composer_json['autoload']['psr-4']["$namespace\\"] = "src/$namespace/";
+        $composer_json['autoload']['psr-4']["$namespace\\"] = "$dir/$namespace/";
 
         Script::fileUpdate("composer.json", str_replace('\/', '/',json_encode($composer_json, 128)));
 
