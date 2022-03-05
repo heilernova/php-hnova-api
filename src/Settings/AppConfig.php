@@ -16,6 +16,10 @@ use HNova\Api\Data\Database;
 
 class AppConfig
 {
+    /**
+     * @param string $name Nombre de la API
+     * @param object $config Configuraciones de la API
+     */
     public function __construct(private string $name, private $config = null)
     {
     }
@@ -95,7 +99,7 @@ class AppConfig
     }
 
     /**
-     * Retorna un object con la infromación de la APP
+     * Retorna un object con la infromación de la API
      */
     public function getInfo():object
     {
@@ -103,7 +107,7 @@ class AppConfig
     }
 
     /**
-     * Carga la rutas de la APP
+     * Carga la rutas de la API
      */
     public function loadRoutes():bool
     {
@@ -115,7 +119,7 @@ class AppConfig
     }
 
     /**
-     * Carga los CORS de la APP
+     * Carga los CORS de la API
      */
     public function loadCORS()
     {

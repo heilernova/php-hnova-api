@@ -16,9 +16,12 @@ use HNova\Api\ApiException;
 class Router
 {
     /**
+     * Alamacena la rutas de la API
      * @var Route[]
      */
     private static array $routes = [];
+
+    /** Almacena le método HTTP de la petición realizada */
     private static string $method = '';
 
     /**
@@ -56,7 +59,6 @@ class Router
         });
 
         uasort($routes, function($a, $b){ return (strcmp($b->pathActionsCount, $a->pathActionsCount)); });
-        // echo json_encode($routes); exit;
         return array_shift($routes);
     }
 

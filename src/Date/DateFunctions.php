@@ -16,7 +16,7 @@ use DateTime;
 class DateFunctions
 {
     /**
-     *@param $date Formato para asignar la fecha: yyyy-mm-dd hh:m:s, por defector es now = fecha actual.
+     *@param string $date Formato para asignar la fecha: yyyy-mm-dd hh:m:s, por defector es now = fecha actual.
      */
     public function __construct(private $date = "now"){
 
@@ -41,7 +41,7 @@ class DateFunctions
     /**
      * Retorna el tiempo tracurrido entre fecha en un string
      * @param string $date Fecha final.
-     * @param string $format Formato de respuesta. [ 'date', 'datetime']
+     * @param string $format Formato de respuesta. [ 'date', 'datetime', 'yaers', 'months', 'days']
      */
     public function getDiffString(string $date = 'now',string $format = 'datetime'):string
     {

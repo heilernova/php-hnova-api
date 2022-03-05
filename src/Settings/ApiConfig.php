@@ -10,6 +10,9 @@
  */
 namespace HNova\Api\Settings;
 
+use HNova\Api\Api;
+use Throwable;
+
 class ApiConfig
 {
 
@@ -45,6 +48,7 @@ class ApiConfig
         return $this->config->name;
     }
 
+    /** Retorna la zona horaria por defecto */
     public function getTimezone():string
     {
         return $this->config->timezone;
@@ -58,7 +62,7 @@ class ApiConfig
     }
 
     /**
-     * retorna la configuraciones de los developers
+     * Retorna la configuraciones de los desarrolladores
      */
     public function getDevelopers():ConfigDevelopers
     {
@@ -85,7 +89,7 @@ class ApiConfig
     }
 
     /**
-     * Retrona el número de apps usasa en la api.
+     * Retrona el número de APPs registradas en la api.
      */
     public function getAppsCount():int
     {
@@ -100,11 +104,22 @@ class ApiConfig
         return new ConfigApps($this->config->apps);
     }
 
+    /**
+     * Guarda la condifuraciones
+     * @throws Throwable En caso de ocurrir un error al momento de guardar la información del api.json
+     */
     public function salve():object
     {
+        $dir = Api::getDir() . "/api.json";
+        $file = fopen($dir, 'a');
+        fputs($file, str_replace('\/', '/', json_encode($this->config, 128)));
+        fclose($file);
         return $this->config;
     }
 
+    /** 
+     * Retorna el objeto de api.json
+     */
     public function getObject():object
     {
         return $this->config;

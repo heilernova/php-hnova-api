@@ -19,22 +19,46 @@ class Route
 {
     public string   $id = '';
     
+    /**
+     * URL de la petición realizada por el cliente.
+     */
     private string   $httpRequest = '';
     
-    private string  $path = '';
-
+    
     /** @var array|callable */
     private         $action;
+    
+    /** Método http asignado a la ruta */
     private string  $method = '';
-
-    /** @var callable[] */
+    
+    /**
+     * Array de los canActive 
+     * @var callable[]
+     * */
     private array    $canActivate = [];
     
+    /** Ruta de acceso */
+    private string  $path = '';
+    
+    /** Número de items de ruta */
     private int     $pathCount = 0;
+    
+    /** Hace referencia los item de la ruta que no son parametros */
     private array   $pathActions = [];
+    
+    /** Número de actions de la ruta */
     public int      $pathActionsCount = 0;
+    
+    /**
+     * Array que contiene los parametros de la ruta.
+     * @var object[]
+     */
     private array   $pathParams = [];
+
+    /** Número de parametros de la ruta */
     private int     $pathParamsCount = 0;
+
+    /** array de los items de la ruta */
     private array   $pathItems = [];
 
     /**
@@ -87,16 +111,19 @@ class Route
         $this->pathCount = $this->pathActionsCount + $this->pathParamsCount;
     }
 
+    /**
+     * Agrega un canActive a la ruta.
+     */
     public function addCanActivate(callable $canActivate):void
     {
         $this->canActivate[] = $canActivate;
     }
 
     /**
-     * Valida si la ruta ingresada concuerda con las rutas establecidas.
-     * @param string $url Url Comple
-     * @param array $url_explode Array de los items de la url
-     * @param int $url_num Número de items de la url
+     * Valida si la ruta ingresada concuerda con las ruta.
+     * @param string $url URL de la petición realizada
+     * @param array $url_explode Array de los items de la URL
+     * @param int $url_num Número de items de la URL
      */
     public function validRoute(string $url, array $url_explode, int $url_num):bool
     {
@@ -145,14 +172,9 @@ class Route
         return $params;
     }
 
-    private function getHttpRequest():string
-    {
-        return $this->httpRequest;
-    }
-
     /**
      * Ejecuta la acción asignada a la ruta de acceso. y retorna un objeto response.
-     * @throws Throwable en coso de ocurrir un error en la ejución.
+     * @throws Throwable en coso de ocurrir un error en la ejecución.
      */
     public function callAction():Response
     {
