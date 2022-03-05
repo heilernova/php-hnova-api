@@ -6,7 +6,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
  */
 namespace HNova\Api\Scripts;
 
@@ -22,7 +21,6 @@ class Generate
         $arg = Script::getArgument();
 
         if ($arg){
-            // echo $arg;
             switch ($arg){
                 case "class":
                     // Crea una clase.
@@ -75,7 +73,7 @@ class Generate
                 $app = Script::getConfig()->getApps()->get();
             }
 
-            $dir = "app/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
+            $dir = "src/" . $app->getNamespace() . "/Controllers/$name" . "Controller.php";
 
             if (file_exists($dir)){
                 console::error("El nombre del controlador ya esta en uso."); exit;
@@ -131,7 +129,7 @@ class Generate
         }
     }
 
-    public static function app(AppConfig $app, bool $auto_sale = true){
+    public static function app(ApiConfig $app, bool $auto_sale = true){
 
         $namespace = $app->getNamespace();
 

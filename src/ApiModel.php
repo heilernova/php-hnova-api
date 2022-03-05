@@ -30,13 +30,13 @@ class ApiModel
         $class = $this::class;
 
         if ($database){
-            $db = Api::getConfig()->getDatabases()->get($database);
+            $db = Api::getAppConfig()->getDatabases()->get($database);
             if (!$db){
                 throw new ApiException(["No se pude inicializar el modelo [ $class ] ya que la configuración de la base de datos no existe. [ $database ]"]);
             }
             $db = new Database((array)$db->dataConnection, $table);
         }else{
-            $db = Api::getAppConfig()->getDatabase($table);
+            $db = Api::getConfig()->getDatabase($table);
         }
         
         if ($db){

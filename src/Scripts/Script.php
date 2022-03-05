@@ -11,7 +11,7 @@ namespace HNova\Api\Scripts;
 
 use Composer\Script\Event;
 use HNova\Api\Scripts\Generate;
-use HNova\Api\Settings\ApiConfig;
+use HNova\Api\Settings\AppConfig;
 
 class Script
 {
@@ -35,7 +35,7 @@ class Script
 
     private static array $args = [];
 
-    private static ApiConfig $config;
+    private static AppConfig $config;
 
     /**
      * retorna el evento de composer.
@@ -45,7 +45,7 @@ class Script
         return self::$event;
     }
 
-    public static function getConfig():ApiConfig
+    public static function getConfig():AppConfig
     {
         return self::$config;
     }
@@ -96,11 +96,11 @@ class Script
                     Generate::execute();
                     break;
                 case "i":
-                    self::$config = ApiConfig::init();
+                    self::$config = AppConfig::init();
                     Install::run();
                     break;
                     case "install":
-                    self::$config = ApiConfig::init();
+                    self::$config = AppConfig::init();
                     Install::run();
                     break;
                 case "test":
@@ -133,7 +133,7 @@ class Script
         }
 
         // Cargamos la configuración
-        self::$config = new ApiConfig(json_decode(file_get_contents("api.json")));
+        self::$config = new AppConfig(json_decode(file_get_contents("api.json")));
     }
 
     /**
@@ -184,15 +184,7 @@ class Script
                 fclose($f);
 
                 console::fileUpdate($file->name);
-
             }
         }
-
-
-
     }
-
-
-
-
 }

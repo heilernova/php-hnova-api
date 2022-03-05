@@ -16,7 +16,7 @@ class ApiController
     protected Database $database;
     public function __construct()
     {
-        $db = Api::getAppConfig()->getDatabase();
+        $db = Api::getConfig()->getDatabase();
         if ($db) $this->database = $db;
     }
 

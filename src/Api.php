@@ -29,7 +29,7 @@ class Api
     /**
      * Alamacena la información de la api en ejecución
      */
-    private static AppConfig $api;
+    private static AppConfig $apiJson;
 
     /**
      * Inicia la app y procesa la URL
@@ -61,7 +61,7 @@ class Api
             self::$config = new ApiConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
             
             // Definimos la zona horaria
-            date_default_timezone_set(self::getConfig()->getTimezone());
+            date_default_timezone_set(self::getAppConfig()->getTimezone());
 
             if (empty($url)){
                 if ($_SERVER['REQUEST_METHOD'] == "GET"){
@@ -79,7 +79,7 @@ class Api
 
             if (str_starts_with($url, "nv-panel")){
 
-                $api = new AppConfig("nv-panel", (object)[
+                $api = new ApiConfig("nv-panel", (object)[
                     "cors"=>(object)[
                         "origin"=> "*",
                         "methods"=>"*",
@@ -94,7 +94,7 @@ class Api
             }else{
 
 
-                if (self::$config->getAppsCount() > 1){
+                if (self::getAppConfig()->getAppsCount() > 1){
                     
                     // extraemos el nombre de la api con el inicio de la URL.
                     $index_char = strpos($url, '/');
@@ -104,9 +104,9 @@ class Api
                     }else{
                         $name_api = $url;
                     }
-                    $api = self::$config->getApps()->get($name_api);
+                    $api = self::getAppConfig()->getApps()->get($name_api);
                 }else{
-                    $api = self::$config->getApps()->get();
+                    $api = self::getAppConfig()->getApps()->get();
                 }
             }
 
@@ -116,7 +116,7 @@ class Api
                 return new Response("not - api", 404);
             }
 
-            self::$api = $api;
+            self::$config = $api;
             $api->loadCORS();
             $api->loadRoutes();
 
@@ -148,11 +148,11 @@ class Api
     }
 
     /**
-     * Retorna al AppConfig en uso.
+     * Retorna la configuración de la APP en uso.
      */
     public static function getAppConfig():AppConfig
     {
-        return self::$api;
+        return self::$apiJson;
     }
 
     /**
