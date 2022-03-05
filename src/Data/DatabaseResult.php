@@ -29,9 +29,10 @@ class DatabaseResult
     }
 
     /**
-     * Obtiene un array de objectos representado las información de los campos
+     * Obtiene un array de objectos representando las información de los campos
      * Parametros que contienen los objecto [ name, orgname, table, orgtable, max_length, length, charsetnr, flags, type, decimals ]
      * @return object[]
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fetchFields():array
     {
@@ -41,6 +42,7 @@ class DatabaseResult
     /**
      * Obtiene un array con el nombre de los campos resultantes de la cosulta SQL.
      * @return string[]
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fetchFieldsName():array
     {
@@ -52,6 +54,7 @@ class DatabaseResult
      * @param bool $assoc true para que la información de las filas se un array asosiativo 
      * en caso contrario sera un array númerico.
      * @return array[]
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fetchAll(bool $assoc = true):array
     {
@@ -59,14 +62,16 @@ class DatabaseResult
     }
 
     /**
-     * Obtine array de la filas con un objeto
+     * Obtine array de la filas mapeados a un objeto
      * @param string $class namespace de la clase a la cual deseamos cargar los valores.
+     * @param array|null valores de controstructor de la clase
      * @return object[]
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
-    public function fetchAllObjects(string $class = 'stdClass'):array
+    public function fetchAllObjects(string $class = 'stdClass', ?array $constructor_args = null):array
     {
         $array = [];
-        while($object = $this->result->fetch_object($class)){
+        while($object = $this->result->fetch_object($class, $constructor_args)){
             $array[] = $object;
         }
         return $array;
@@ -74,6 +79,7 @@ class DatabaseResult
 
     /**
      * Obtiene un array asosiativo de la primera fila del resulta de la consulta SQL.
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fetchAssoc():array|false|null{
         return $this->result->fetch_assoc();
@@ -81,6 +87,7 @@ class DatabaseResult
 
     /**
      * Obtiene un array númerico de la primera fila del resultado de la cosulta SQL.
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fetchArray():array|false|null{
         return $this->result->fetch_array(MYSQLI_NUM);
@@ -88,6 +95,7 @@ class DatabaseResult
 
     /**
      * Obtiene un objeto de la primera fila del resultado de la consulta SQL.
+     * @throws Throwable Retorna un exepción en caso de que el resultado de la cosulta no sea de tipo mysqli_result
      */
     public function fecthObject(string $class = 'stdClass', ?array $constructor_args = null):object|false|null
     {
