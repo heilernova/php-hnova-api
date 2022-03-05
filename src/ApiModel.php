@@ -20,7 +20,7 @@ class ApiModel
 
     /**
      * Método constructror.
-     * @param string $table El nombre de la tabla por defecto a la que se hara referencia.
+     * @param string $table El nombre de la tabla por defecto a la cueal se le realizaran las consultas SQL.
      * @param string $database Nombre de la base de datos a la cual se ralizara la conexión 
      * en caso de ser null se tomará la base de datos de app en ejecución.
      * @throws ApiException Retorna una exception en caso de que no se encuentre la condifuración de la base de datos para el modelo.
