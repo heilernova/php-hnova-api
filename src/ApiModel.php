@@ -36,7 +36,7 @@ class ApiModel
             }
             $db = new Database((array)$db->dataConnection, $table);
         }else{
-            $db = Api::getAppConfig()->getDatabase();
+            $db = Api::getAppConfig()->getDatabase($table);
         }
         
         if ($db){

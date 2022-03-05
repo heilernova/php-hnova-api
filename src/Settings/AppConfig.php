@@ -39,10 +39,11 @@ class AppConfig
 
     /**
      * Retorna la base de datos.
+     * @param string|null $default_table Difine la tabla por defecto para ejecutar las cosulta SQL.
      * @return null|Database Retorna el objeto Database o null en caso de que no tenga una base de datos establecida.
      * @throws ApiException retorna una exception en caso de no encontrarse las base de datos solicitada al api.json.
      */
-    public function getDatabase():?Database
+    public function getDatabase(string $default_table = null):?Database
     {
         $db_name = $this->config->database;
         if ($db_name){
