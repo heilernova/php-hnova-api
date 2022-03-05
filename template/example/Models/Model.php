@@ -5,7 +5,6 @@
 namespace Example\Controllers;
 
 use Example\ExampleBaseModel;
-use HNova\Api\Response;
 
 class NameModel extends ExampleBaseModel
 {
