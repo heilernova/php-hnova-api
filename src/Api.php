@@ -58,7 +58,7 @@ class Api
             }
             
             // Cargamos el archivo api.json
-            self::$config = new ApiConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
+            self::$apiJson = new AppConfig(json_decode(file_get_contents(self::$dir . "/api.json")));
             
             // Definimos la zona horaria
             date_default_timezone_set(self::getAppConfig()->getTimezone());

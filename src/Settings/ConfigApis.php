@@ -11,27 +11,24 @@
 namespace HNova\Api\Settings;
 
 
-class ConfigApps
+class ConfigApis
 {
-    public function __construct(private object $apps)
+    public function __construct(private object $apis)
     {
         
     }
 
     /**
      * Retorna un array de AppConfig de los 
-     * @return AppConfig[]
+     * @return ApiConfig[]
      */
     public function getAll():array
     {
        $list = [];
-        foreach ($this->apps as $key => $element ){
-            $app = new AppConfig($key, $element->namespace);
-            $app->disable = $element->disable;
-            $app->dirResources = $element->dirResources;
-            $app->cors = new CorsConfig($element->cors->origin, $element->cors->headers, $element->cors->methods);
+        foreach ($this->apis as $key => $element ){
 
-            $list[$key] = $app;
+            $apis = new ApiConfig($key, $element);
+            $list[$key] = $apis;
         }
        return $list;
     }
@@ -44,17 +41,17 @@ class ConfigApps
     {
         // echo json_encode($this->apps, 128); exit;
         if ($name){
-            if (isset($this->apps->$name)){
-                $app = new ApiConfig($name, $this->apps->$name);
-                return $app;
+            if (isset($this->apis->$name)){
+                $api = new ApiConfig($name, $this->apis->$name);
+                return $api;
             }else{
                 return null;
             }
         }else{
-            $app = null;
+            $api = null;
 
-            foreach ($this->apps as $key=>$value){
-                $app = new AppConfig($key, $value);
+            foreach ($this->apis as $key => $value){
+                $app = new ApiConfig($key, $value);
                 break;
             }
 
@@ -68,7 +65,7 @@ class ConfigApps
     public function add($name, $namespace):void
     {
         $namespace = ucfirst($namespace);
-        $this->apps->$name = (object)[
+        $this->apis->$name = (object)[
             "namespace"=>$namespace,
             "disable"=>false,
             "dirResources"=>"",

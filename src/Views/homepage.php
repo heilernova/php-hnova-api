@@ -94,7 +94,7 @@
                 <?php
                     use HNova\Api\Api;
 
-                    echo Api::getConfig()->getName();
+                    echo Api::getAppConfig()->getName();
                 ?>
             </h2>
             <br>
@@ -103,7 +103,7 @@
             </h2>
             <h2>Desarrolladores api rest</h2>
             <ul class="list-developers">
-                <?php foreach(Api::getConfig()->getDevelopers()->getAll() as $elemnt){ ?>
+                <?php foreach(Api::getAppConfig()->getDevelopers()->getAll() as $elemnt){ ?>
                     <li>
                         <div class="item">
                             <i class="fas fa-user-tie"></i>

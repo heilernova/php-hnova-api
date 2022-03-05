@@ -34,7 +34,7 @@ class AppConfig
             "developers" => [],
             "debug" =>false,
             "databases"=>(object)[],
-            "apps"=>(object)[]
+            "apis"=>(object)[]
         ];
 
         return new AppConfig($config);
@@ -92,15 +92,15 @@ class AppConfig
      */
     public function getAppsCount():int
     {
-        return count((array)$this->config->apps);
+        return count((array)$this->config->apis);
     }
 
     /**
      * Retorna la configuyraciona de las appas
      */
-    public function getApps():ConfigApps
+    public function getApps():ConfigApis
     {
-        return new ConfigApps($this->config->apps);
+        return new ConfigApis($this->config->apis);
     }
 
     /**
