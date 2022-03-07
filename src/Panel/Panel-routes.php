@@ -61,8 +61,13 @@ Routes::post("auth", function(){
 
 // Retorna la lista de las bases de datos.
 Routes::get("databases", function(){
-    
-    return new Response([]);
+    $d = Api::getAppConfig()->getObject()->databases;
+    $map = [];
+    foreach($d as $key => $item){
+        $item->name = $key;
+        $map[] = $item;
+    }
+    return new Response($map);
 });
 
 // Actualiza la información de la base de datos.
