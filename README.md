@@ -32,8 +32,7 @@ Pegue el siguiente código el su archivo composer.json.
 }
 ```
 
-Debería quedar de la siguiete manera.
-
+Debería quedar com se muestra el la imgamen.
 
 <img src="img/ejemplo-script.png" width="600px">
 
@@ -51,7 +50,7 @@ Nota: En caso de la carpeta src este creada y tenga contenido no se ejecutara la
 
 Importante: Una vez ejecutado el script de debe actualar el autoload de composer ejecutando el comando `composer dump-autoload`
 
-#### composer nv g c '<name>'
+#### composer nv g c (name)
 Crea un controlador para ser accedito por la ruta. al ejecutar este comando creara un archivo con el nombre ingredado en caso de que el controlador ya se encuentre creado retornara un error informando que le nombre del controlador ya esta en uso
 
 Nota: En caso de que de hallan creado mas una pai debera agregar en el script el nombre de la API a la cual se le crearar el controlador.
@@ -104,7 +103,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
             }
         }
     },
-    "apps": {
+    "apis": {
         "app": {
             "namespace": "App",
             "disable": false,
@@ -153,7 +152,7 @@ Routes::get("test/saludo/{nombre:string}", function(string $nombre){
 ```
 
 ## Protección de rutas
-Para limitar el acceso a las rutas utilizaremos los guards los cuales estan alojado en la clase `AppGuards` alojada en el archivo `app/App/AppGuards.php`.
+Para limitar el acceso a las rutas utilizaremos los guards los cuales estan alojado en la clase `AppGuards` alojada en el archivo `src/App/AppGuards.php`.
 
 Esta es un clase estatica como métodos que retorna `callable` "funciones" para ejecutarse antes ingresar a la acción de la ruta, estas funciones deben retorna null o un objeto `HNova\Api\Response`, donde null es permitir el acceso y Objeto es negar el acceso.
 
