@@ -30,8 +30,8 @@ Routes::post("auth", function(){
     $res = new ResponseApi();
     $res->message->title = "Credenciales incorrectas";
 
-    if (Api::getConfig()->getUser()->getUsername() == $data->username){
-        if (Api::getConfig()->getUser()->passwordVerify($data->password)){
+    if (Api::getAppConfig()->getUser()->getUsername() == $data->username){
+        if (Api::getAppConfig()->getUser()->passwordVerify($data->password)){
 
             $token = ApiFunctions::generateToken(50);
 
@@ -109,14 +109,14 @@ Routes::get("apis", function(){
 
 // Retronamos la información de la api.
 Routes::get("apis/{name}", function($name){
-    $info = Api::getConfig()->getApps()->get($name);
+    $info = Api::getAppConfig()->getApps()->get($name);
     
     return new Response($info ? $info->getInfo() : null);
 });
 
 // Deshabilita el acceso a una api
 Routes::patch("apis/{name}/disable", function(string $name){
-    $re = Api::getConfig()->getApps()->get($name);
+    $re = Api::getAppConfig()->getApps()->get($name);
     return new Response($re);
 });
 
