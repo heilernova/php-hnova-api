@@ -11,13 +11,14 @@
 namespace HNova\Api;
 
 use Exception;
+use HNova\Api\Routes\Router;
 use Throwable;
 
 class ApiException extends Exception
 {
     /**
      * Almacena los mensaje de desarrollador
-     * @var string[]
+     * @var (string|string[])[]
      */
     private array $messageDeveloper = [];
 
@@ -82,8 +83,16 @@ class ApiException extends Exception
     {
         // Carmaso la informacion del errro a un array asosiativo
         $content = [
-            "api"=>"",
+            "api"=>Api::getConfig()->getName(),
             "date"=> date('Y-m-d H:i:s',time()) . "z",
+            "httpRequest"=>[
+                'url' => $_GET['url'],
+                'method'=> Router::getMethod(),
+                'ip'=>ClientInfo::getIp(),
+                'device'=>ClientInfo::getDevice(),
+                'platform'=>ClientInfo::getPlatform()
+            ],
+            "description"=>"",
             "messageDeveloper"=>$this->messageDeveloper,
             "mensajeError"=>$this->message,
             "code"=>$this->getCode(),
