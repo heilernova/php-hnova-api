@@ -109,7 +109,16 @@ Routes::post("database/test-connection", function(){
 
 // Retornamos la lista de apis
 Routes::get("apis", function(){
-    return new Response([]);
+
+    $obj = Api::getAppConfig()->getObject()->apis;
+    $list = [];
+
+    foreach ($obj as $key => $value){
+        $value->name = $key;
+        $list[] = $value;
+    }
+
+    return new Response($list);
 });
 
 // Retronamos la información de la api.
