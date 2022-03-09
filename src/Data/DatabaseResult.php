@@ -71,8 +71,14 @@ class DatabaseResult
     public function fetchAllObjects(string $class = 'stdClass', ?array $constructor_args = null):array
     {
         $array = [];
-        while($object = $this->result->fetch_object($class, $constructor_args)){
-            $array[] = $object;
+        if ($constructor_args){
+            while($object = $this->result->fetch_object($class, $constructor_args)){
+                $array[] = $object;
+            }
+        }else{
+            while($object = $this->result->fetch_object($class)){
+                $array[] = $object;
+            }
         }
         return $array;
     }
@@ -99,6 +105,6 @@ class DatabaseResult
      */
     public function fecthObject(string $class = 'stdClass', ?array $constructor_args = null):object|false|null
     {
-        return $this->result->fetch_object($class, $constructor_args);
+        return $constructor_args ? $this->result->fetch_object($class, $constructor_args) : $this->result->fetch_object($class);
     }
 }
