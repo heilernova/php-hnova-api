@@ -104,9 +104,9 @@ class Database
         }else{
 
             // Se crea el objeto stmt
-            $stmt = $this->getConnection()->prepare($sql);
+            $connection = $this->getConnection();
             try {
-                $this->stmt = $stmt;
+                $this->stmt = $connection->prepare($sql);
             } catch (\Throwable $th) {
                 throw new ApiException([
                     'Error con la prepación de la consulta sql.',
