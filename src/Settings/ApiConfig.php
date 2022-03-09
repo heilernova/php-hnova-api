@@ -113,7 +113,7 @@ class ApiConfig
     {
         $name = $this->getNamespace();
         if ($name != ""){
-            require Api::getDir() . "\\app\\$name\\$name-routes.php";
+            require Api::getDirSRC() . "\\$name\\$name-routes.php";
         }
         return true;
     }

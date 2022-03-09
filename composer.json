@@ -1,11 +1,12 @@
 {
     "name": "hnova/api",
-    "description": "Librería para el desarrolo de apis como PHP",
+    "description": "Librer\u00eda para el desarrolo de apis como PHP",
     "type": "library",
     "license": "GPL-3.0",
     "autoload": {
         "psr-4": {
-            "HNova\\Api\\": "src/"
+            "HNova\\Api\\": "src/",
+            "App\\": "app/App/"
         }
     },
     "authors": [
@@ -19,6 +20,10 @@
         "composer/composer": "^2.2"
     },
     "scripts": {
-        "nv": "HNova\\Api\\Scripts\\Script::execute"
+        "nv": "HNova\\Api\\Scripts\\Script::execute",
+        "nv-test": [
+            "HNova\\Api\\Scripts\\Script::test",
+            "HNova\\Api\\Scripts\\Script::execute"
+        ]
     }
 }

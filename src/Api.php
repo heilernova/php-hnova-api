@@ -21,6 +21,9 @@ class Api
      */
     private static string $dir = '';
 
+    /** Almacen el direcotrio de las APIs */
+    private static string $dirSRC = "";
+
     /**
      * Contiene un objeto que represent la configuraciones del api.json.
      */
@@ -46,6 +49,11 @@ class Api
              * con el fin de obtener el directorio princial del proyecto.
              */
             foreach (get_required_files() as $require){
+
+                if (str_ends_with( $require, "api-index.php")){
+                    self::$dirSRC = dirname($require, 1);
+                }
+
                 if (str_ends_with( $require, "autoload.php")){
                     self::$dir = dirname($require, 2);
                     break;
@@ -145,6 +153,14 @@ class Api
     public static function getDir():string
     {
         return self::$dir;
+    }
+
+    /**
+     * Retorna la ruta donde de encutran las apis
+     */
+    public static function getDirSRC():string
+    {
+        return self::$dirSRC;
     }
 
     /**
