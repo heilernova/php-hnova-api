@@ -97,13 +97,9 @@ class Database
      */
     private function queryMySql(string $sql, array $params = null):bool|mysqli_result
     {
-        if ($sql == $this->lastCommand){
+        if ($sql != $this->lastCommand){
 
-            // En caso de que le ultimo comando sql sea igual al actual se recicla el objeto stmt.
-            $stmt = $this->stmt;
-        }else{
-
-            // Se crea el objeto stmt
+            // En casos de la consulta sea distinta a la anterior ejecutar la preparacion SQL nuevamente
             $connection = $this->getConnection();
             try {
                 $this->stmt = $connection->prepare($sql);
@@ -115,6 +111,8 @@ class Database
                 ], $th);
             }
         }
+        
+        $stmt = $this->stmt;
 
         // En caso de que haber parametro solos cargamos al bind_param.
         if ($params){
@@ -128,7 +126,7 @@ class Database
                 $ref = new ReflectionMethod($stmt, 'bind_param');
                 $ref->invokeArgs($stmt, $refValues);
             } catch (\Throwable $th) {
-                throw new ApiException(['Error con el bind_param', $sql], $th);
+                throw new ApiException(['Error con el bind_param', "SQL:  $sql"], $th);
             }
         }
 
