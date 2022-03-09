@@ -60,7 +60,7 @@ class ApiConfig
                 throw new ApiException(["Actualmento no se cuenta soporte para las bases de datos de MYSQL"]);
             }
 
-            return new Database((array)$db->dataConnection);
+            return new Database((array)$db->dataConnection, $default_table);
         }else{
             return null;
         }
