@@ -2,7 +2,7 @@
 /**
  * Clase modelo para intercturar con la base de datos.
  */
-namespace Example\Controllers;
+namespace Example\Models;
 
 use Example\ExampleBaseModel;
 
