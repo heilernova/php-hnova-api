@@ -7,6 +7,7 @@
 namespace Example\Controllers;
 
 use Example\ExampleBaseController;
+use HNova\Api\Http\ResponseApi;
 use HNova\Api\Response;
 
 class NameControllerController extends ExampleBaseController
