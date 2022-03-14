@@ -12,6 +12,11 @@ use HNova\Api\Response;
 
 class NameControllerController extends ExampleBaseController
 {
+    function __construct()
+    {
+        
+        parent::__construct();
+    }
     function get():Response
     {
         /**
