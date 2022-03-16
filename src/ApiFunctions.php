@@ -22,7 +22,7 @@ class ApiFunctions
     public static function generateToken(int $long = 4):string
     {
         if ($long < 4) $long = 4;
-        return bin2hex(random_bytes(($long - ($long % 2) /2)));
+        return bin2hex(random_bytes(($long - ($long % 2)) /2));
     }
 
 
