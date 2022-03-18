@@ -48,14 +48,14 @@ class DateFunctions
         $date_star = $this->getDateTime();
         $date_diff = $date_star->diff(new DateTime($date));
         $time = '';
-        if ($format == 'date' && $format == 'datetime'){
+        if ($format == 'date' || $format == 'datetime'){
             $time = '';
-            if ($date_diff->y > 0) $time = $date_diff->y == 1 ? ' año, ' : ' años, ';
-            if ($date_diff->m > 0) $time .= $date_diff->m == 1 ? ' mes, ' : ' meses, ';
-            if ($date_diff->d > 0) $time .= $date_diff->d == 1 ? ' dia, ' : ' dias, ';
+            if ($date_diff->y > 0) $time = $date_diff->y == 1 ? ($date_diff->y . ' año, ') : ($date_diff->y . ' años, ');
+            if ($date_diff->m > 0) $time .= $date_diff->m == 1 ? ($date_diff->m . ' mes, ') : ($date_diff->m . ' meses, ');
+            if ($date_diff->d > 0) $time .= $date_diff->d == 1 ? ($date_diff->d . ' dia, ') : ($date_diff->d . ' dias, ');
             if ($format == 'datetime'){
-                if ($date_diff->h > 0) $time .= $date_diff->h == 1 ? ' hora, ' : ' horas, ';
-                if ($date_diff->i > 0) $time .= $date_diff->i == 1 ? ' minuto, ' : ' minutos, ';
+                if ($date_diff->h > 0) $time .= $date_diff->h == 1 ? ($date_diff->h . ' hora, ') : ($date_diff->h . ' horas, ');
+                if ($date_diff->i > 0) $time .= $date_diff->i == 1 ? ($date_diff->i . ' minuto, ') : ($date_diff->i . ' minutos, ');
                 // if ($date_diff->s > 0) $time .= $date_diff->s == 1 ? ' segundo, ' : ' segundos, ';
             }
             $time = rtrim($time, ', ');
