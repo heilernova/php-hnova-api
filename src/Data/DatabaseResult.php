@@ -10,6 +10,7 @@
  */
 namespace HNova\Api\Data;
 
+use HNova\Api\ApiException;
 use mysqli_result;
 use Throwable;
 
@@ -71,15 +72,24 @@ class DatabaseResult
     public function fetchAllObjects(string $class = 'stdClass', ?array $constructor_args = null):array
     {
         $array = [];
-        if ($constructor_args){
-            while($object = $this->result->fetch_object($class, $constructor_args)){
-                $array[] = $object;
+
+        try {
+            if ($constructor_args){
+                while($object = $this->result->fetch_object($class, $constructor_args)){
+                    $array[] = $object;
+                }
+            }else{
+                while($object = $this->result->fetch_object($class)){
+                    $array[] = $object;
+                }
             }
-        }else{
-            while($object = $this->result->fetch_object($class)){
-                $array[] = $object;
-            }
+        } catch (\Throwable $th) {
+            throw new ApiException([
+                'Error al establace al cargar los datos de resulta de la consulta sql al objecto',
+                'objecto: ' . $class::class
+            ], $th);
         }
+
         return $array;
     }
 
@@ -105,6 +115,13 @@ class DatabaseResult
      */
     public function fecthObject(string $class = 'stdClass', ?array $constructor_args = null):object|false|null
     {
-        return $constructor_args ? $this->result->fetch_object($class, $constructor_args) : $this->result->fetch_object($class);
+        try{
+            return $constructor_args ? $this->result->fetch_object($class, $constructor_args) : $this->result->fetch_object($class);
+        } catch  (\Throwable $th){
+            throw new ApiException([
+                'Error al establace al cargar los datos de resulta de la consulta sql al objecto',
+                'objecto: ' . $class::class
+            ], $th);
+        }
     }
 }
