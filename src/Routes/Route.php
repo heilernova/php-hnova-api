@@ -229,12 +229,23 @@ class Route
             }else{
                 if ($num_params_require <= $params_count){
     
+                    // Manejamos el resultado de los controladores.
+                    $result = null;
                     if ($reflection::class == ReflectionFunction::class){
-                        return $reflection->invokeArgs($params);
+                        $result = $reflection->invokeArgs($params);
                     }else{
-                        return $reflection->invokeArgs($controller, $params);
+                        $result = $reflection->invokeArgs($controller, $params);
                     }
-    
+                    
+                    if (is_object($result)){
+                        if ($result::class == Response::class){
+                            return $result;
+                        }else{
+                            return new Response($result);
+                        }
+                    }else{
+                        return new Response($result);
+                    }
     
                 }else{
                     return new Response("Error - params - url", 400);
