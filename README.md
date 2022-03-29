@@ -5,7 +5,7 @@ Librería de PHP para el desarrollo de apis
 package de compsoser [Aquí](https://packagist.org/packages/hnova/api)
 
 ### Programas requeridos
-* [XAMMP](https://www.apachefriends.org/es/download.html) Instalar la versión con php 8.0.13 o superior
+* [XAMMP](https://www.apachefriends.org/es/download.html) Instalar la versión con php 8.1.0 o superior
 * [Composer](https://getcomposer.org/download/)
 * Editor de código puede ser [Visual Studio Code](https://code.visualstudio.com/);
 ### Programas opcionales
