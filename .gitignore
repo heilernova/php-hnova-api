@@ -3,5 +3,6 @@
 /www/
 api.json
 /nv-panel/
+/test/
 
 src/Scripts/test.php
