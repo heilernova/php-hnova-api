@@ -18,12 +18,18 @@ class ApiConfig
     /**
      *@param object JSON de la configuración
      */
-    public function __construct(object $data_json)
+    public function __construct(object $data_json = null)
     {
-        if ($data_json::class == ApiConfigData::class){
-            $this->_dataConfig = $data_json;
+        if ($data_json){
+            if ($data_json::class == ApiConfigData::class){
+                $this->_dataConfig = $data_json;
+            }else{
+                $this->_dataConfig = new ApiConfigData($data_json);
+            }
         }else{
-            $this->_dataConfig = new ApiConfigData($data_json);
+            $dir = $_ENV['api-dir'];
+
+            $this->_dataConfig = new ApiConfigData(json_decode(file_get_contents("$dir/api.json")));
         }
     }
 
@@ -33,6 +39,10 @@ class ApiConfig
         return new ApiConfig($api_cofig_data);
     }
 
+    public function getDir():string
+    {
+        return $_ENV['api-dir-src'];
+    }
     public function getConfigData():ApiConfigData{
         return $this->_dataConfig;
     }

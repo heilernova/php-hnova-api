@@ -13,7 +13,13 @@ use HNova\Api\Routes\Methods;
 
 class Routes
 {
-    public static function add(string $path, Methods $method)
+    /**
+     * @param string $path Ruta de acceso
+     * @param Methods $method Método HTTP de acceso
+     * @param string[]|callable $action Acción ajecutar 
+     * @param callable[] $can_active
+     */
+    public static function add(string $path, Methods $method, $action, $can_active = null)
     {
         header("content-type: application/json");
         
@@ -23,20 +29,20 @@ class Routes
         $patterns[] = "/({(\w+:)})/i";
         $patterns[] = "/({(\w+:\w+)})/i";
         $patterns[] = "/({(\w+.*?:\w+)})/i";
-        // $patterns[] = '/({(\w+?:\w+)})/i';
     
         $replacement[] = '{p}';
         $replacement[] = '{p}';
         $replacement[] = '{p}';
         $replacement[] = '{p?}';
-        // $replacement[] = '{p?}';
 
         $path = preg_replace($patterns, $replacement, $path);
     
         $_ENV['api-routes'][] = (object)[
-            'path'=>$path,
+            'path'      =>$path,
             'pathFormat'=>$patFormat,
-            'method'=>$method->value
+            'method'    =>$method->value,
+            'action'    =>$action,
+            'canActive' =>$can_active
         ];
     }
 
@@ -47,7 +53,7 @@ class Routes
     public static function find(string $url)
     {
         $url = trim($url, '/');
-        $routes = $_ENV['api-routes'];
+        $routes = $_ENV['api-routes'] ?? [];
 
         $method = strtolower($_SERVER['REQUEST_METHOD']);
 
@@ -144,15 +150,21 @@ class Routes
                 }
 
                 $item->params = $params;
-                $item->paramNum = substr_count($item->path, '{p}') +  substr_count($item->path, '{p?}');
+                $item->paramsNum = substr_count($item->path, '{p}') +  substr_count($item->path, '{p?}');
                 
                 if ($valid) $carry[] = $item;
             };
             
             return $carry;
         });
+
+        if ($routes){
+
+            uasort($routes, function($a, $b){ return (strcmp($b->keys, $a->keys)); });
+            return array_shift($routes);
+        }else{
+            return null;
+        }
         
-        uasort($routes, function($a, $b){ return (strcmp($b->keys, $a->keys)); });
-        return array_shift($routes);
     }
 }

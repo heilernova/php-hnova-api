@@ -20,26 +20,48 @@ class Install
         
 
         // Validamos que la instalación no se halla ejecutado
-        if (file_exists("$dir/api.json")){
-            Console::error("El install ya se ejecuta");
-            exit;
+        if ($dir != "api"){
+            if (file_exists("api.json")){
+                Console::error("El install ya se ejecuta");
+                exit;
+            }
         }
 
         if (!file_exists($dir)) mkdir($dir);
 
         // Creamos la carta prinfipal
-        if (file_exists("$dir/src")){
-            if (filesize("$dir/src")){
-                Console::error("El directorio [src] ya se encuetra en suo.");
-                exit;
+        if ($dir != "api"){
+            if (file_exists("$dir")){
+                if (filesize("$dir")){
+                    Console::error("El directorio [src] ya se encuetra en suo.");
+                    exit;
+                }
             }
         }
 
         $api_config = ApiConfig::initInstall();
 
-        Files::addFile("$dir/api.json", json_encode($api_config->getConfigData()));
+        Files::addFile("api.json", str_replace('\/','/', json_encode($api_config->getConfigData(), 128)));
 
-        Files::addFile("$dir/src/index.php", "");
+        Files::addFile('www/.htaccess', Templates::getWWWHtaccess());
+        Files::addFile('www/index.php', Templates::getWWWIndex($dir));
+
+        Files::addFile("$dir/index.api.php", Templates::getIndex());
+        Files::addFile("$dir/routes.php", Templates::getRoutes());
+
+        Files::addFile("$dir/BaseController.php", Templates::getBaseController());
+        Files::addFile("$dir/BaseModel.php", Templates::getBaseModel());
+        Files::addFile("$dir/BaseDB.php", Templates::getBaseDB());
+
+        $composer = json_decode(file_get_contents('composer.json'));
+
+        $composer->autoload->{'psr-4'}->{'ApiRest\\'} = "$dir/";
+
+        Files::addFile('composer.json', str_replace('\/','/', json_encode($composer, 128)));
+        // $e = Script::getEvent()->getComposer()->getAutoloadGenerator();
+        // $e->
+        // echo json_encode($e, 128);
+        // // Script::getEvent()->getComposer()->setAutoloadGenerator($e);
         Files::loadFiles();
     }
 }

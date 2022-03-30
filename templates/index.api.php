@@ -1,11 +1,11 @@
 <?php
 /**
- * Script de entrada para el manejo de la api.
+ * Script de entrada para el manejo de la API.
  */
 
 use HNova\Api\Api;
 
-require_once __DIR__.'./../vendor/autoload.php'; // Llamamos el autoload.
+require_once __DIR__.'./../vendor/autoload.php'; // Llamamos el autoload de composer.
 
 /**
  * Iniciamos la app

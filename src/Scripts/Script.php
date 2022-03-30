@@ -10,6 +10,7 @@
 namespace HNova\Api\Scripts;
 
 use Composer\Script\Event;
+use HNova\Api\Settings\ApiConfig;
 
 /**
  * Case de les escripst que ejecutara composer
@@ -17,10 +18,12 @@ use Composer\Script\Event;
 class Script
 {
     private static string $_mainDir = "";
-    private static string $_srcDir = "";
+    private static string $_srcDir = "src";
     private static Event $_event;
     /** @var string[] */
     private static array $_args = [];
+
+    private static ApiConfig $_apiConfig;
     
 
     /**
@@ -28,7 +31,11 @@ class Script
      */
     public static function test(Event $event)
     {
-        self::$_srcDir = "test";
+        self::$_srcDir = "api";
+    }
+
+    public static function getEvent():Event{
+        return self::$_event;
     }
 
     /**
@@ -57,6 +64,10 @@ class Script
         return $arg ? strtolower($arg) : null;
     }
 
+    public static function getConfig():ApiConfig
+    {
+        return self::$_apiConfig;
+    }
     /**
      * Ejecuta los scrips definidos en la aplicación
      */
@@ -79,18 +90,27 @@ class Script
                 }else if ($arg == 'g' || $arg == 'generate'){
 
                     $cmd = self::getArgment();
-
-                    switch ($cmd) {
-                        case 'c':
-                            # code...
-                            break;
-                        
-                        default:
-                            # code...
-                            break;
+                    if (file_exists('api.json')){
+                        $_ENV['api-dir'] = self::$_mainDir;
+                        $_ENV['api-dir-src'] = self::$_srcDir;
+                        self::$_apiConfig  = new ApiConfig();
+    
+                        switch ($cmd) {
+                            case 'c':
+                                # code...
+                                Generate::controller();
+                                break;
+                            
+                            default:
+                                # code...
+                                break;
+                        }
+                    }else{
+                        Console::error("Se de instalar la aplicación");
                     }
+            
+                }else if ($arg == 'r' || $arg == 'route'){
 
-                    Console::error("gene $arg");
                 }else{
                     Console::error("nv: '$arg' is not a nv command.");
                 }

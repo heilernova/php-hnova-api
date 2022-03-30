@@ -25,7 +25,30 @@ class Files
     public static function loadFiles():void
     {
         foreach (self::$_files as $item){
-            Console::fileCreate($item->path);
+
+            $path = $item->path;
+
+            $edit = file_exists($path);
+
+            $dir_name = dirname($path);
+            if (!file_exists($dir_name)){
+                $dir_names = explode('/', $dir_name);
+                $dir = ".";
+                foreach ($dir_names as $name){
+                    $dir .= "/$name";
+                    if (!file_exists($dir)) mkdir($dir);
+                }
+            }
+            
+            $file = fopen($path, $edit ? 'w' : 'a');
+            fputs($file, $item->content);
+            fclose($file);
+            
+            if ($edit){
+                Console::fileUpdate($item->path);
+            }else{
+                Console::fileCreate($item->path);
+            }
         }
     }
 }

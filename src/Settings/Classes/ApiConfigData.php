@@ -14,15 +14,25 @@ class ApiConfigData
     public string $name = "";
     public string $timezone = "UTC";
     public object $user;
-    public object $developers;
+    public array $developers;
     public bool $debug = true;
     public object $databases;
     public object $routes;
      
     public function __construct(object $data = null)
     {
-        $this->developers = (object)[];
-        $this->databases = (object)[];
+        $this->developers = [];
+        $this->databases = (object)[
+            'test'=>[
+                'type'=>'mysql',
+                'dataConnection'=>[
+                    "hostname"=> "localhost",
+                    "username"=> "root",
+                    "password"=> "",
+                    "database"=> "ssm"
+                ]
+            ]
+        ];
         $this->routes = (object)[];
 
         if ($data){

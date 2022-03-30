@@ -11,5 +11,30 @@ namespace HNova\Api\Scripts;
 
 class Generate
 {
-    
+    public static function controller():void{
+        $name = Script::getArgment();
+        if ($name){
+
+            if (str_contains($name, '-')){
+                $names = explode('-', $name);
+                $name = "";
+                foreach ($names as $v){
+                    $name .= ucfirst($v);
+                }
+            }
+            $name .= "Controller";
+            $name = ucfirst($name);
+            $path = Script::getConfig()->getDir() . "/Controllers/$name.php";
+            
+            if (file_exists($path)){
+                Console::error("Comflito: el nombre del controlador ya esta en usuo");
+            }else{
+                Files::addFile($path, Templates::getController($name, "ApiRest"));
+            }
+
+            Files::loadFiles();
+        }else{
+            Console::error("Falan argumentos");
+        }
+    }
 }
