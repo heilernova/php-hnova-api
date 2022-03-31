@@ -53,7 +53,6 @@ class Api
 
             $route = Routes::find($url);
             if ($route){
-
                 $result = self::callActions($route);
             }else{
                 Response::addMessage("Invalid route");
@@ -61,9 +60,15 @@ class Api
                 $result = null;
             }
             return new Response($result);
-        } catch (\Throwable $th) {
-            
-            throw $th;
+        } catch(ApiException $th){
+            Response::SetHttpResponseCode($th->getHttpResponseCode());
+
+            Response::setMenssage($th->getMessageDeveloper());
+
+            return new Response('error de ejecución');
+        }catch (\Throwable $th) {
+            Response::SetHttpResponseCode(500);
+            return new Response("Error inesperado: \n" . $th);
         }
     }
 

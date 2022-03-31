@@ -34,7 +34,35 @@ class Generate
 
             Files::loadFiles();
         }else{
-            Console::error("Falan argumentos");
+            Console::error("Faltan argumentos");
         }
+    }
+
+    public static function db():void
+    {
+        $name = Script::getArgment();
+        if ($name){
+
+            if (str_contains($name, '-')){
+                $names = explode('-', $name);
+                $name = "";
+                foreach ($names as $v){
+                    $name .= ucfirst($v);
+                }
+            }
+            $name .= "DB";
+            $name = ucfirst($name);
+            $path = Script::getConfig()->getDir() . "/DB/$name.php";
+            
+            if (file_exists($path)){
+                Console::error("Comflito: el nombre del ObjectDB ya esta en usuo");
+            }else{
+                Files::addFile($path, Templates::getObjectDB($name, "ApiRest"));
+            }
+
+            Files::loadFiles();
+        }else{
+            Console::error("Faltan argumentos");
+        } 
     }
 }

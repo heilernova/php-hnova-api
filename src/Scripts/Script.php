@@ -100,7 +100,9 @@ class Script
                                 # code...
                                 Generate::controller();
                                 break;
-                            
+                            case 'db':
+                                Generate::db();
+                                break;
                             default:
                                 # code...
                                 break;

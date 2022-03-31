@@ -39,7 +39,7 @@ class ApiConfigData
                         "hostname"=> "localhost",
                         "username"=> "root",
                         "password"=> "",
-                        "database"=> "ssm"
+                        "database"=> "test"
                     ]
                 ]
             ];

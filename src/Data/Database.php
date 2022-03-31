@@ -49,7 +49,7 @@ class Database
         }else{
             try {
                 $dataConnection = $this->dataConnection;
-                $this->dbMysql = @mysqli_connect(
+                $this->dbMysql = mysqli_connect(
                     $dataConnection['hostname'],
                     $dataConnection['username'],
                     $dataConnection['password'],
@@ -170,6 +170,7 @@ class Database
      */
     public function execute(string $slq, array $params = null):DatabaseResult
     {
+        
         return new DatabaseResult($this->queryMySql($slq, $params), $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 

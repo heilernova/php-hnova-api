@@ -3,7 +3,7 @@ namespace HNnamespace\DB;
 
 use HNnamespace\BaseDB;
 
-class name extends BaseDB
+class Name extends BaseDB
 {
     public function __construct()
     {

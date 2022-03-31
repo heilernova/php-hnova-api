@@ -10,6 +10,7 @@
  */
 namespace HNova\Api\Data;
 
+use Exception;
 use HNova\Api\ApiException;
 use mysqli_result;
 use Throwable;
@@ -86,7 +87,7 @@ class DatabaseResult
         } catch (\Throwable $th) {
             throw new ApiException([
                 'Error al establace al cargar los datos de resulta de la consulta sql al objecto',
-                'objecto: ' . $class::class
+                'objecto: ' . $class
             ], $th);
         }
 
@@ -119,9 +120,8 @@ class DatabaseResult
             return $constructor_args ? $this->result->fetch_object($class, $constructor_args) : $this->result->fetch_object($class);
         } catch  (\Throwable $th){
             throw new ApiException([
-                'Error al establace al cargar los datos de resulta de la consulta sql al objecto',
-                'objecto: ' . $class::class
-            ], $th);
+                'Error al establace al cargar los datos de resulta de la consulta SQL al objecto definido',
+                'class: ' . $class], $th);   
         }
     }
 }

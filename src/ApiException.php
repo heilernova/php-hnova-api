@@ -31,7 +31,7 @@ class ApiException extends Exception
      * @param (string|string[])[] $messages_developer
      * @param Throwable $th exception del cath
      */
-    public function __construct(array $messages_developer, ?Throwable $th = null, $text_body = 'Error - server', private $responeCode = 500)
+    public function __construct(array $messages_developer, ?Throwable $th = null, $text_body = 'Error - server', private int $responeCode = 500)
     {
         try {
             
@@ -46,8 +46,13 @@ class ApiException extends Exception
                 $this->file = $th->getFile();
             }
         } catch (\Throwable $th) {
-            throw $th;
+            throw new Exception("Errro a inilizalizar la clase");
         }
+    }
+
+    public function getHttpResponseCode():int
+    {
+        return $this->responeCode;
     }
 
     /**

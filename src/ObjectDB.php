@@ -15,7 +15,7 @@ class ObjectDB
         $db = Api::getConfig()->getConfigData()->databases->$db ?? null;
         if ($db){
 
-            $this->database =  new Database($db->dataConnection, $table);
+            $this->database =  new Database((array)$db->dataConnection, $table);
         }else{
             throw new ApiException(["No se encontro la configuración de la base de datos $db"]);
         }

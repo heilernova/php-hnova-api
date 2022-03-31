@@ -48,10 +48,22 @@ class Response
         self::$_httpResponseCode = $code;
     }
 
-    public static function addMessage(string $content):void
+    /**
+     * @param string|string[] $content
+     */
+    public static function addMessage(string|array $content):void
     {
         if (!self::$_message) self::$_message = (object)[];
 
         self::$_message->content[] = $content;
+    }
+    
+    /**
+     * @param string|string[] $content
+     */
+    public static function setMenssage(array $content):void
+    {
+        if (!self::$_message) self::$_message = (object)[];
+        self::$_message->content = $content;
     }
 }

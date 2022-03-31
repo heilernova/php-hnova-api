@@ -53,4 +53,13 @@ class Templates
         $replace = [$namespace, $name];
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Controllers/Controller.php'));
     }
+
+
+    //
+    public static function getObjectDB($name, $namespace):string{
+        $searh = ['HNnamespace', 'Name'];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'DB/ObjectDB.php'));
+    }
+
 }
