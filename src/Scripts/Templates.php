@@ -54,6 +54,12 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Controllers/Controller.php'));
     }
 
+    public static function getGuard($name = '', $namespace = "ApiRest"):string
+    {
+        $searh = ['HNnamespace', 'Name'];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Guard.php'));
+    }
 
     //
     public static function getObjectDB($name, $namespace):string{

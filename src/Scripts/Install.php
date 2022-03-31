@@ -52,6 +52,7 @@ class Install
         Files::addFile("$dir/BaseController.php", Templates::getBaseController());
         Files::addFile("$dir/BaseModel.php", Templates::getBaseModel());
         Files::addFile("$dir/BaseDB.php", Templates::getBaseDB());
+        Files::addFile("$dir/Guard.php", Templates::getGuard());
 
         $composer = json_decode(file_get_contents('composer.json'));
 
