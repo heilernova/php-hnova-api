@@ -103,6 +103,9 @@ class Script
                             case 'db':
                                 Generate::db();
                                 break;
+                            case 'm':
+                                Generate::model();
+                                break;
                             default:
                                 # code...
                                 break;

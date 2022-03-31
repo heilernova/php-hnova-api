@@ -65,4 +65,40 @@ class Generate
             Console::error("Faltan argumentos");
         } 
     }
+
+    public static function model():void
+    {
+        $name = trim(Script::getArgment(), "/");
+
+        $name_explode = explode('/', $name);
+
+        $name_tempo = ".";
+        foreach ($name_explode as $value){
+            $name_tempo .= "/" . ucfirst($value);
+        }
+
+        $name_explode = explode('-', $name_tempo);
+
+        $name_tempo = "";
+        foreach ($name_explode as $value){
+            $name_tempo .= ucfirst($value);
+        }
+
+        $namespace = "ApiRest";
+        
+        $namespace_long = "";
+        $namespace_long = '\\' . str_replace('/', '\\', ltrim(dirname($name_tempo),"/|."));
+        
+        $name_tempo = ltrim($name_tempo,"/|.") . "Model";
+  
+        $name_tempo = Script::getConfig()->getDir() . "/Models/$name_tempo.php";
+        if (file_exists($name_tempo)){
+            Console::error("Comflito: el nombre del ObjectDB ya esta en uso.");
+            exit;
+        }
+
+        Files::addFile($name_tempo, Templates::getModel(basename($name_tempo, '.php').PHP_EOL, "ApiRest", $namespace_long));
+        
+        Files::loadFiles();
+    }
 }

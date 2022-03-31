@@ -62,4 +62,11 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'DB/ObjectDB.php'));
     }
 
+    public static function getModel($name, $namespace ,$namespace_long):string
+    {
+        $searh =["HNnamespace", "Name", 'Long'];
+        $replace = [$namespace, $name, $namespace_long];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Models/Model.php'));
+    }
+
 }
