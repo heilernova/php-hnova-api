@@ -11,6 +11,7 @@
 namespace HNova\Api;
 
 use Exception;
+use HNova\Api\Error\ErrorRegister;
 use HNova\Api\Routes\Router;
 use Throwable;
 
@@ -81,6 +82,10 @@ class ApiException extends Exception
         return $this->textBody;
     }
 
+    public function getError():ErrorRegister
+    {
+        return ErrorRegister::__load($this);
+    }
     /**
      * Imprime el error en el body
      */

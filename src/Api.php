@@ -65,7 +65,7 @@ class Api
 
             Response::setMenssage($th->getMessageDeveloper());
 
-            return new Response('error de ejecución');
+            return new Response($th->getError());
         }catch (\Throwable $th) {
             Response::SetHttpResponseCode(500);
             return new Response("Error inesperado: \n" . $th);
