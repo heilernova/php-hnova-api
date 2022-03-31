@@ -52,6 +52,7 @@ class Api
             }
 
             $route = Routes::find($url);
+            $result = 0;
             if ($route){
                 $result = self::callActions($route);
             }else{
@@ -94,10 +95,18 @@ class Api
      */
     private static function callActions(object $route):mixed
     {
-        Response::SetHttpResponseCode(400);
         if ($route->paramsErrors){
             return "params error";
         }else{
+
+            // Validamos los canActive
+            foreach ($route->canActive as $canActive){
+                
+                $res = $canActive();
+                // echo json_encode($res); echo "\n";
+                if ($res) return $res;
+            }
+
 
             // Validasmo el timpo de acción.
             $action = $route->action;

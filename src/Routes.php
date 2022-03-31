@@ -19,7 +19,7 @@ class Routes
      * @param string[]|callable $action Acción ajecutar 
      * @param callable[] $can_active
      */
-    public static function add(string $path, Methods $method, $action, $can_active = null)
+    public static function add(string $path, Methods $method, $action, $can_active = [])
     {
         header("content-type: application/json");
         
