@@ -23,6 +23,7 @@ class ApiConfigData
     {
         if ($data){
 
+            $this->name = $data->name;
             $this->timezone = $data->timezone;
             $this->developers = $data->developers;
             $this->debug = $data->debug;

@@ -24,7 +24,7 @@ class Response
     {
         header('content-type: application/json');
         $response = [];
-        $response['Application'] = 'Nombre de la aplicacion';
+        $response['Application'] = Api::getConfig()->getConfigData()->name;
         $response['time-response'] = time() - $_ENV['api-time-start'];
         if (self::$_message) $response['systemMessage'] = self::$_message;
         $response['response'] = $this->_result;
