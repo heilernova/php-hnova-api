@@ -5,12 +5,14 @@
 
 namespace HNnamespace;
 
-class BaseDB
+use HNova\Api\ObjectDB;
+
+class BaseDB extends ObjectDB
 {
     /** Método constructor */
-    public function __construct()
+    public function __construct(string $table, string $db = 'default')
     {
         
-        // parent::__construct();
+        parent::__construct($table, $db);
     }
 }

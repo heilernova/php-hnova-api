@@ -180,7 +180,7 @@ class Database
      * @param string|array $condition Condición where de la filas a seleccionas, puese ser un string o un array 
      * donde el primer item es un string con la condicion preparadao y el segundo un array con los parametros.
      */
-    public function select($table = null, array $fields = null, string|array $condition = null):DatabaseResult
+    public function select(array $data = [], $table = null, array $fields = null, string|array $condition = null):DatabaseResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
 
