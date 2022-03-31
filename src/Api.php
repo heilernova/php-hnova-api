@@ -63,12 +63,21 @@ class Api
         } catch(ApiException $th){
             Response::SetHttpResponseCode($th->getHttpResponseCode());
 
-            Response::setMenssage($th->getMessageDeveloper());
+            $body = "Error";
+            if (self::getConfig()->getDebug()){
+                Response::setMenssage($th->getMessageDeveloper());
+                $body = $th->getError();
+            }
 
-            return new Response($th->getError());
+            return new Response($body);
         }catch (\Throwable $th) {
             Response::SetHttpResponseCode(500);
-            return new Response("Error inesperado: \n" . $th);
+            $body = "--";
+            if (self::getConfig()->getDebug()) {
+                Response::addMessage("Error inesperado de la API");
+                $body = $th->getMessage();
+            }
+            return new Response("Error inesperado: $body");
         }
     }
 

@@ -11,6 +11,7 @@ namespace HNova\Api\Settings;
 
 use HNova\Api\Settings\Classes\ApiConfigData;
 use HNova\Api\Settings\Routes\ConfigRoutes;
+use Symfony\Component\Console\Output\TrimmedBufferOutput;
 
 class ApiConfig
 {
@@ -55,6 +56,10 @@ class ApiConfig
         return $this->_dataConfig;
     }
 
+    public function getDebug():bool
+    {   
+        return $this->_dataConfig->debug;
+    }
 
     public function getRoutes():ConfigRoutes{
         return new ConfigRoutes($this->_dataConfig);
