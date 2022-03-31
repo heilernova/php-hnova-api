@@ -11,6 +11,7 @@ namespace HNova\Api\Error;
 
 use HNova\Api\ApiException;
 use HNova\Api\Funs;
+use HNova\Api\HTTP\ClientInfo;
 
 class ErrorRegister
 {
@@ -19,11 +20,11 @@ class ErrorRegister
             time() . '-' . Funs::generateToken(5),
             date('Y-m-d H:i:s',time()) . "z",
             (object)[
-                'url'       => '',
-                'method'    => '',
-                'ip'        => '',
-                'device'    => '',
-                'platform'  => ''
+                'url'       => $_ENV['api-http-request-url'],
+                'method'    => $_SERVER['REQUEST_METHOD'],
+                'ip'        => ClientInfo::getIp(),
+                'device'    => ClientInfo::getDevice(),
+                'platform'  => ClientInfo::getPlatform()
             ],
             "Error de ejecución",
             $exec->getMessageDeveloper(),

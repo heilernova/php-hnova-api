@@ -26,6 +26,7 @@ class Api
             
             $url = trim($url, '/');
             
+            $_ENV['api-http-request-url'] = $url;
             // establecemos los directorios donde esten alojado el código
             foreach (get_required_files() as $required){
                 if (str_ends_with($required, 'index.api.php')){
