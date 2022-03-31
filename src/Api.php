@@ -10,6 +10,7 @@
 namespace HNova\Api;
 
 use Exception;
+use HNova\Api\Settings\ApiConfig;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -25,6 +26,7 @@ class Api
             
             $url = trim($url, '/');
             
+            // establecemos los directorios donde esten alojado el código
             foreach (get_required_files() as $required){
                 if (str_ends_with($required, 'index.api.php')){
                     $_ENV['api-dir-src'] = dirname($required);
@@ -38,8 +40,16 @@ class Api
             }
 
             // Rutas por default de la API
+            if (self::getConfig()->getRoutes()->getCount() == 1){
+                
+                require $_ENV['api-dir-src'] . "/routes.php";
 
-            require $_ENV['api-dir-src'] . "/routes.php";
+                $routeConfig = self::getConfig()->getRoutes()->get();
+                $routeConfig->loadCORS();
+            }else{
+                
+
+            }
 
             $route = Routes::find($url);
             if ($route){
@@ -55,6 +65,14 @@ class Api
             
             throw $th;
         }
+    }
+
+    /**
+     * Retorna la configuraciones del sistema.
+     */
+    public static function getConfig():ApiConfig
+    {
+        return new ApiConfig();
     }
 
     /**
@@ -122,8 +140,5 @@ class Api
         }
     }
 
-    public static function getConfig()
-    {
 
-    }
 }

@@ -10,6 +10,7 @@
 namespace HNova\Api\Settings;
 
 use HNova\Api\Settings\Classes\ApiConfigData;
+use HNova\Api\Settings\Routes\ConfigRoutes;
 
 class ApiConfig
 {
@@ -39,11 +40,23 @@ class ApiConfig
         return new ApiConfig($api_cofig_data);
     }
 
+    /**
+     * Retrona el directorio don se encutra el codigo de APIREST
+     */
     public function getDir():string
     {
         return $_ENV['api-dir-src'];
     }
+
+    /**
+     * Retrona el objecto que que representa el api.json
+     */
     public function getConfigData():ApiConfigData{
         return $this->_dataConfig;
+    }
+
+
+    public function getRoutes():ConfigRoutes{
+        return new ConfigRoutes($this->_dataConfig);
     }
 }

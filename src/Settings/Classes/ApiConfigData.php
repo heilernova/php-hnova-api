@@ -21,22 +21,38 @@ class ApiConfigData
      
     public function __construct(object $data = null)
     {
-        $this->developers = [];
-        $this->databases = (object)[
-            'test'=>[
-                'type'=>'mysql',
-                'dataConnection'=>[
-                    "hostname"=> "localhost",
-                    "username"=> "root",
-                    "password"=> "",
-                    "database"=> "ssm"
-                ]
-            ]
-        ];
-        $this->routes = (object)[];
-
         if ($data){
-            $this->developers = $this->developers;
+
+            $this->timezone = $data->timezone;
+            $this->developers = $data->developers;
+            $this->debug = $data->debug;
+            $this->databases = $data->databases;
+            $this->routes = $data->routes;
+
+        }else{
+
+            $this->developers = [];
+            $this->databases = (object)[
+                'test'=>[
+                    'type'=>'mysql',
+                    'dataConnection'=>[
+                        "hostname"=> "localhost",
+                        "username"=> "root",
+                        "password"=> "",
+                        "database"=> "ssm"
+                    ]
+                ]
+            ];
+            $this->routes = (object)[
+                'default'=>[
+                    'cors'=>[
+                        'origin'=>null,
+                        'headers'=> null,
+                        'metods' => null
+                    ]
+                ]
+            ];
         }
+
     }
 }
