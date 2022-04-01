@@ -1,6 +1,6 @@
 <?php
 
-namespace HNnamespace\Controllers;
+namespace HNnamespace\ControllersLong;
 
 use HNnamespace\BaseController;
 

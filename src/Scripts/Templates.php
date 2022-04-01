@@ -47,10 +47,10 @@ class Templates
         return str_replace('HNnamespace', $namespace, file_get_contents(self::$_dir . 'BaseDB.php'));
     }
 
-    public static function getController($name, $namespace)
+    public static function getController($name, $namespace, $long = "")
     {
-        $searh = ['HNnamespace', 'Name'];
-        $replace = [$namespace, $name];
+        $searh = ['HNnamespace', 'Name', 'Long'];
+        $replace = [$namespace, $name, $long];
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Controllers/Controller.php'));
     }
 

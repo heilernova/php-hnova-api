@@ -12,8 +12,34 @@ namespace HNova\Api\Scripts;
 class Generate
 {
     public static function controller():void{
-        $name = Script::getArgment();
+
+        
+        
+        // $name = Script::getArgment();
+        $name = Script::getArgment(); //trim(Script::getArgment(), "/");
         if ($name){
+    
+            $name = trim($name, "/");
+            $name_explode = explode('/', $name);
+    
+            $name_tempo = ".";
+            foreach ($name_explode as $value){
+                $name_tempo .= "/" . ucfirst($value);
+            }
+    
+            $name_explode = explode('-', $name_tempo);
+    
+            $name_tempo = "";
+            foreach ($name_explode as $value){
+                $name_tempo .= ucfirst($value);
+            }
+    
+            $namespace = "ApiRest";
+            
+            $namespace_long = "";
+            $namespace_long = '\\' . str_replace('/', '\\', ltrim(dirname($name_tempo),"/|."));
+            
+            $name_tempo = ltrim($name_tempo,"/|.") . "Controller";
 
             if (str_contains($name, '-')){
                 $names = explode('-', $name);
@@ -22,14 +48,15 @@ class Generate
                     $name .= ucfirst($v);
                 }
             }
-            $name .= "Controller";
-            $name = ucfirst($name);
-            $path = Script::getConfig()->getDir() . "/Controllers/$name.php";
+            // $name .= "Controller";
+            // $name = ucfirst($name);
+            $path = Script::getConfig()->getDir() . "/Controllers/$name_tempo.php";
+            // echo $namespace_long; exit;
             
             if (file_exists($path)){
                 Console::error("Comflito: el nombre del controlador ya esta en usuo");
             }else{
-                Files::addFile($path, Templates::getController($name, "ApiRest"));
+                Files::addFile($path, Templates::getController(basename($name_tempo, '.php'), "ApiRest", $namespace_long));
             }
 
             Files::loadFiles();
@@ -97,7 +124,7 @@ class Generate
             exit;
         }
 
-        Files::addFile($name_tempo, Templates::getModel(basename($name_tempo, '.php').PHP_EOL, "ApiRest", $namespace_long));
+        Files::addFile($name_tempo, Templates::getModel(basename($name_tempo, '.php'), "ApiRest", $namespace_long));
         
         Files::loadFiles();
     }
