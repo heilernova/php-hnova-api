@@ -108,6 +108,10 @@ class Script
                                 break;
                             case 'route':
                                 Generate::route();
+                                break;
+                            case 'r':
+                                Generate::route();
+                                break;
                             default:
                                 # code...
                                 break;
