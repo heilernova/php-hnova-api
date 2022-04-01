@@ -176,14 +176,14 @@ class Database
 
     /**
      * Ejecuta un select en la base de datos con los parametros ingresados.
-     * @param string $table Nombre de la tabla.
-     * @param array $fields Campos o array de los campos a seleccionar de la tabla por defecto es "*".
-     * @param string|array $condition Condición where de la filas a seleccionas, puese ser un string o un array 
-     * donde el primer item es un string con la condicion preparadao y el segundo un array con los parametros.
+     * @param array $data array asociativo de las condiciones de uso. ['fiels'=>'*','condition'=>['id=?', [$id]]]
      */
-    public function select(array $data = [], $table = null, array $fields = null, string|array $condition = null):DatabaseResult
+    public function select(array $data = [], string $table = null):DatabaseResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
+        
+        $fields = $data['fields'] ?? null;
+        $condition = $data['condition'] ?? null;
 
         if ($fields){
             $fields_tempo = '';
