@@ -131,6 +131,10 @@ class Generate
         
         Files::addFile("$dir/$name/$name.php", Templates::getRouteIndex($name));
         Files::addFile("$dir/$name/$name" . "Guard.php", Templates::getRouteGuard($name));
+        Files::addFile("$dir/$name/$name" . "BaseController.php", Templates::getRouteBaseController($name));
+        Files::addFile("$dir/$name/$name" . "BaseDB.php", Templates::getRouteBaseDB($name));
+        // Files::addFile("$dir/$name/$name" . "BaseDB.php", Templates::getRouteGuard($name));
+        // Files::addFile("$dir/$name/$name" . "BaseModel.php", Templates::getRouteGuard($name));
         Files::addFile("$dir/$name/Routes.php", Templates::getRouteRoutes());
         Files::loadFiles();
 

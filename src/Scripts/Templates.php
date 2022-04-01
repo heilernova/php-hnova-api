@@ -83,9 +83,21 @@ class Templates
     }
     public static function getRouteGuard($name, $namespace = "ApiRest"):string
     {
-        $searh =["HNnamespace", "Namse"];
+        $searh =["HNnamespace", "Name"];
         $replace = [$namespace, $name];
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteGuard.php'));
+    }
+    public static function getRouteBaseController($name, $namespace = "ApiRest"):string
+    {
+        $searh =["HNnamespace", "Name"];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteBaseController.php'));
+    }
+    public static function getRouteBaseDB($name, $namespace = "ApiRest"):string
+    {
+        $searh =["HNnamespace", "Name"];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteBaseDB.php'));
     }
     public static function getRouteRoutes():string
     {

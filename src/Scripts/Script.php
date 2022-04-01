@@ -121,6 +121,36 @@ class Script
                     }
             
                 }else if ($arg == 'r' || $arg == 'route'){
+                    $cmd = self::getArgment();
+                    if (file_exists('api.json')){
+                        $_ENV['api-dir'] = self::$_mainDir;
+                        $_ENV['api-dir-src'] = self::$_srcDir;
+                        self::$_apiConfig  = new ApiConfig();
+    
+                        switch ($cmd) {
+                            case 'c':
+                                # code...
+                                // Generate::controller();
+                                break;
+                            case 'r':
+                                // Generate::db();
+                                break;
+                            case 'm':
+                                // Generate::model();
+                                break;
+                            case 'route':
+                                // Generate::route();
+                                break;
+                            case 'r':
+                                // Generate::route();
+                                break;
+                            default:
+                                # code...
+                                break;
+                        }
+                    }else{
+                        Console::error("Se de instalar la aplicación");
+                    }
 
                 }else{
                     Console::error("nv: '$arg' is not a nv command.");
