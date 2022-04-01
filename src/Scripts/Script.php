@@ -106,6 +106,8 @@ class Script
                             case 'm':
                                 Generate::model();
                                 break;
+                            case 'route':
+                                Generate::route();
                             default:
                                 # code...
                                 break;

@@ -75,4 +75,23 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Models/Model.php'));
     }
 
+    public static function getRouteIndex($name, $namespace = "ApiRest"):string
+    {
+        $searh =["HNnamespace", "Name"];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/Route.php'));
+    }
+    public static function getRouteGuard($name, $namespace = "ApiRest"):string
+    {
+        $searh =["HNnamespace", "Namse"];
+        $replace = [$namespace, $name];
+        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteGuard.php'));
+    }
+    public static function getRouteRoutes():string
+    {
+        // $searh =["HNnamespace", "Namse"];
+        // $replace = [$namespace, $name];
+        return file_get_contents(self::$_dir . 'Routes/Route/Routes.php');
+    }
+
 }

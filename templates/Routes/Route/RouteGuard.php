@@ -1,16 +1,9 @@
 <?php
-/**
- * En esta clase puede agregar las restrcicioines de aceceso a las rutas del sistema
- * mediante el uso del los guard almacenso el calse estatica.
- * 
- * todos los método deverar retorna un callable
- */
-
-namespace Example;
+namespace HNnamespace\Routes\Name;
 
 use HNova\Api\Response;
 
-class ExampleGuards
+class NameGuard
 {
     public static function authenticate():callable
     {
@@ -29,7 +22,8 @@ class ExampleGuards
             }else{
 
                 // Retornameos un Response para negar el acceso.
-                return new Response('No access',  401);
+                Response::SetHttpResponseCode(401); // Código de estado para usuario no logeados
+                return "No access";
             }
         };
     }

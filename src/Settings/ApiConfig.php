@@ -64,4 +64,12 @@ class ApiConfig
     public function getRoutes():ConfigRoutes{
         return new ConfigRoutes($this->_dataConfig);
     }
+
+    public function salve():void
+    {
+        $dir = $_ENV['api-dir'];
+        $file = fopen("$dir/api.json", 'w');
+        fputs($file, str_replace('\/', '/', json_encode($this->_dataConfig, 128)));
+        fclose($file);
+    }
 }

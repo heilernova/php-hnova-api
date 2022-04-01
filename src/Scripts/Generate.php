@@ -101,4 +101,42 @@ class Generate
         
         Files::loadFiles();
     }
+
+    public static function route()
+    {
+        $dir = Script::getConfig()->getDir() . "/Routes";
+        $name_route = Script::getArgment();
+
+        $name_explode = explode('-', $name_route);
+        $name = "";
+        foreach ($name_explode as $value)
+        {
+            $name .= ucfirst($value);
+        }
+
+        $data = [
+            'namespace'=>$name,
+            'disable'=>false,
+            'cors' => [
+                'origin'=> null,
+                'headers'=>null,
+                'methods'=>null
+            ]
+        ];
+
+        if (file_exists("$dir/$name/$name.php")){
+            Console::error("Conflicto: la rauta ya existe");
+            exit;
+        }        
+        
+        Files::addFile("$dir/$name/$name.php", Templates::getRouteIndex($name));
+        Files::addFile("$dir/$name/$name" . "Guard.php", Templates::getRouteGuard($name));
+        Files::addFile("$dir/$name/Routes.php", Templates::getRouteRoutes());
+        Files::loadFiles();
+
+        $config = Script::getConfig()->getConfigData();
+        $config->routes->$name_route = $data;
+
+        Script::getConfig()->salve();
+    }
 }
