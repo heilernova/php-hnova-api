@@ -39,9 +39,12 @@ Debería quedar com se muestra el la imgamen.
 ### Script disponibles
 
 * `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
-* `composer nv g c (name)` => Crea un controldor en la app
-* `composer nv g m (name) (name)` => Crea un modelo en la app
+* `composer nv g c (name)` => Crea un controldor en la API para la ruta por defecto
+* `composer nv g m (name) (name)` => Crea un modelo en API para la ruta por defecto
 * `composer nv g route (name)` => Crea una nueva ruta de acceso.
+* `composer nv route c (name) [name-rute]` => Crea un nuevo controlador para ruta de acceso.
+* `composer nv route m (name) [name-rute]` => Crea un nuevo modelo para la ruta de acceso.
+* `composer nv route db (name) [name-rute]` => Crea una nueva ruta de acceso.
 
 #### composer nv install / composer nv i
 Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta src donde alojara el código para gestion de la API.
