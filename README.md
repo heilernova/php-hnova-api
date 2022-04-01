@@ -41,7 +41,7 @@ Debería quedar com se muestra el la imgamen.
 * `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
 * `composer nv g c (name)` => Crea un controldor en la app
 * `composer nv g m (name) (name)` => Crea un modelo en la app
-* `composer nv g api (name)` => Crea una nueva app de acceso a la API
+* `composer nv g route (name)` => Crea una nueva ruta de acceso.
 
 #### composer nv install / composer nv i
 Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta src donde alojara el código para gestion de la API.
@@ -93,7 +93,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
     ],
     "debug": true,
     "databases": {
-        "test": {
+        "default": {
             "type": "mysql",
             "dataConnection": {
                 "hostname": "localhost",
@@ -103,12 +103,11 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
             }
         }
     },
-    "apis": {
-        "app": {
-            "namespace": "App",
+    "routes": {
+        "default": {
             "disable": false,
             "dirResources": "",
-            "database": "test",
+            "database": "default",
             "cors": {
                 "origin": null,
                 "headers": null,
