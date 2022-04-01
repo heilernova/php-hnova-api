@@ -19,7 +19,7 @@ class Routes
      * @param string[]|callable $action Acción ajecutar 
      * @param callable[] $can_active
      */
-    public static function add(string $path, Methods $method, $action, $canActive = [])
+    public static function add(string $path, Methods $method, array|callable $action, $canActive = [])
     {   
         $patFormat = $path;
 
@@ -52,9 +52,9 @@ class Routes
      * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
      * de que el parametro controller este incompleto.
      */
-    public static function get(string $path, $action, array $canActive = [])
+    public static function get(string $path, array|callable $action, array $canActive = [])
     {
-        self::add($path, Methods::Get, $canActive);
+        self::add($path, Methods::Get, $action, $canActive);
     }
 
      /**
@@ -65,9 +65,9 @@ class Routes
      * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
      * de que el parametro controller este incompleto.
      */
-    public static function post(string $path, $action, array $canActive = [])
+    public static function post(string $path, array|callable $action, array $canActive = [])
     {
-        self::add($path, Methods::Post, $canActive);
+        self::add($path, Methods::Post, $action, $canActive);
     }
 
     /**
@@ -78,9 +78,9 @@ class Routes
      * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
      * de que el parametro controller este incompleto.
      */
-    public static function put(string $path, $action, $canActive = [])
+    public static function put(string $path, array|callable $action, $canActive = [])
     {
-        self::add($path, Methods::Put, $canActive);
+        self::add($path, Methods::Put, $action, $canActive);
     }
 
      /**
@@ -91,9 +91,9 @@ class Routes
      * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
      * de que el parametro controller este incompleto.
      */
-    public static function patch(string $path, $action, $canActive = [])
+    public static function patch(string $path, array|callable $action, $canActive = [])
     {
-        self::add($path, Methods::Patch, $canActive);
+        self::add($path, Methods::Patch, $action, $canActive);
     }
 
      /**
@@ -104,9 +104,9 @@ class Routes
      * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
      * de que el parametro controller este incompleto.
      */
-    public static function delete(string $path, $action, $canActive = [])
+    public static function delete(string $path, array|callable $action, $canActive = [])
     {
-        self::add($path, Methods::Delete, $canActive);
+        self::add($path, Methods::Delete, $action, $canActive);
     }
 
     /**
