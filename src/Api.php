@@ -44,18 +44,25 @@ class Api
             if (self::getConfig()->getRoutes()->getCount() == 1){
                 
                 require $_ENV['api-dir-src'] . "/routes.php";
-
                 $routeConfig = self::getConfig()->getRoutes()->get();
-                if ($routeConfig->disabled()){
-                    Response::SetHttpResponseCode(404);
-                    return new Response("path not access");
-                }
-                $routeConfig->loadCORS();
             }else{
                 
-
+                $index_char = strpos($url, '/');
+                if ($index_char){
+                    $name_api = $index_char ? substr($url,0, $index_char) : $url;
+                    $route = self::getConfig()->getRoutes()->get($name_api);
+                }else{
+                    $name_api = $url;
+                    $routeConfig = self::getConfig()->getRoutes()->get();
+                }
             }
 
+            if ($routeConfig->disabled()){
+                Response::SetHttpResponseCode(404);
+                return new Response("path not access");
+            }
+            $routeConfig->loadCORS();
+            
             $route = Routes::find($url);
             $result = 0;
             if ($route){
@@ -66,6 +73,8 @@ class Api
                 $result = null;
             }
             return new Response($result);
+
+            
         } catch(ApiException $th){
             Response::SetHttpResponseCode($th->getHttpResponseCode());
 
