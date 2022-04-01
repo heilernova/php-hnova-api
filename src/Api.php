@@ -46,6 +46,10 @@ class Api
                 require $_ENV['api-dir-src'] . "/routes.php";
 
                 $routeConfig = self::getConfig()->getRoutes()->get();
+                if ($routeConfig->disabled()){
+                    Response::SetHttpResponseCode(404);
+                    return new Response("path not access");
+                }
                 $routeConfig->loadCORS();
             }else{
                 

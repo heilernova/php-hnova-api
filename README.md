@@ -185,8 +185,9 @@ class AppGuards
                 return null;
             }else{
 
-                // Retornameos un Response para negar el acceso.
-                return new Response('No access',  401);
+               // Retornameos un Response para negar el acceso.
+                Response::SetHttpResponseCode(401); // Código de estado para usuario si acceso
+                return "No access";
             }
         };
     }

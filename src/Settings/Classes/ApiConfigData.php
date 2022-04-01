@@ -46,6 +46,7 @@ class ApiConfigData
             ];
             $this->routes = (object)[
                 'default'=>[
+                    'disable'=>false,
                     'cors'=>[
                         'origin'=>null,
                         'headers'=> null,

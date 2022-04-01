@@ -27,6 +27,11 @@ class ConfigRoute
         return $this->_cors;    
     }
 
+    public function disabled():bool
+    {
+        return $this->_cors->disable ?? true;
+    }
+
     /**
      * Carga los CORS de la ruta
      */
