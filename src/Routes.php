@@ -19,10 +19,8 @@ class Routes
      * @param string[]|callable $action Acción ajecutar 
      * @param callable[] $can_active
      */
-    public static function add(string $path, Methods $method, $action, $can_active = [])
-    {
-        header("content-type: application/json");
-        
+    public static function add(string $path, Methods $method, $action, $canActive = [])
+    {   
         $patFormat = $path;
 
         $patterns[] = "/({\w+})/i";
@@ -42,8 +40,73 @@ class Routes
             'pathFormat'=>$patFormat,
             'method'    =>$method->value,
             'action'    =>$action,
-            'canActive' =>$can_active
+            'canActive' =>$canActive
         ];
+    }
+
+     /**
+     * Agrega una ruta de acceso a una función expecifica de un controlador mediante el método HTTP GET.
+     * @param string                                $path url a por la cual se accedera al controlador.
+     * @param array<namespace, method>|callable     $controller función o array del namespace y el metodo del controlador
+     * @param callable[]                            $canActivate
+     * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
+     * de que el parametro controller este incompleto.
+     */
+    public static function get(string $path, $action, array $canActive = [])
+    {
+        self::add($path, Methods::Get, $canActive);
+    }
+
+     /**
+     * Agrega una ruta de acceso a una función expecifica de un controlador mediante el método HTTP POST.
+     * @param string                                $path url a por la cual se accedera al controlador.
+     * @param array<namespace, method>|callable     $controller función o array del namespace y el metodo del controlador
+     * @param callable[]                            $canActivate
+     * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
+     * de que el parametro controller este incompleto.
+     */
+    public static function post(string $path, $action, array $canActive = [])
+    {
+        self::add($path, Methods::Post, $canActive);
+    }
+
+    /**
+     * Agrega una ruta de acceso a una función expecifica de un controlador mediante el método HTTP PUT.
+     * @param string                                $path url a por la cual se accedera al controlador.
+     * @param array<namespace, method>|callable     $controller función o array del namespace y el metodo del controlador
+     * @param callable[]                            $canActivate
+     * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
+     * de que el parametro controller este incompleto.
+     */
+    public static function put(string $path, $action, $canActive = [])
+    {
+        self::add($path, Methods::Put, $canActive);
+    }
+
+     /**
+     * Agrega una ruta de acceso a una función expecifica de un controlador mediante el método HTTP PATCH.
+     * @param string                                $path url a por la cual se accedera al controlador.
+     * @param array<namespace, method>|callable     $controller función o array del namespace y el metodo del controlador
+     * @param callable[]                            $canActivate
+     * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
+     * de que el parametro controller este incompleto.
+     */
+    public static function patch(string $path, $action, $canActive = [])
+    {
+        self::add($path, Methods::Patch, $canActive);
+    }
+
+     /**
+     * Agrega una ruta de acceso a una función expecifica de un controlador mediante el método HTTP DELETE.
+     * @param string                                $path url a por la cual se accedera al controlador.
+     * @param array<namespace, method>|callable     $controller función o array del namespace y el metodo del controlador
+     * @param callable[]                            $canActivate
+     * @throws ApiException  Retorna error en caso de que la ruta ya este en uso, o en caso
+     * de que el parametro controller este incompleto.
+     */
+    public static function delete(string $path, $action, $canActive = [])
+    {
+        self::add($path, Methods::Delete, $canActive);
     }
 
     /**
