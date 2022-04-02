@@ -11,6 +11,8 @@ namespace HNova\Api;
 
 use Exception;
 use HNova\Api\Settings\ApiConfig;
+use HNova\Api\Settings\HTTP\Cors;
+use HNova\Api\Settings\Routes\ConfigRoute;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -41,19 +43,26 @@ class Api
             }
 
             // Rutas por default de la API
-            if (self::getConfig()->getRoutes()->getCount() == 1){
-                
-                require $_ENV['api-dir-src'] . "/routes.php";
-                $routeConfig = self::getConfig()->getRoutes()->get();
+            if (str_starts_with($url, "nv-panel")){
+                $url = str_replace("nv-panel", "", $url);
+                require __DIR__ . './Panel/panel-routes.php';
+                $routeConfig = new ConfigRoute((object)['cors'=>(object)['origin'=>'*', 'methods'=>'*', 'headers'=>'*']]);
             }else{
-                
-                $index_char = strpos($url, '/');
-                if ($index_char){
-                    $name_api = $index_char ? substr($url,0, $index_char) : $url;
-                    $route = self::getConfig()->getRoutes()->get($name_api);
-                }else{
-                    $name_api = $url;
+
+                if (self::getConfig()->getRoutes()->getCount() == 1){
+                    
+                    require $_ENV['api-dir-src'] . "/routes.php";
                     $routeConfig = self::getConfig()->getRoutes()->get();
+                }else{
+                    
+                    $index_char = strpos($url, '/');
+                    if ($index_char){
+                        $name_api = $index_char ? substr($url,0, $index_char) : $url;
+                        $route = self::getConfig()->getRoutes()->get($name_api);
+                    }else{
+                        $name_api = $url;
+                        $routeConfig = self::getConfig()->getRoutes()->get();
+                    }
                 }
             }
 
