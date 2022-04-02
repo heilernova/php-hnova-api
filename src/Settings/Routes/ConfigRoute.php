@@ -29,7 +29,7 @@ class ConfigRoute
 
     public function disabled():bool
     {
-        return $this->_cors->disable ?? true;
+        return $this->_cors->disable ?? false;
     }
 
     /**
