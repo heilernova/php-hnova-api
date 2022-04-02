@@ -25,6 +25,7 @@ class ApiConfigData
 
             $this->name = $data->name;
             $this->timezone = $data->timezone;
+            $this->user = $data->user;
             $this->developers = $data->developers;
             $this->debug = $data->debug;
             $this->databases = $data->databases;
@@ -33,6 +34,11 @@ class ApiConfigData
         }else{
 
             $this->developers = [];
+            $this->user = (object)[
+                'username'=>'$2y$04$A8dGLVylvwo/0eLebRIam.jJ6xLqfrnMKay2m1xB7cmptEYAyGp9.',
+                'password'=>'$2y$04$A8dGLVylvwo/0eLebRIam.jJ6xLqfrnMKay2m1xB7cmptEYAyGp9.',
+                'email'=>null
+            ];
             $this->databases = (object)[
                 'test'=>[
                     'type'=>'mysql',
