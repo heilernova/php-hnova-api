@@ -14,3 +14,8 @@ use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
 
 Routes::add('auth', Methods::Post, [AuthController::class]);
+
+Routes::add('db', Methods::Get, [DbController::class]);
+Routes::add('db/{name:string}', Methods::Post, [DbController::class]);
+Routes::add('db/{name:string}', Methods::Put, [DbController::class]);
+Routes::add('db/{name:string}', Methods::Delete, [DbController::class]);
