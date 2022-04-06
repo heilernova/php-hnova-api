@@ -10,12 +10,12 @@ use HNova\Api\Data\Database;
 class ObjectDB
 {
     /** Método constructor */
-    public function __construct(string $table, string $db = 'default', public ?Database $database = null)
+    public function __construct(string $table, string $db = 'default', public ?Database $_database = null)
     {
         $db = Api::getConfig()->getConfigData()->databases->$db ?? null;
         if ($db){
 
-            $this->database =  new Database((array)$db->dataConnection, $table);
+            $this->_database =  new Database((array)$db->dataConnection, $table);
         }else{
             throw new ApiException(["No se encontro la configuración de la base de datos $db"]);
         }
