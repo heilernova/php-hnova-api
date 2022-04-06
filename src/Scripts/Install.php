@@ -56,13 +56,11 @@ class Install
 
         $composer = json_decode(file_get_contents('composer.json'));
 
+        if (!isset($composer->autoload)) $composer->autoload = (object)[];
+
         $composer->autoload->{'psr-4'}->{'ApiRest\\'} = "$dir/";
 
         Files::addFile('composer.json', str_replace('\/','/', json_encode($composer, 128)));
-        // $e = Script::getEvent()->getComposer()->getAutoloadGenerator();
-        // $e->
-        // echo json_encode($e, 128);
-        // // Script::getEvent()->getComposer()->setAutoloadGenerator($e);
         Files::loadFiles();
     }
 }
