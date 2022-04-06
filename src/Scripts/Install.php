@@ -56,7 +56,7 @@ class Install
 
         $composer = json_decode(file_get_contents('composer.json'));
 
-        if (!isset($composer->autoload)) $composer->autoload = (object)[];
+        if (!isset($composer->autoload)) $composer->autoload = (object)['psr-4'=>(object)[]];
 
         $composer->autoload->{'psr-4'}->{'ApiRest\\'} = "$dir/";
 
