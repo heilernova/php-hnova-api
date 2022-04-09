@@ -35,9 +35,13 @@ class Generate
             }
     
             $namespace = "ApiRest";
+            $name_tempo_1 =  ltrim(dirname($name_tempo),"/|.");
             
             $namespace_long = "";
-            $namespace_long = '\\' . str_replace('/', '\\', ltrim(dirname($name_tempo),"/|."));
+
+            if ($name_tempo_1){
+                $namespace_long = '\\' . str_replace('/', '\\', $name_tempo_1);
+            }
             
             $name_tempo = ltrim($name_tempo,"/|.") . "Controller";
 
