@@ -31,6 +31,7 @@ class Response
         
         if (self::$_message) $api_info['systemMessage'] = self::$_message;
 
+        header('Access-Control-Expose-Headers: nv-data');
         header('nv-data: ' . json_encode($api_info));
         
         if (self::$_httpResponseType == "blob"){
