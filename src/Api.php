@@ -10,6 +10,7 @@
 namespace HNova\Api;
 
 use Exception;
+use HNova\Api\Data\Database;
 use HNova\Api\Settings\ApiConfig;
 use HNova\Api\Settings\HTTP\Cors;
 use HNova\Api\Settings\Routes\ConfigRoute;
@@ -18,6 +19,7 @@ use ReflectionMethod;
 
 class Api
 {
+    private static $_routeConfig;
     /**
      * Ejecuta la API
      */
@@ -71,7 +73,7 @@ class Api
                 return new Response("path not access");
             }
             $routeConfig->loadCORS();
-            
+            self::$_routeConfig = $routeConfig;
             $route = Routes::find($url);
             $result = 0;
             if ($route){
@@ -102,6 +104,19 @@ class Api
                 $body = $th->getMessage();
             }
             return new Response("Error inesperado: $body");
+        }
+    }
+
+    /**
+     * Retorna un Objeto 
+     */
+    public static function getDatabase($db = 'default', $table = null):Database
+    {
+        $db = Api::getConfig()->getConfigData()->databases->$db ?? null;
+        if ($db){
+            return new Database((array)$db->dataConnection, $table);
+        }else{
+            throw new ApiException(["No se encontro la configuración de la base de datos $db"]);
         }
     }
 
