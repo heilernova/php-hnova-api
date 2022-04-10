@@ -187,10 +187,12 @@ class Database
 
         if ($fields){
             $fields_tempo = '';
-            foreach ($fields as $element){
-                $fields_tempo .= ", `$element`";
+            if (is_array($fields)){
+                foreach ($fields as $element){
+                    $fields_tempo .= ", `$element`";
+                }
+                $fields .= ltrim($fields_tempo, ', ');
             }
-            $fields .= ltrim($fields_tempo, ', ');
         }else{
             $fields = '*';
         }
