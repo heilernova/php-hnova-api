@@ -5,11 +5,13 @@ use HNnamespace\BaseDB;
 
 class Name extends BaseDB
 {
+    /**
+     * Método contructor
+     */
     public function __construct()
     {
-        parent::__construct('table_name');
+        parent::__construct('table_name', 'name database');
     }
-
 
     public function get($id, int $limit = 1000)
     {
@@ -17,14 +19,14 @@ class Name extends BaseDB
             "condition"=>['id=?', [$id]],
             'fields'=>'*'
         ];
-        $this->database->select($data);
+        $this->_database->select($data);
     }
 
     public function insert($data, bool $auto_commit = false):bool
     {
-        $ok = $this->database->insert($data)->result;
+        $ok = $this->_database->insert($data)->result;
         if ($ok){
-            if ($auto_commit) $this->database->commit();
+            if ($auto_commit) $this->_database->commit();
             return true;
         }else{
             return false;
@@ -33,9 +35,9 @@ class Name extends BaseDB
 
     public function update($data, $id, bool $auto_commit = false):bool
     {
-        $ok = $this->database->update($data, ['id=?', [$id]])->result;
+        $ok = $this->_database->update($data, ['id=?', [$id]])->result;
         if ($ok){
-            if ($auto_commit) $this->database->commit();
+            if ($auto_commit) $this->_database->commit();
             return true;
         }else{
             return false;
@@ -44,9 +46,9 @@ class Name extends BaseDB
 
     public function delete($id, $auto_commit = false):bool
     {
-        $ok = $this->database->delete(['id=?', [$id]])->result;
+        $ok = $this->_database->delete(['id=?', [$id]])->result;
         if ($ok){
-            if ($auto_commit) $this->database->commit();
+            if ($auto_commit) $this->_database->commit();
             return true;
         }else{
             return false;
