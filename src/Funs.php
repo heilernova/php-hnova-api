@@ -5,6 +5,8 @@
 
 namespace HNova\Api;
 
+use HNova\Api\Date\DateFunctions;
+
 class Funs
 {
     /**
@@ -16,6 +18,15 @@ class Funs
     {
         if ($long < 4) $long = 4;
         return bin2hex(random_bytes(($long - ($long % 2)) /2));
+    }
+
+    /**
+     * Retorna un objeto que funcionalidades para el manejo de los intervalos entre dos fechas
+     * @param string $date Formato para asignar la fecha: yyyy-mm-dd hh:m:s
+     */
+    public static function date(string $date = 'now'):DateFunctions
+    {
+        return new DateFunctions($date);
     }
 
 }
