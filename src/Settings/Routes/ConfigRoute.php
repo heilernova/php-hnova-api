@@ -9,27 +9,53 @@
  */
 namespace HNova\Api\Settings\Routes;
 
+use HNova\Api\Api;
 use HNova\Api\ApiException;
+use HNova\Api\Data\Database;
 use HNova\Api\Settings\HTTP\Cors;
 
 class ConfigRoute
 {
-    
+    /**
+     * @param object $_data Objeto con la información de la ruta.
+     * @param Cors|null $_cors El caso de personalizar la configuración de los CORS
+     */
     public function __construct(private object $_data, private ?Cors $_cors = null)
     {
 
         $this->_cors = new Cors($_data->cors);
-        // echo json_encode($this->_cors, 128); exit;
     }
 
+    /**
+     * Retorna uno objeto con los CORS
+     */
     public function getCORS():Cors
     {
         return $this->_cors;    
     }
 
+    /**
+     * Retorna si la rutas esta desactivada.
+     */
     public function disabled():bool
     {
         return $this->_cors->disable ?? false;
+    }
+
+    /**
+     * Retorna la conexión de la base de datos.
+     */
+    public function getDatabase(string $table = null):Database
+    {
+        return Api::getDatabase($this->_data->database, $table);
+    }
+
+    /**
+     * Retorna el nombre de la base de datos por default para la ruta.
+     */
+    public function getDatabaseName():string
+    {
+        return $this->_data->database;
     }
 
     /**

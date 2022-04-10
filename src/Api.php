@@ -12,7 +12,6 @@ namespace HNova\Api;
 use Exception;
 use HNova\Api\Data\Database;
 use HNova\Api\Settings\ApiConfig;
-use HNova\Api\Settings\HTTP\Cors;
 use HNova\Api\Settings\Routes\ConfigRoute;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -98,6 +97,7 @@ class Api
             return new Response($body);
         }catch (\Throwable $th) {
             Response::SetHttpResponseCode(500);
+
             $body = "--";
             if (self::getConfig()->getDebug()) {
                 Response::addMessage("Error inesperado de la API");
@@ -108,9 +108,19 @@ class Api
     }
 
     /**
-     * Retorna un Objeto 
+     * Retorna la configuración de la ruta.
      */
-    public static function getDatabase($db = 'default', $table = null):Database
+    public static function getRouteConfig():ConfigRoute
+    {
+        return self::$_routeConfig;
+    }
+
+    /**
+     * Retorna la conexión de la base de datos en caso de dejarse el null devolvera el labase de datos
+     * @param string $db Nombre de la base de datos a la cual se desea conectar.
+     * @param string $table Nombre de la tabla por defecto.
+     */
+    public static function getDatabase(string $db = 'default', string $table = null):Database
     {
         $db = Api::getConfig()->getConfigData()->databases->$db ?? null;
         if ($db){

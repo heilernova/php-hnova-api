@@ -53,6 +53,7 @@ class ApiConfigData
             $this->routes = (object)[
                 'default'=>[
                     'namespace'=>'',
+                    'database'=>'test',
                     'disable'=>false,
                     'cors'=>[
                         'origin'=>null,

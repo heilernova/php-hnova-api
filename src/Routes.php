@@ -27,10 +27,12 @@ class Routes
         $patterns[] = "/({(\w+:)})/i";
         $patterns[] = "/({(\w+:\w+)})/i";
         $patterns[] = "/({(\w+.*?:\w+)})/i";
+        $patterns[] = "/({(\w+.*?)})/i";
     
         $replacement[] = '{p}';
         $replacement[] = '{p}';
         $replacement[] = '{p}';
+        $replacement[] = '{p?}';
         $replacement[] = '{p?}';
 
         $path = preg_replace($patterns, $replacement, $path);
@@ -122,6 +124,8 @@ class Routes
 
         $url_item = explode('/', $url);
 
+        // header("content-type: application/json");
+        // echo json_encode($routes); exit;
         $routes = array_reduce($routes, function($carry, $item)use ($method, $url_item){
             static $carry = [];
             
