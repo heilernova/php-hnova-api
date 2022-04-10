@@ -10,7 +10,7 @@ use HNova\Api\Data\Database;
 class ObjectDB
 {
     /** Método constructor */
-    public function __construct(string $table, string $db = 'default', public ?Database $_database = null)
+    public function __construct(string $table, string $db , public ?Database $_database = null)
     {
         $db = Api::getConfig()->getConfigData()->databases->$db ?? null;
         if ($db){
