@@ -45,13 +45,13 @@ class Generate
             
             $name_tempo = ltrim($name_tempo,"/|.") . "Controller";
 
-            if (str_contains($name, '-')){
-                $names = explode('-', $name);
-                $name = "";
-                foreach ($names as $v){
-                    $name .= ucfirst($v);
-                }
-            }
+            // if (str_contains($name, '-')){
+            //     $names = explode('-', $name);
+            //     $name = "";
+            //     foreach ($names as $v){
+            //         $name .= ucfirst($v);
+            //     }
+            // }
             // $name .= "Controller";
             // $name = ucfirst($name);
             $path = Script::getConfig()->getDir() . "/Controllers/$name_tempo.php";
@@ -116,9 +116,13 @@ class Generate
         }
 
         $namespace = "ApiRest";
+        $name_tempo_1 =  ltrim(dirname($name_tempo),"/|.");
         
         $namespace_long = "";
-        $namespace_long = '\\' . str_replace('/', '\\', ltrim(dirname($name_tempo),"/|."));
+
+        if ($name_tempo_1){
+            $namespace_long = '\\' . str_replace('/', '\\', $name_tempo_1);
+        }
         
         $name_tempo = ltrim($name_tempo,"/|.") . "Model";
   
