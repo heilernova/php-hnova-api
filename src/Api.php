@@ -198,6 +198,8 @@ class Api
                     if ($reflection::class == ReflectionFunction::class){
                         try{
                             return $reflection->invokeArgs($params);
+                        } catch(ApiException $ex){
+                            throw $ex;
                         } catch(\Throwable $th){
 
                             $params_text = [];
@@ -213,7 +215,9 @@ class Api
                     }else{
                         try {
                             return $reflection->invokeArgs($controller, $params);
-                        } catch (\Throwable $th) {
+                        } catch(ApiException $ex){
+                            throw $ex;
+                        }catch (\Throwable $th) {
                             //throw $th;
                             $params_text = [];
                             foreach ($params as $key=>$value){
