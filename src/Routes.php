@@ -23,6 +23,10 @@ class Routes
     {   
         $patFormat = $path;
 
+        /**
+         * Enlace para probrar caractes regulares
+         * https://regex101.com/
+         */
         $patterns[] = "/({\w+})/i";
         $patterns[] = "/({(\w+:)})/i";
         $patterns[] = "/({(\w+:\w+)})/i";
