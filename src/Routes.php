@@ -221,9 +221,10 @@ class Routes
                 $item->paramsOptionals = substr_count($item->path, '{p?}');
                 $item->paramsNum = ($item->paramsRequired + $item->paramsOptionals);
                 
-                $numParamsURL = count($url_item);
+                $numParamsURL = count($url_item)  - $item->keys;
                 $numParams = count($item->params);
                 $item->paramsURL = $numParamsURL;
+                
 
                 if ($item->paramsNum >= $numParamsURL){
 
