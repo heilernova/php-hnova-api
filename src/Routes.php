@@ -133,7 +133,7 @@ class Routes
             if ($item->method == $method && str_starts_with($item->path, $url_item[0])){
                 
                 $value = array_shift($url_item);
-
+                
                 $path_item = explode('/', $item->path);
                 $path_format_items = explode('/', $item->pathFormat);
                 
@@ -145,12 +145,12 @@ class Routes
                 $item->paramsErrors = [];
                 $params = [];
                 $valid = true;
-                foreach ($path_item as $i=>$path_item_value){
-                    
-                    if ($path_item_value == '{p}'){
 
-                        // En caso de ser un parametro requerido, verificamos que lo tenga en la URL
-                        if (!($url_item[$i] ?? null)){
+                foreach ($path_item as $i=>$path_item_value){
+
+                    if ($path_item_value == '{p}'){
+                        
+                        if (!array_key_exists($i,$url_item)){
                             $valid = false;
                             break;
                         }else{
