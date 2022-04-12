@@ -9,12 +9,14 @@
  */
 namespace HNova\Api\Error;
 
+use HNova\Api\Api;
 use HNova\Api\ApiException;
 use HNova\Api\Funs;
 use HNova\Api\HTTP\ClientInfo;
 
 class ErrorRegister
 {
+    public object $path;
     public static function __load(ApiException $exec){
         return new ErrorRegister(
             time() . '-' . Funs::generateToken(5),
@@ -47,7 +49,7 @@ class ErrorRegister
         public object $error = new \stdClass()
     )
     {
-        
+        $this->path = Api::getRouteConfig()->getData();
     }
     
 }

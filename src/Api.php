@@ -76,6 +76,7 @@ class Api
             $route = Routes::find($url);
             $result = 0;
             if ($route){
+                $routeConfig->setPath($route);
                 $result = self::callActions($route);
             }else{
                 Response::addMessage("Invalid route");

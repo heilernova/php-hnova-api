@@ -98,4 +98,14 @@ class ConfigRoute
             throw new ApiException(['Error al establecer los CORS'], $th);
         }
     }
+
+    public function setPath($route):void
+    {
+        $this->_data->path = $route;
+    }
+
+    public function getData():object
+    {
+        return $this->_data;
+    }
 }
