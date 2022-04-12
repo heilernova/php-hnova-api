@@ -195,9 +195,35 @@ class Api
                 if ($num_params_requered <= $params_num){
                     
                     if ($reflection::class == ReflectionFunction::class){
-                        return $reflection->invokeArgs($params);
+                        try{
+                            return $reflection->invokeArgs($params);
+                        } catch(\Throwable $th){
+
+                            $params_text = [];
+                            foreach ($params as $key=>$value){
+                                $params_text = "$key =  $value : " . gettype($value);
+                            }
+
+                            throw new ApiException(
+                                ['Error con el llamado de la función', 'parametros', $params_text],
+                                $th
+                            );
+                        }
                     }else{
-                        return $reflection->invokeArgs($controller, $params);
+                        try {
+                            return $reflection->invokeArgs($controller, $params);
+                        } catch (\Throwable $th) {
+                            //throw $th;
+                            $params_text = [];
+                            foreach ($params as $key=>$value){
+                                $params_text = "$key =  $value : " . gettype($value);
+                            }
+
+                            throw new ApiException(
+                                ['Error con el llamado del método del controlador', 'parametros', $params_text],
+                                $th
+                            );
+                        }
                     }
                 }else{
                     Response::addMessage('Prametros incorrectos');
