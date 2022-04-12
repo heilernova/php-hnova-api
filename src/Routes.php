@@ -26,8 +26,8 @@ class Routes
         $patterns[] = "/({\w+})/i";
         $patterns[] = "/({(\w+:)})/i";
         $patterns[] = "/({(\w+:\w+)})/i";
-        $patterns[] = "/({(\w+.*?:\w+)})/i";
-        $patterns[] = "/({(\w+.*?)})/i";
+        $patterns[] = "/({(\w+[?]:\w+)})/i";
+        $patterns[] = "/({\w+[?]})/i";
     
         $replacement[] = '{p}';
         $replacement[] = '{p}';
@@ -148,7 +148,7 @@ class Routes
                 foreach ($path_item as $i=>$path_item_value){
                     
                     if ($path_item_value == '{p}'){
-                        
+
                         // En caso de ser un parametro requerido, verificamos que lo tenga en la URL
                         if (!($url_item[$i] ?? null)){
                             $valid = false;
@@ -217,7 +217,22 @@ class Routes
                 }
 
                 $item->params = $params;
-                $item->paramsNum = substr_count($item->path, '{p}') +  substr_count($item->path, '{p?}');
+                $item->paramsRequired = substr_count($item->path, '{p}');
+                $item->paramsOptionals = substr_count($item->path, '{p?}');
+                $item->paramsNum = ($item->paramsRequired + $item->paramsOptionals);
+                
+                $numParamsURL = count($url_item);
+                $numParams = count($item->params);
+                $item->paramsURL = $numParamsURL;
+
+                if ($item->paramsNum >= $numParamsURL){
+
+                    $valid = ($numParamsURL >= ($item->paramsNum - $item->paramsOptionals))
+                    && ($numParamsURL >= $item->paramsRequired) 
+                    && ($numParamsURL >= $item->paramsRequired);
+                }else{
+                    $valid = false;
+                }
                 
                 if ($valid) $carry[] = $item;
             };
