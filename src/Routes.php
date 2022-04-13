@@ -128,8 +128,6 @@ class Routes
 
         $url_item = explode('/', $url);
 
-        // header("content-type: application/json");
-        // echo json_encode($routes); exit;
         $routes = array_reduce($routes, function($carry, $item)use ($method, $url_item){
             static $carry = [];
             
@@ -209,13 +207,12 @@ class Routes
                         }
                         
                     }else{
-                        
-                        // En caso de no ser un parametro validamos que sea igual
+
+                        $item->keys++;
                         if ($path_item_value != ($url_item[$i] ?? null)){
                             $valid = false;
                             break;
                         }
-                        $item->keys++;
                     }
                     
                 }
@@ -248,6 +245,7 @@ class Routes
         if ($routes){
 
             uasort($routes, function($a, $b){ return (strcmp($b->keys, $a->keys)); });
+
             return array_shift($routes);
         }else{
             return null;
