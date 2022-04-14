@@ -145,6 +145,7 @@ class Api
     private static function callActions(object $route):mixed
     {
         if ($route->paramsErrors){
+            Response::SetHttpResponseCode(400);
             return "params error";
         }else{
 
@@ -155,7 +156,6 @@ class Api
                 // echo json_encode($res); echo "\n";
                 if ($res) return $res;
             }
-
 
             // Validasmo el timpo de acción.
             $action = $route->action;
@@ -198,34 +198,62 @@ class Api
                     if ($reflection::class == ReflectionFunction::class){
                         try{
                             return $reflection->invokeArgs($params);
-                        } catch(ApiException $ex){
-                            throw $ex;
-                        } catch(\Throwable $th){
+                        }catch(\ReflectionException $th){
 
-                            $params_text = [];
+                            $params_received = [];
+
                             foreach ($params as $key=>$value){
-                                $params_text = "$key =  $value : " . gettype($value);
+                                $params_received[] = '$' . "$key : " . gettype($value) . ' = ' . $value;
+                            }
+
+                            $parameters_expected = [];
+                            foreach ($reflection->getParameters() as $value){
+                                $default = "";
+                                try {
+                                    $default = " = " . json_encode($value->getDefaultValue());
+                                } catch (\Throwable $th) {}
+
+                                $parameters_expected[] = "$" . $value->getName() . " : " . ($value->getType() ?? 'mixed') . $default;
                             }
 
                             throw new ApiException(
-                                ['Error con el llamado de la función', 'parametros', $params_text],
+                                [
+                                    'Error con el llamado de la función', 
+                                    'Parametros recibidos:', 
+                                    $params_received,
+                                    'Parametros esperados:'
+                                ],
                                 $th
                             );
                         }
                     }else{
                         try {
                             return $reflection->invokeArgs($controller, $params);
-                        } catch(ApiException $ex){
-                            throw $ex;
-                        }catch (\Throwable $th) {
-                            //throw $th;
-                            $params_text = [];
+                        }catch (\ReflectionException $th) {
+                            $params_received = [];
+
                             foreach ($params as $key=>$value){
-                                $params_text = "$key =  $value : " . gettype($value);
+                                $params_received[] = '$' . "$key : " . gettype($value) . ' = ' . $value;
+                            }
+
+                            $parameters_expected = [];
+                            foreach ($reflection->getParameters() as $value){
+                                $default = "";
+                                try {
+                                    $default = " = " . json_encode($value->getDefaultValue());
+                                } catch (\Throwable $th) {}
+
+                                $parameters_expected[] = "$" . $value->getName() . " : " . ($value->getType() ?? 'mixed') . $default;
                             }
 
                             throw new ApiException(
-                                ['Error con el llamado del método del controlador', 'parametros', $params_text],
+                                [
+                                    'Error con el llamado del método del controlador',
+                                    'Parametros recibidos (' . count($params_received) .') :',
+                                    $params_received,
+                                    'Parametros experados (' . count($parameters_expected) .') :',
+                                    $parameters_expected 
+                                ],
                                 $th
                             );
                         }
@@ -236,7 +264,6 @@ class Api
                     return "incorrect parameters";
                 }
             }
-
 
             return $action();
         }
