@@ -16,11 +16,12 @@ use HNova\Api\HTTP\ClientInfo;
 
 class ErrorRegister
 {
-    public object $path;
     public static function __load(ApiException $exec){
         return new ErrorRegister(
             time() . '-' . Funs::generateToken(5),
             date('Y-m-d H:i:s',time()) . "z",
+            "Error de ejecución",
+            $exec->getMessageDeveloper(),
             (object)[
                 'url'       => $_ENV['api-http-request-url'],
                 'method'    => $_SERVER['REQUEST_METHOD'],
@@ -28,13 +29,12 @@ class ErrorRegister
                 'device'    => ClientInfo::getDevice(),
                 'platform'  => ClientInfo::getPlatform()
             ],
-            "Error de ejecución",
-            $exec->getMessageDeveloper(),
             (object)[
-                'code'  => $exec->getCode(),
-                'file'  => $exec->getFile(),
-                'line'  => $exec->getLine(),
-                'trace' => $exec->getTrace()
+                'message'   => $exec->getMessage(),
+                'code'      => $exec->getCode(),
+                'file'      => $exec->getFile(),
+                'line'      => $exec->getLine(),
+                'trace'     => $exec->getTrace()
             ]
         );
 
@@ -43,13 +43,14 @@ class ErrorRegister
     public function __construct(
         public string $id = "",
         public string $date = '',
-        public object $httpRquest = new \stdClass(),
         public string $description = "",
         public array $messageDeveloper = [],
-        public object $error = new \stdClass()
+        public object $httpRquest = new \stdClass(),
+        public object $error = new \stdClass(),
+        public ?object $route = null
     )
     {
-        $this->path = Api::getRouteConfig()->getData();
+        $this->route = Api::getRouteConfig()->getData();
     }
     
 }
