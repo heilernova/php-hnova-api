@@ -73,7 +73,7 @@ class Api
             }
             $routeConfig->loadCORS();
             self::$_routeConfig = $routeConfig;
-            $route = Routes::find($url);
+            $route = self::routeFind($url);
             $result = 0;
             if ($route){
                 $routeConfig->setPath($route);
@@ -269,5 +269,143 @@ class Api
         }
     }
 
+    /**
+     * Buscar la ruta correspondiente a la url ingresada
+     * @return null|object
+     */
+    public static function routeFind(string $url)
+    {
+        $url = trim($url, '/');
+        $routes = $_ENV['api-routes'] ?? [];
+
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+
+        $url_item = explode('/', $url);
+
+        $routes = array_reduce($routes, function($carry, $item)use ($method, $url_item){
+            static $carry = [];
+            
+            
+            if ($item->method == $method && str_starts_with($item->path, $url_item[0])){
+                
+                $value = array_shift($url_item);
+                
+                $path_item = explode('/', $item->path);
+                $path_format_items = explode('/', $item->pathFormat);
+                
+                // Retinarmos el primeros items de los arrays
+                array_shift($path_item);
+                array_shift($path_format_items);
+
+                $item->keys = 0;
+                $item->paramsErrors = [];
+                $params = [];
+                $valid = true;
+
+                foreach ($path_item as $i=>$path_item_value){
+
+                    if ($path_item_value == '{p}'){
+                        
+                        if (!array_key_exists($i,$url_item)){
+                            $valid = false;
+                            break;
+                        }else{
+                            $param_url = $url_item[$i];
+                            $param_format = explode(':', preg_replace('/[{,},?]/', '',$path_format_items[$i]));
+
+                            $type_param = $param_format[1] ?? 'string';
+
+                            if ($type_param == 'int'){
+                                if (is_numeric($param_url)){
+                                    $params[$param_format[0]] = (int)$param_url;
+                                }else{
+                                    $item->paramsErrors[] = "incorrect parameter type (int) name: '$param_format[0]' Value: $param_url";
+                                }
+                            }else if ($type_param == 'float'){
+                                if (is_float($param_url)){
+                                    $params[$param_format[0]] = (float)$param_url;
+                                }else{
+                                    $item->paramsErrors[] = "incorrect parameter type (flat) name: '$param_format[0]' Value: $param_url";
+                                }
+                            }else{
+                                // Si es un string
+                                $params[$param_format[0]] = $param_url;
+                            }
+                        }
+                    }else if ($path_item_value == '{p?}'){
+                        
+                        // En caso de ser un parametro opcional
+                        $param_url = ($url_item[$i] ?? null);
+                        $param_format = explode(':', preg_replace('/[{,},?]/', '',$path_format_items[$i]));
+                        
+                        $type_param = $param_format[1] ?? 'string';
+
+                        if ($param_url){
+
+                            if ($type_param == 'int'){
+                                if (is_numeric($param_url)){
+                                    $params[$param_format[0]] = (int)$param_url;
+                                }else{
+                                    $item->paramsErrors[] = "incorrect parameter type (int) name: '$param_format[0]' Value: $param_url";
+                                }
+                            }else if ($type_param == 'float'){
+                                if (is_float($param_url)){
+                                    $params[$param_format[0]] = (float)$param_url;
+                                }else{
+                                    $item->paramsErrors[] = "incorrect parameter type (flat) name: '$param_format[0]' Value: $param_url";
+                                }
+                            }else{
+                                // Si es un string
+                                $params[$param_format[0]] = $param_url;
+                            }
+                        }
+                        
+                    }else{
+
+                        $item->keys++;
+                        if ($path_item_value != ($url_item[$i] ?? null)){
+                            $valid = false;
+                            break;
+                        }
+                    }
+                    
+                }
+
+                if ($valid){
+                    $item->params = $params;
+                    $item->paramsRequired = substr_count($item->path, '{p}');
+                    $item->paramsOptionals = substr_count($item->path, '{p?}');
+                    $item->paramsNum = ($item->paramsRequired + $item->paramsOptionals);
+                    
+                    $numParamsURL = count($url_item)  - $item->keys;
+                    $numParams = count($item->params);
+                    $item->paramsURL = $numParamsURL;
+                    
+    
+                    if ($item->paramsNum >= $numParamsURL){
+    
+                        $valid = ($numParamsURL >= ($item->paramsNum - $item->paramsOptionals))
+                        && ($numParamsURL >= $item->paramsRequired) 
+                        && ($numParamsURL >= $item->paramsRequired);
+                    }else{
+                        $valid = false;
+                    }
+                    
+                }
+                if ($valid) $carry[] = $item;
+            };
+            
+            return $carry;
+        });
+
+        if ($routes){
+
+            uasort($routes, function($a, $b){ return (strcmp($b->keys, $a->keys)); });
+            return array_shift($routes);
+        }else{
+            return null;
+        }
+        
+    }
 
 }
