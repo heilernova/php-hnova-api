@@ -217,25 +217,27 @@ class Routes
                     
                 }
 
-                $item->params = $params;
-                $item->paramsRequired = substr_count($item->path, '{p}');
-                $item->paramsOptionals = substr_count($item->path, '{p?}');
-                $item->paramsNum = ($item->paramsRequired + $item->paramsOptionals);
-                
-                $numParamsURL = count($url_item)  - $item->keys;
-                $numParams = count($item->params);
-                $item->paramsURL = $numParamsURL;
-                
-
-                if ($item->paramsNum >= $numParamsURL){
-
-                    $valid = ($numParamsURL >= ($item->paramsNum - $item->paramsOptionals))
-                    && ($numParamsURL >= $item->paramsRequired) 
-                    && ($numParamsURL >= $item->paramsRequired);
-                }else{
-                    $valid = false;
+                if ($valid){
+                    $item->params = $params;
+                    $item->paramsRequired = substr_count($item->path, '{p}');
+                    $item->paramsOptionals = substr_count($item->path, '{p?}');
+                    $item->paramsNum = ($item->paramsRequired + $item->paramsOptionals);
+                    
+                    $numParamsURL = count($url_item)  - $item->keys;
+                    $numParams = count($item->params);
+                    $item->paramsURL = $numParamsURL;
+                    
+    
+                    if ($item->paramsNum >= $numParamsURL){
+    
+                        $valid = ($numParamsURL >= ($item->paramsNum - $item->paramsOptionals))
+                        && ($numParamsURL >= $item->paramsRequired) 
+                        && ($numParamsURL >= $item->paramsRequired);
+                    }else{
+                        $valid = false;
+                    }
+                    
                 }
-                
                 if ($valid) $carry[] = $item;
             };
             
@@ -245,7 +247,6 @@ class Routes
         if ($routes){
 
             uasort($routes, function($a, $b){ return (strcmp($b->keys, $a->keys)); });
-
             return array_shift($routes);
         }else{
             return null;
