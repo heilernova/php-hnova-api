@@ -96,7 +96,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
     ],
     "debug": true,
     "databases": {
-        "default": {
+        "test": {
             "type": "mysql",
             "dataConnection": {
                 "hostname": "localhost",
@@ -110,7 +110,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
         "default": {
             "disable": false,
             "dirResources": "",
-            "database": "default",
+            "database": "test",
             "cors": {
                 "origin": null,
                 "headers": null,
@@ -124,7 +124,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
 En este archivo podremos 
 
 ## Rutas
-Las rutas de acceso a la api de deberan definir en el archivo `App-routes.php` encontrado en la carpeta de cada app, cabe recalcar el nombre del archivo hace referencia al nombre de app por lo tanto el nombre biene definido por el namespace mas -routes.php.
+Las rutas de acceso a la api de deberan definir en el archivo `routes.php` encontrado en la carpeta de cada app, cabe recalcar el nombre del archivo hace referencia al nombre de app por lo tanto el nombre biene definido por el namespace mas -routes.php.
 
 Para definir las ruta utilizaresmo la clase estaticasa `HNova\Api\Routes`, la cual contiene métodos para agrear rutas según el HTTP METOHOD requerido.
 
@@ -156,7 +156,7 @@ Routes::get("test/saludo/{nombre:string}", function(string $nombre){
 ## Protección de rutas
 Para limitar el acceso a las rutas utilizaremos los guards los cuales estan alojado en la clase `AppGuards` alojada en el archivo `src/App/AppGuards.php`.
 
-Esta es un clase estatica como métodos que retorna `callable` "funciones" para ejecutarse antes ingresar a la acción de la ruta, estas funciones deben retorna null o un objeto `HNova\Api\Response`, donde null es permitir el acceso y Objeto es negar el acceso.
+Esta es un clase estatica como métodos que retorna `callable` "funciones" para ejecutarse antes ingresar a la acción de la ruta, estas funciones deben retorna null o un resultado, donde null es permitir el acceso y Objeto es negar el acceso.
 
 ```php
 /**
@@ -201,7 +201,7 @@ Para implementar el guard el ruta debebmos ingresar el llamdo del métodos de lo
 
 Nota: podremos utilizar mas de un gards en la misma ruta.
 ```php
-Routes::get("test", function(){ return new Response("Hola mundo tetst"); } , [AppGuards::authenticate()]);
+Routes::get("test", function(){ return "Hola mundo tetst"; } , [AppGuards::authenticate()]);
 ```
 
 ### Ruta con parámetros
@@ -210,13 +210,12 @@ Lo parametros se asigna entre llaves el nombre del parametro y serparado por ":"
 Importante que los parametros de la funcion ya sean de callable o la clse controlador concuerden con el nombre y el tipo de parametro esperado en la función o métohod
 
 ```php
-Routes::get("name/{name:string}", function(string $name){ return new Response("Hola $name"); });
-Routes::get("year/{year:int}", function(int $year){ return new Response("El año es: $name"); });
+Routes::get("name/{name:string}", function(string $name){ return "Hola $name"; });
+Routes::get("year/{year:int}", function(int $year){ return "El año es: $name"; });
 
 // Retornaria un error porue el parámetro de la URL es de tipo string y el parámetro de la funcion es int.
 Routes::get("error/{num:string}", function(int $num){ 
-    $num++;
-    return new Response("Numero mas 1; $num"); 
+    return "Numero: $num + 1 = " . ($num + 1); 
 });
 ```
 #### LLamado a un controlador.
@@ -234,116 +233,10 @@ Routes::get("test/hello", [TestController::class, "hello"]);
 Routes::post("test/hello", [TestController::class]);
 ```
 
-## Utilidades para Angular
+## Utilidades integración con Angular
 En caso de validar los mensaje del sistema en Angular, se recomienta utilizar un interceptor para el manejo de errores
 
 Código para el interceptor
 ```ts
-import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse,
-  HttpResponse
-} from '@angular/common/http';
-import { catchError, map, Observable, throwError } from 'rxjs';
-
-@Injectable()
-export class NvApiInterceptor implements HttpInterceptor {
-
-  static urlDefault:string|undefined = undefined;
-
-  constructor(
-    private _message:NvMessageBoxService
-  ) {}
-
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-
-    let url:string = request.url;
-    
-    if (NvApiInterceptor.urlDefault){
-      if (!url.match(/^http(s)?:\/\/(.*)$/)){
-        url = `${NvApiInterceptor.urlDefault}/${url}`;
-      }
-    }
-
-    let requestClone:HttpRequest<unknown> = request.clone({url});
-
-    return next.handle(requestClone).pipe(
-      map((event:HttpEvent<any>)=>{
-          if (event instanceof HttpResponse ){
-            let bodyObject = this.getBodyResponse(event.body);
-            
-            // Validas si la repuesta concuerda con ResponseApi de la libreria HNova/api
-            if (bodyObject){
-
-              if (bodyObject.status){
-                // En caso de ser true establecemos el body con el contenido de la data.
-                if (bodyObject.message.content.length > 0){
-                  
-                  // Aquí el codigo par al manejo del mensaje.
-                }
-                event = event.clone({body: bodyObject.data});
-              }else{
-                // En caso de retornar false devolvemos un error
-                throw new HttpErrorResponse({error: bodyObject.message, url: event.url ?? '', status: event.status});
-              }
-
-            }
-          }
-        return event;
-      }),
-      catchError((e:HttpErrorResponse)=>{
-        
-        let text:string = "Error inesperado";
-        let ms = this.getMessage(e.error);
-
-        if (ms){
-          if (ms.content.length > 0){
-            // Aquí el codigo par al manejo del mesaje del servidror.
-            
-          }
-        }else{
-          if (typeof e.error == 'object'){
-            text = e.message;
-            
-          }else if (typeof e.error == "string"){
-            text = e.error;
-
-            // Aquí el codigo par al manejo del mensjaer de error del servidor.
-          }
-        }
-        
-        return throwError(()=>e);
-      })
-    );
-  }
-
-  private getMessage(data:any):{title:string, content:(string|string[])[], type:number}|null{
-    try {
-      if ('title' in data && 'content' in data && 'type' in data){
-        return data;
-      }else{
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-
-  private getBodyResponse(data:any):{status:string, statusCode:number, message:{title:string, content:(string|string[])[], type:number}, data:any}|null{
-    try {
-      if ('status' in data && 'statusCode' in data && 'message' in data && 'data' in data){
-        return data;
-      }else{
-        return null;
-      }
-    } catch (error) {
-      return null;
-    }
-  }
-}
 
 ```
