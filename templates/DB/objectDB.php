@@ -6,7 +6,7 @@ use HNnamespace\BaseDB;
 class Name extends BaseDB
 {
     /**
-     * Método contructor
+     * Método constructor
      */
     public function __construct()
     {
