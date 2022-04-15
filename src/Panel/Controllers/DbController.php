@@ -25,7 +25,50 @@ class DbController extends PanelBaseController
 
         foreach (Api::getConfig()->getConfigData()->databases as $key=>$value){
             $value->name = $key;
+            
+            
+            // Obtenemos la estructura
+            $value->src = $_ENV['api-dir'] . "/databases/$key/tables";
+            $value->structure = (object)[
+                'tables'=>[],
+                'views'=>[]
+            ];
+
+            $path = $_ENV['api-dir'] . "/databases/$key/tables/";
+
+            $dir = opendir($_ENV['api-dir'] . "/databases/$key/tables");
+            while ($elemento = readdir($dir)){
+                // Tratamos los elementos . y .. que tienen todas las carpetas
+                if( $elemento != "." && $elemento != ".."){
+
+                    if( !is_dir($path.$elemento) ){
+                        $value->structure->tables[] = [
+                            'name' => basename($elemento, '.sql'),
+                            'creationCode' =>file_get_contents($path.$elemento)
+                        ];
+
+                    }
+                }
+            }
+            $path = $_ENV['api-dir'] . "/databases/$key/views/";
+
+            $dir = opendir($_ENV['api-dir'] . "/databases/$key/views");
+            while ($elemento = readdir($dir)){
+                // Tratamos los elementos . y .. que tienen todas las carpetas
+                if( $elemento != "." && $elemento != ".."){
+
+                    if( !is_dir($path.$elemento) ){
+                        $value->structure->views[] = [
+                            'name' => basename($elemento, '.sql'),
+                            'creationCode' =>file_get_contents($path.$elemento)
+                        ];
+
+                    }
+                }
+            }
+
             $databases[] = $value;
+
         }
 
         return $databases;
