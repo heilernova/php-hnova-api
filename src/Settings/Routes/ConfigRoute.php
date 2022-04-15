@@ -26,6 +26,21 @@ class ConfigRoute
         $this->_cors = new Cors($_data->cors);
     }
 
+    public function loadRoutes():void
+    {
+        $ns = $this->_data->namespace;
+        if (!empty($ns)){
+            try {
+                require Api::getConfig()->getDir() . "/Routes/$ns/Routes.php";
+            } catch (\Throwable $th) {
+                //throw $th;
+                throw new ApiException([
+                    'Error al cargar las rutas'
+                ], $th);
+            }
+        }
+    }
+
     /**
      * Retorna uno objeto con los CORS
      */

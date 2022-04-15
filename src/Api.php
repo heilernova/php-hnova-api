@@ -59,7 +59,8 @@ class Api
                     $index_char = strpos($url, '/');
                     if ($index_char){
                         $name_api = $index_char ? substr($url,0, $index_char) : $url;
-                        $route = self::getConfig()->getRoutes()->get($name_api);
+                        $routeConfig = self::getConfig()->getRoutes()->get($name_api);
+                        $url = substr($url, $index_char);
                     }else{
                         $name_api = $url;
                         $routeConfig = self::getConfig()->getRoutes()->get();
@@ -70,7 +71,10 @@ class Api
             if ($routeConfig->disabled()){
                 Response::SetHttpResponseCode(404);
                 return new Response("path not access");
+            }else{
+                $routeConfig->loadRoutes();
             }
+            // echo json_encode($url);
             $routeConfig->loadCORS();
             self::$_routeConfig = $routeConfig;
             $route = self::routeFind($url);
