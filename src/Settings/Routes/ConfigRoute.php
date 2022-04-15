@@ -35,7 +35,7 @@ class ConfigRoute
             } catch (\Throwable $th) {
                 //throw $th;
                 throw new ApiException([
-                    'Error al cargar las rutas'
+                    'Error al cargar las sub rutas'
                 ], $th);
             }
         }
