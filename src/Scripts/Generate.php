@@ -142,15 +142,7 @@ class Generate
         $dir = Script::getConfig()->getDir() . "/Routes";
         $name_route = Script::getArgment();
 
-        $name_explode = explode('-', $name_route);
-        $name = "";
-        foreach ($name_explode as $value)
-        {
-            $name .= ucfirst($value);
-        }
-
         $data = [
-            'namespace'=>$name,
             'disable'=>false,
             'cors' => [
                 'origin'=> null,
@@ -159,18 +151,12 @@ class Generate
             ]
         ];
 
-        if (file_exists("$dir/$name/$name.php")){
+        if (file_exists("$dir/$name_route.php")){
             Console::error("Conflicto: la rauta ya existe");
             exit;
         }        
         
-        Files::addFile("$dir/$name/$name.php", Templates::getRouteIndex($name));
-        Files::addFile("$dir/$name/$name" . "Guard.php", Templates::getRouteGuard($name));
-        Files::addFile("$dir/$name/$name" . "BaseController.php", Templates::getRouteBaseController($name));
-        Files::addFile("$dir/$name/$name" . "BaseDB.php", Templates::getRouteBaseDB($name));
-        // Files::addFile("$dir/$name/$name" . "BaseDB.php", Templates::getRouteGuard($name));
-        // Files::addFile("$dir/$name/$name" . "BaseModel.php", Templates::getRouteGuard($name));
-        Files::addFile("$dir/$name/Routes.php", Templates::getRouteRoutes());
+        Files::addFile("$dir/$name_route.php", Templates::getRoutes());
         Files::loadFiles();
 
         $config = Script::getConfig()->getConfigData();
