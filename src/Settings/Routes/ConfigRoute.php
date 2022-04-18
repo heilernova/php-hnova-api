@@ -20,7 +20,7 @@ class ConfigRoute
      * @param object $_data Objeto con la información de la ruta.
      * @param Cors|null $_cors El caso de personalizar la configuración de los CORS
      */
-    public function __construct(private object $_data, private ?Cors $_cors = null)
+    public function __construct(private string $name, private object $_data, private ?Cors $_cors = null)
     {
 
         $this->_cors = new Cors($_data->cors);
@@ -28,16 +28,14 @@ class ConfigRoute
 
     public function loadRoutes():void
     {
-        $ns = $this->_data->namespace ?? '';
-        if (!empty($ns)){
-            try {
-                require Api::getConfig()->getDir() . "/Routes/$ns/Routes.php";
-            } catch (\Throwable $th) {
-                //throw $th;
-                throw new ApiException([
-                    'Error al cargar las sub rutas'
-                ], $th);
-            }
+        try {
+            require Api::getConfig()->getDir() . "/Routes/$this->name.php";
+            $this->loadCORS();
+        } catch (\Throwable $th) {
+            throw new ApiException([
+                'Error al cargar las rutas',
+                "No se encotron: src" . "/Routes/$this->name.php"
+            ], $th);
         }
     }
 

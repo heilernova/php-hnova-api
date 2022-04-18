@@ -47,12 +47,11 @@ class Api
             if (str_starts_with($url, "nv-panel")){
                 $url = str_replace("nv-panel", "", $url);
                 require __DIR__ . './Panel/panel-routes.php';
-                $routeConfig = new ConfigRoute((object)['cors'=>(object)['origin'=>'*', 'methods'=>'*', 'headers'=>'*']]);
+                $routeConfig = new ConfigRoute('nv-panel', (object)['cors'=>(object)['origin'=>'*', 'methods'=>'*', 'headers'=>'*']]);
             }else{
 
                 if (self::getConfig()->getRoutes()->getCount() == 1){
                     
-                    require $_ENV['api-dir-src'] . "/routes.php";
                     $routeConfig = self::getConfig()->getRoutes()->get();
                 }else{
                     
@@ -75,7 +74,6 @@ class Api
                 $routeConfig->loadRoutes();
             }
 
-            $routeConfig->loadCORS();
             self::$_routeConfig = $routeConfig;
             $route = self::routeFind($url);
             $result = 0;

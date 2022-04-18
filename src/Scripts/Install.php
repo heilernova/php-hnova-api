@@ -47,7 +47,7 @@ class Install
         Files::addFile('www/index.php', Templates::getWWWIndex($dir));
 
         Files::addFile("$dir/index.api.php", Templates::getIndex());
-        Files::addFile("$dir/routes.php", Templates::getRoutes());
+        Files::addFile("$dir/Routes/default.php", Templates::getRoutes());
 
         Files::addFile("$dir/BaseController.php", Templates::getBaseController());
         Files::addFile("$dir/BaseModel.php", Templates::getBaseModel());

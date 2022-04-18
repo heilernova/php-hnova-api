@@ -29,7 +29,7 @@ class ConfigRoutes
     {
         if (isset($this->_dataConfig->routes->$name)){
 
-            return new ConfigRoute((object)$this->_dataConfig->routes->$name);
+            return new ConfigRoute($name, (object)$this->_dataConfig->routes->$name);
         }else{
             throw new ApiException(["No se enctro la configuración para la ruta $name"]);
         }
