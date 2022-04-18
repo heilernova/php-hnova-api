@@ -2,6 +2,7 @@
 namespace HNnamespace\DB;
 
 use HNnamespace\BaseDB;
+use HNova\Api\Api;
 
 class Name extends BaseDB
 {

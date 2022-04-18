@@ -3,6 +3,7 @@
 namespace HNnamespace\ControllersLong;
 
 use HNnamespace\BaseController;
+use HNova\Api\Api;
 
 class Name extends BaseController
 {
@@ -16,6 +17,6 @@ class Name extends BaseController
     
     function get()
     {
-        return "Hola mundo";
+        return "Hello world";
     }
 }
