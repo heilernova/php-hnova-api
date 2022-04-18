@@ -9,7 +9,7 @@
  */
 namespace HNova\Api;
 
-use DataSystem\Message;
+use HNova\Api\DataSystem\Message;
 use SplFileInfo;
 
 class Response

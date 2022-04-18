@@ -66,7 +66,7 @@ class Api
                     }
                 }
             }
-
+            
             if ($routeConfig->disabled()){
                 Response::SetHttpResponseCode(404);
                 return new Response("path not access");

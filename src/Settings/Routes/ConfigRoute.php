@@ -29,8 +29,8 @@ class ConfigRoute
     public function loadRoutes():void
     {
         try {
-            require Api::getConfig()->getDir() . "/Routes/$this->name.php";
             $this->loadCORS();
+            if ($this->name != "nv-panel") require Api::getConfig()->getDir() . "/Routes/$this->name.php";
         } catch (\Throwable $th) {
             throw new ApiException([
                 'Error al cargar las rutas',
