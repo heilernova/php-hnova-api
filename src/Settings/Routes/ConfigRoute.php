@@ -28,7 +28,7 @@ class ConfigRoute
 
     public function loadRoutes():void
     {
-        $ns = $this->_data->namespace;
+        $ns = $this->_data->namespace ?? '';
         if (!empty($ns)){
             try {
                 require Api::getConfig()->getDir() . "/Routes/$ns/Routes.php";

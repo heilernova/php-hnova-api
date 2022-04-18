@@ -26,7 +26,8 @@ class AuthController extends PanelBaseController
                 
                 $token = Funs::generateToken(50);
                 Files::addFile($_ENV['api-dir']. "/nv-panel/.access-token.txt", $token);
-                Files::loadFiles();
+                Files::loadFiles(false);
+                return $token;
             }else{
                 Response::addMessage("Contraseña incorrecta");
             }

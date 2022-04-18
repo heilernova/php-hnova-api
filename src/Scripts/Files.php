@@ -22,7 +22,7 @@ class Files
         self::$_files[] = (object)["path"=>$path, 'content'=>$content];
     }
 
-    public static function loadFiles():void
+    public static function loadFiles($echo = true):void
     {
         foreach (self::$_files as $item){
 
@@ -43,11 +43,12 @@ class Files
             $file = fopen($path, $edit ? 'w' : 'a');
             fputs($file, $item->content);
             fclose($file);
-            
-            if ($edit){
-                Console::fileUpdate($item->path);
-            }else{
-                Console::fileCreate($item->path);
+            if ($echo){
+                if ($edit){
+                    Console::fileUpdate($item->path);
+                }else{
+                    Console::fileCreate($item->path);
+                }
             }
         }
     }

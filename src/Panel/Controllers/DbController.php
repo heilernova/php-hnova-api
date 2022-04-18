@@ -28,44 +28,108 @@ class DbController extends PanelBaseController
             
             
             // Obtenemos la estructura
-            $value->src = $_ENV['api-dir'] . "/databases/$key/tables";
+            $dir = $_ENV['api-dir'] . "/databases/$key";
             $value->structure = (object)[
-                'tables'=>[],
-                'views'=>[]
+                'tables'    =>[],
+                'views'     =>[],
+                'procedures'=>[],
+                'functions' =>[]
             ];
 
-            $path = $_ENV['api-dir'] . "/databases/$key/tables/";
+            $structure_files = [];
+            $structure = "";
 
-            $dir = opendir($_ENV['api-dir'] . "/databases/$key/tables");
-            while ($elemento = readdir($dir)){
-                // Tratamos los elementos . y .. que tienen todas las carpetas
-                if( $elemento != "." && $elemento != ".."){
+            // Recoremos todos los ficheros si existen
+            if (file_exists($dir) && (filesize($dir) > 0)){
 
-                    if( !is_dir($path.$elemento) ){
-                        $value->structure->tables[] = [
-                            'name' => basename($elemento, '.sql'),
-                            'creationCode' =>file_get_contents($path.$elemento)
-                        ];
+                $open_dir = opendir($dir);
+                while ($element = readdir($open_dir)){
+                    if ($element != "." && $element  != ".."){
 
+                        if (is_dir("$dir/$element")){
+                            $o = opendir("$dir/$element");
+                            
+                            while ($element_sub_1 = readdir($o)){
+                                if ($element_sub_1 != "." && $element_sub_1  != ".."){
+                                    if (is_dir($element_sub_1)){
+
+                                    }else{
+                                        $structure_files[] = "$element_sub_1";
+                                        $structure .= file_get_contents("$dir/$element/$element_sub_1");
+                                    }
+                                }
+                            }
+                        }else{
+
+                            // Si es un fichero obtenermos us contenido
+                            $structure_files[] = $element;
+                            $structure .= file_get_contents("$dir/$element");
+                        }
                     }
                 }
+
             }
-            $path = $_ENV['api-dir'] . "/databases/$key/views/";
-
-            $dir = opendir($_ENV['api-dir'] . "/databases/$key/views");
-            while ($elemento = readdir($dir)){
-                // Tratamos los elementos . y .. que tienen todas las carpetas
-                if( $elemento != "." && $elemento != ".."){
-
-                    if( !is_dir($path.$elemento) ){
-                        $value->structure->views[] = [
-                            'name' => basename($elemento, '.sql'),
-                            'creationCode' =>file_get_contents($path.$elemento)
-                        ];
-
-                    }
+            $structure = explode(';', $structure);
+            $tables = [];
+            $views = [];
+            foreach ($structure as $sql){
+                $sql = trim($sql);
+                if (str_starts_with($sql, 'CREATE TABLE')){
+                    $temp = substr($sql, strpos($sql, '`') + 1);
+                    $temp = substr($temp, 0, strpos($temp, '`'));
+                    // $tables[] = $temp . ' :: ' .$sql ;
+                    $tables[] = [
+                        'name'=>$temp,
+                        'drop'=>"DROP TABLE IF EXISTS `$temp`",
+                        'creationCode'=>$sql,
+                    ];
+                }else if(str_starts_with($sql, 'CREATE VIEW')){
+                    $temp = substr($sql, strpos($sql, '`') + 1);
+                    $temp = substr($temp, 0, strpos($temp, '`'));
+                    // $tables[] = $temp . ' :: ' .$sql ;
+                    $views[] = [
+                        'name'=>$temp,
+                        'drop'=>"DROP VIEW IF EXISTS `$temp`",
+                        'creationCode'=>$sql,
+                    ];
                 }
             }
+            $value->structure->tables = $tables;
+            $value->structure->views = $views;
+            // echo json_encode($views); exit;
+            $value->files = $structure_files;
+            // $path = $_ENV['api-dir'] . "/databases/$key/tables/";
+
+            // $dir = opendir($_ENV['api-dir'] . "/databases/$key/tables");
+            // while ($elemento = readdir($dir)){
+            //     // Tratamos los elementos . y .. que tienen todas las carpetas
+            //     if( $elemento != "." && $elemento != ".."){
+
+            //         if( !is_dir($path.$elemento) ){
+            //             $value->structure->tables[] = [
+            //                 'name' => basename($elemento, '.sql'),
+            //                 'creationCode' =>file_get_contents($path.$elemento)
+            //             ];
+
+            //         }
+            //     }
+            // }
+            // $path = $_ENV['api-dir'] . "/databases/$key/views/";
+
+            // $dir = opendir($_ENV['api-dir'] . "/databases/$key/views");
+            // while ($elemento = readdir($dir)){
+            //     // Tratamos los elementos . y .. que tienen todas las carpetas
+            //     if( $elemento != "." && $elemento != ".."){
+
+            //         if( !is_dir($path.$elemento) ){
+            //             $value->structure->views[] = [
+            //                 'name' => basename($elemento, '.sql'),
+            //                 'creationCode' =>file_get_contents($path.$elemento)
+            //             ];
+
+            //         }
+            //     }
+            // }
 
             $databases[] = $value;
 
