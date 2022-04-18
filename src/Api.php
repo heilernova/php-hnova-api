@@ -74,11 +74,12 @@ class Api
             }else{
                 $routeConfig->loadRoutes();
             }
-            // echo json_encode($url);
+
             $routeConfig->loadCORS();
             self::$_routeConfig = $routeConfig;
             $route = self::routeFind($url);
             $result = 0;
+
             if ($route){
                 $routeConfig->setPath($route);
                 $result = self::callActions($route);
@@ -91,24 +92,52 @@ class Api
 
             
         } catch(ApiException $th){
-            Response::SetHttpResponseCode($th->getHttpResponseCode());
 
-            $body = "Error";
+            // En caso de que sea una Exeption de la API
+            Response::SetHttpResponseCode($th->getHttpResponseCode());
+            Response::setResponsetype('error');
+            $body = "[ERROR]";
+            
             if (self::getConfig()->getDebug()){
+
                 Response::setMenssage($th->getMessageDeveloper());
-                $body = $th->getError();
+                $error = $th->getError();
+                $body = "Message developer:\n";
+
+                foreach($error->messageDeveloper as $item){
+
+                    if (is_string($item)){
+                        $body .= "    " . $item . "\n";
+                    }else{
+
+                        foreach($item as $sub_item){
+                            $body .= "     * " . $sub_item . "\n";
+                        }
+                    }
+                    
+                }
+                $body .= "Error: " . $th->getMessage() . "\n";
+                $body .= "Line: " . $th->getLine() . "\n";
+                $body .= "File: " . $th->getFile();
+                $body .= "Line: " . $th->getLine();
+
             }
 
             return new Response($body);
         }catch (\Throwable $th) {
             Response::SetHttpResponseCode(500);
+            Response::setResponsetype('error');
 
-            $body = "--";
+            $body = "[ERROR]";
             if (self::getConfig()->getDebug()) {
                 Response::addMessage("Error inesperado de la API");
-                $body = $th->getMessage();
+                $body = "[Error inesperado]\n";
+                $body .= "Message: " . $th->getMessage() . "\n";
+                $body .= "Code: " .  $th->getCode() . "\n";
+                $body .= "File: " . $th->getFile() . "\n";
+                $body .= "Line: " . $th->getLine() . "\n";
             }
-            return new Response("Error inesperado: $body");
+            return new Response($body);
         }
     }
 

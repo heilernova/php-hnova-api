@@ -34,8 +34,12 @@ class Response
         header('Access-Control-Expose-Headers: nv-data');
         header('nv-data: ' . json_encode($api_info));
         
-        if (self::$_httpResponseType == "blob"){
+        if (self::$_httpResponseType == "json"){
             
+            header('content-type: application/json charset=UTF-8');
+            echo json_encode($this->_result);
+        }else if(self::$_httpResponseType == "blob"){
+
             if (file_exists($this->_result)){
 
                 $file = new SplFileInfo($this->_result);
@@ -48,11 +52,12 @@ class Response
             }else{
                 self::$_httpResponseCode = 404;
             }
-        }else{
-            
-            header('content-type: application/json charset=UTF-8');
-            echo json_encode($this->_result);
+        }else if (self::$_httpResponseType == "error"){
+            header('content-type: text charset=UTF-8');
+            echo $this->_result;
         }
+
+
         http_response_code(self::$_httpResponseCode);
         exit;
     }
