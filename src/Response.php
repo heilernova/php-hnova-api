@@ -9,6 +9,7 @@
  */
 namespace HNova\Api;
 
+use DataSystem\Message;
 use SplFileInfo;
 
 class Response
@@ -16,7 +17,7 @@ class Response
 
     private static int $_httpResponseCode = 200;
     private static string $_httpResponseType = "json";
-    private static ?object $_message = null;
+    private static Message $_message;
 
     public  function __construct(private $_result)
     {
@@ -29,7 +30,7 @@ class Response
         $api_info['application'] = Api::getConfig()->getConfigData()->name;
         $api_info['time-response'] = time() - $_ENV['api-time-start'];
         
-        if (self::$_message) $api_info['systemMessage'] = self::$_message;
+        if (isset(self::$_message)) $api_info['systemMessage'] = self::$_message->getObject();
 
         header('Access-Control-Expose-Headers: nv-data');
         header('nv-data: ' . json_encode($api_info));
@@ -62,6 +63,10 @@ class Response
         exit;
     }
 
+    /**
+     * Estable el tipo de contenido a retornar en el body
+     * @param string $type Tipo: json, blob, error
+     */
     public static function setResponsetype(string $type):void
     {
         self::$_httpResponseType = $type;
@@ -80,24 +85,17 @@ class Response
     }
 
     /**
-     * @param string|string[] $content
+     * Objeto para enviar un mensaje de la API al backend
+     * El mensaje se guardar el formato JSON en el header 'nv-data', bajo la propiedad de systemMessage
      */
-    public static function addMessage(string|array $content):void
-    {
-        if (!self::$_message) self::$_message = (object)[];
+    public static function message(){
+        if (!isset(self::$_message)){
+            self::$_message = new Message();
+        }
 
-        self::$_message->content[] = $content;
+        return self::$_message;
     }
     
-    /**
-     * @param string|string[] $content
-     */
-    public static function setMenssage(array $content):void
-    {
-        if (!self::$_message) self::$_message = (object)[];
-        self::$_message->content = $content;
-    }
-
     /**
      * Retorna el headers de content-type segun la extención del archivo.;
      */

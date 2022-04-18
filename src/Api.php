@@ -84,7 +84,6 @@ class Api
                 $routeConfig->setPath($route);
                 $result = self::callActions($route);
             }else{
-                Response::addMessage("Invalid route");
                 Response::SetHttpResponseCode(404);
                 $result = null;
             }
@@ -100,7 +99,7 @@ class Api
             
             if (self::getConfig()->getDebug()){
 
-                Response::setMenssage($th->getMessageDeveloper());
+
                 $error = $th->getError();
                 $body = "Message developer:\n";
 
@@ -130,7 +129,6 @@ class Api
 
             $body = "[ERROR]";
             if (self::getConfig()->getDebug()) {
-                Response::addMessage("Error inesperado de la API");
                 $body = "[Error inesperado]\n";
                 $body .= "Message: " . $th->getMessage() . "\n";
                 $body .= "Code: " .  $th->getCode() . "\n";
@@ -221,7 +219,6 @@ class Api
             // En caso de que el metodo no requiera parametro y la urle contentga parametro retornamos un error.
             if ($num_params == 0 && $params_num > 0){
                 Response::SetHttpResponseCode(400);
-                Response::addMessage('Prametros incorrectos');
                 return "incorrect parameters";
             }else{
                 
@@ -292,7 +289,6 @@ class Api
                         }
                     }
                 }else{
-                    Response::addMessage('Prametros incorrectos');
                     Response::SetHttpResponseCode(400);
                     return "incorrect parameters";
                 }
