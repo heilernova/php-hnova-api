@@ -29,10 +29,10 @@ class AuthController extends PanelBaseController
                 Files::loadFiles(false);
                 return $token;
             }else{
-                Response::addMessage("Contraseña incorrecta");
+                Response::message()->addContent("Contraseña incorrecta");
             }
         }else{
-            Response::addMessage("Usuario incorrecto");
+            Response::message()->addContent("Usuario incorrecto");
         }
     }
 }
