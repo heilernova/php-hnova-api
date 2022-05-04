@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  * 
  */
-namespace HNova\Api\Data;
+namespace HNova\Api\Db\MySql;
 
 use Exception;
 use HNova\Api\ApiException;
