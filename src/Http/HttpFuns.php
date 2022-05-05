@@ -9,8 +9,6 @@
  */
 namespace HNova\Api\Http;
 
-use Composer\XdebugHandler\Status;
-
 class HttpFuns
 {
     /**
