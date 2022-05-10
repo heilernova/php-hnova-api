@@ -16,7 +16,7 @@ use mysqli_stmt;
 use ReflectionMethod;
 use Throwable;
 
-class Database
+class DbMysql
 {
     private mysqli|null $dbMysql = null;
     private array $errorList = [];
@@ -168,17 +168,17 @@ class Database
      * @throws ApiException En caso de no poder establecer la conexión con la base de datos
      * @throws ApiException En caso de haber un error estableces los bind_params
      */
-    public function execute(string $slq, array $params = null):DatabaseResult
+    public function execute(string $slq, array $params = null):DbMysqlResult
     {
         
-        return new DatabaseResult($this->queryMySql($slq, $params), $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($this->queryMySql($slq, $params), $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
      * Ejecuta un select en la base de datos con los parametros ingresados.
      * @param array $data array asociativo de las condiciones de uso. ['fiels'=>'*','condition'=>['id=?', [$id]]]
      */
-    public function select(array $data = [], string $table = null):DatabaseResult
+    public function select(array $data = [], string $table = null):DbMysqlResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
         
@@ -205,7 +205,7 @@ class Database
         }
         
         $result = $this->queryMySql("SELECT $fields FROM $table $cond", $params ?? null);
-        return new DatabaseResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
@@ -215,7 +215,7 @@ class Database
      * @param string $table Nombre de la tabla, por defecto es el nombre de la tabla establecido.
      * @throws ApiException En caso de haber un problema con la conexión, el bind_params, o preparación de la consulta.
      */
-    public function insert(array|object $params, string $table = null):DatabaseResult
+    public function insert(array|object $params, string $table = null):DbMysqlResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
         $fields = '';
@@ -227,7 +227,7 @@ class Database
         $fields = ltrim($fields, ', ');
         $values = ltrim($values, ', ');
         $result = $this->queryMySql("INSERT INTO $table($fields) VALUES($values)", (array)$params);
-        return new DatabaseResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
@@ -237,7 +237,7 @@ class Database
      * donde el primer item es un string con la condicion preparadao y el segundo un array con los parametros.
      * @throws ApiException En caso de haber un problema con la conexión, el bind_params, o preparación de la consulta
      */
-    public function update(array|object $params, string|array $condition, string $table = null):DatabaseResult
+    public function update(array|object $params, string|array $condition, string $table = null):DbMysqlResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
         $values = '';
@@ -250,7 +250,7 @@ class Database
         }
         if (isset($condition[1])) $params = array_merge((array)$params, (array)$condition[1]);
         $result = $this->queryMySql("UPDATE $table SET $values WHERE " . $condition[0], $params);
-        return new DatabaseResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
@@ -259,14 +259,14 @@ class Database
      * donde el primer item es un string con la condicion preparadao y el segundo un array con los parametros.
      * @throws ApiException En caso de haber un problema con la conexión, el bind_params, o preparación de la consulta
      */
-    public function delete(array|string $condition, string $table = null):DatabaseResult
+    public function delete(array|string $condition, string $table = null):DbMysqlResult
     {
         if (!$table) $table = ($this->defaultTable ?? '');
         if (is_string($condition)){
             $condition = [$condition];
         }
         $result = $this->queryMySql("DELETE FROM $table WHERE " . $condition[0], $condition[1] ?? null);
-        return new DatabaseResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($result, $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
@@ -275,11 +275,11 @@ class Database
      * @param array|null $params array de los parametros
      * @throws ApiException En caso de haber un problema con la conexión, el bind_params, o preparación de la consulta
      */
-    public function function(string $name, array $params = null):DatabaseResult
+    public function function(string $name, array $params = null):DbMysqlResult
     {
         $p = '';
         if ($params) $p = ltrim(str_repeat(', ?', count($params)), ', ');
-        return new DatabaseResult($this->queryMySql("SELECT $name($p)", $params), $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($this->queryMySql("SELECT $name($p)", $params), $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
     /**
@@ -288,11 +288,11 @@ class Database
      * @param array|null $params array de los parametros.
      * @throws ApiException En caso de haber un problema con la conexión, el bind_params, o preparación de la consulta
      */
-    public function procedure(string $name, array $params = null):DatabaseResult
+    public function procedure(string $name, array $params = null):DbMysqlResult
     {
         $p = '';
         if ($params) $p = ltrim(str_repeat(', ?', count($params)), ', ');
-        return new DatabaseResult($this->queryMySql("CALL $name($p)", $params), $this->stmt->insert_id, $this->stmt->affected_rows);
+        return new DbMysqlResult($this->queryMySql("CALL $name($p)", $params), $this->stmt->insert_id, $this->stmt->affected_rows);
     }
 
 }

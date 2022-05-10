@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  * 
  */
-namespace HNova\Api\Data;
+namespace HNova\Api\Db\MySql;
 
-class DatabaseInfo
+class DbMysqlInfo
 {
     /** Tipo de la base de datos */
     public string $type = "";

@@ -15,7 +15,7 @@ use HNova\Api\ApiException;
 use mysqli_result;
 use Throwable;
 
-class DatabaseResult
+class DbMysqlResult
 {
     public function __construct(public bool|mysqli_result $result, public int $insertId = 0, public int  $affectedRows = 0)
     {
