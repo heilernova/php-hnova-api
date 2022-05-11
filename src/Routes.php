@@ -27,24 +27,20 @@ class Routes
          * Enlace para probrar caractes regulares
          * https://regex101.com/
          */
-        $patterns[] = "/({\w+})/i";
-        $patterns[] = "/({(\w+:)})/i";
-        $patterns[] = "/({(\w+:\w+)})/i";
-        $patterns[] = "/({(\w+[?]:\w+)})/i";
-        $patterns[] = "/({\w+[?]})/i";
-    
-        $replacement[] = '{p}';
-        $replacement[] = '{p}';
-        $replacement[] = '{p}';
-        $replacement[] = '{p?}';
-        $replacement[] = '{p?}';
+        $patterns[] = "/(:\w+)/i";
+        $replacement[] = ':p';
 
         $path = preg_replace($patterns, $replacement, $path);
-    
-        $_ENV['api-routes'][] = (object)[
-            'path'      =>$path,
+
+        if (!array_key_exists($path, $_ENV['api-rest']->routes->list)){
+            $_ENV['api-rest']->routes->list[$path] = (object)[
+                'format'    => $patFormat,
+                'methods'   => []
+            ];
+        }
+
+        $_ENV['api-rest']->routes->list[$path]->methods[$method->value] = (object)[
             'pathFormat'=>$patFormat,
-            'method'    =>$method->value,
             'action'    =>$action,
             'canActive' =>$canActive
         ];
