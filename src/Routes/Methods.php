@@ -11,9 +11,9 @@ namespace HNova\Api\Routes;
 
 enum Methods:string
 {
-    case Get = 'get';
-    case Post = 'post';
-    case Put = 'put';
-    case Delete = 'delete';
-    case Patch = 'patch';
+    case Get = 'GET';
+    case Post = 'POST';
+    case Put = 'PUT';
+    case Delete = 'DELETE';
+    case Patch = 'PACTCH';
 }
