@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace HNova\Api\Util;
+namespace HNova\Api\Utils;
 
 use DateInterval;
 use DateTime;
@@ -51,7 +51,7 @@ class DateFunctions
             $time = '';
             if ($date_diff->y > 0) $time = $date_diff->y == 1 ? ($date_diff->y . ' año, ') : ($date_diff->y . ' años, ');
             if ($date_diff->m > 0) $time .= $date_diff->m == 1 ? ($date_diff->m . ' mes, ') : ($date_diff->m . ' meses, ');
-            if ($date_diff->d > 0) $time .= $date_diff->d == 1 ? ($date_diff->d . ' dia, ') : ($date_diff->d . ' dias, ');
+            if ($date_diff->d > 0) $time .= $date_diff->d == 1 ? ($date_diff->d . ' día, ') : ($date_diff->d . ' días, ');
             if ($format == 'datetime'){
                 if ($date_diff->h > 0) $time .= $date_diff->h == 1 ? ($date_diff->h . ' hora, ') : ($date_diff->h . ' horas, ');
                 if ($date_diff->i > 0) $time .= $date_diff->i == 1 ? ($date_diff->i . ' minuto, ') : ($date_diff->i . ' minutos, ');
