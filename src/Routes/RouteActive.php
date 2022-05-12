@@ -91,8 +91,9 @@ class RouteActive
 
     /**
      * Retorna la configuración.
+     * @param string $table Nombre de la tabla por defecto para las consultas SQL
      */
-    public function getDatabase():Database{
+    public function getDatabase(?string $table = null):Database{
         try {
             $database_name = $_ENV['api-rest']->routes->routeActive->database;
             $databases = ApiRoot::getConfig()->databases;
@@ -102,8 +103,7 @@ class RouteActive
         }
 
         if (array_key_exists($database_name, (array)$databases)){
-            // echo json_encode($databases->$database_name); exit;
-            return new Database($databases->$database_name);
+            return new Database($databases->$database_name, $table);
         }else{
             throw new ApiException(['No se encontro la configuración de la base de datos en el app.json']);
         }
