@@ -10,4 +10,4 @@ require_once __DIR__.'./../vendor/autoload.php'; // Llamamos el autoload de comp
 /**
  * La ruta esta definida por el archivo .htaccess de la carpeta www
  */
-ApiRoot::run($_GET['api-rest-path']);
+ApiRoot::run($_GET['api-rest-path'])->echo();
