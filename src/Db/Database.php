@@ -38,13 +38,12 @@ class Database
             $dns = "";
             $username = $data->dataConnection->username;
             $password = $data->dataConnection->password;
+            $host = $data->dataConnection->hostname;
+            $db =   $data->dataConnection->database;
 
             if ($data->type == "mysql"){
-                $dns = "";
+                $dns = "mysql:host=$host; dbname=$db";
             }else if ($data->type == "postgresql"){
-
-                $host = $data->dataConnection->hostname;
-                $db =   $data->dataConnection->database;
                 $dns = "pgsql:host=$host; dbname=$db";
             }
 

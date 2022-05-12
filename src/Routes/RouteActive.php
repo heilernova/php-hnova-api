@@ -9,6 +9,7 @@
  */
 namespace HNova\Api\Routes;
 
+use HNova\Api\Api;
 use HNova\Api\ApiException;
 use HNova\Api\ApiRoot;
 use HNova\Api\Db\Database;
@@ -96,16 +97,15 @@ class RouteActive
     public function getDatabase(?string $table = null):Database{
         try {
             $database_name = $_ENV['api-rest']->routes->routeActive->database;
-            $databases = ApiRoot::getConfig()->databases;
+            $databases = ApiRoot::getConfig()->databases->get($database_name);
 
+            if ($databases){
+                return new Database($databases, $table);
+            }else{
+                throw new ApiException(['No se encontrol la condifguracioón de la base de datos']);
+            }
         } catch (\Exception $th) {
             throw new ApiException(["Error al obtener la base de datos associada a la ruta [$database_name]"], $th);
-        }
-
-        if (array_key_exists($database_name, (array)$databases)){
-            return new Database($databases->$database_name, $table);
-        }else{
-            throw new ApiException(['No se encontro la configuración de la base de datos en el app.json']);
         }
     }
 }

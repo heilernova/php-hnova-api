@@ -13,6 +13,7 @@ use HNova\Api\ApiResponse;
 use HNova\Api\Http\Request;
 use HNova\Api\Http\Response;
 use HNova\Api\Routes\RouteActive;
+use HNova\Api\Settings\ApiConfig;
 
 try {
     $_ENV['api-rest'] = (object)[
@@ -48,6 +49,7 @@ try {
         'response' => new Response(),
         'request'  => new Request(),
         'route'  => new RouteActive(),
+        'config' => new ApiConfig()
     ];
     
     // Establecemos los directorios donde esten alojado el código
