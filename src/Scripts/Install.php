@@ -39,28 +39,29 @@ class Install
             }
         }
 
-        $api_config = ApiConfig::initInstall();
+    
+        $api_config = ApiConfig::initConfig();
 
-        Files::addFile("api.json", str_replace('\/','/', json_encode($api_config->getConfigData(), 128)));
-
+        // Archivo públicos
         Files::addFile('www/.htaccess', Templates::getWWWHtaccess());
         Files::addFile('www/index.php', Templates::getWWWIndex($dir));
 
-        Files::addFile("$dir/index.api.php", Templates::getIndex());
-        Files::addFile("$dir/routes.php", Templates::getRoutes());
+        Files::addFile("$dir/app.json", str_replace('\/','/', json_encode($api_config, 128)));
+        Files::addFile("$dir/app.php", Templates::getIndex());
+        Files::addFile("$dir/Routes/.routes.php", "");
+        Files::addFile("$dir/Guards/AppGuard.php", "");
 
-        Files::addFile("$dir/BaseController.php", Templates::getBaseController());
-        Files::addFile("$dir/BaseModel.php", Templates::getBaseModel());
-        Files::addFile("$dir/BaseDB.php", Templates::getBaseDB());
-        Files::addFile("$dir/Guard.php", Templates::getGuard());
+        if (!file_exists("$dir/Controllers")) mkdir("$dir/Controllers");
+        if (!file_exists("$dir/Bin")) mkdir("$dir/Bin");
+        if (!file_exists("$dir/Models")) mkdir("$dir/Models");
+        if (!file_exists("$dir/Guards")) mkdir("$dir/Guards");
 
+        // Actualizamos el composer.json
         $composer = json_decode(file_get_contents('composer.json'));
-
-        if (!isset($composer->autoload)) $composer->autoload = (object)['psr-4'=>(object)[]];
-
-        $composer->autoload->{'psr-4'}->{'ApiRest\\'} = "$dir/";
-
+        $composer->autoload->{'psr-4'}->{'App\\'} = "$dir/";
         Files::addFile('composer.json', str_replace('\/','/', json_encode($composer, 128)));
         Files::loadFiles();
+
+        Console::log("Fin ... ");
     }
 }

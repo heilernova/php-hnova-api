@@ -43,10 +43,6 @@ class Script
      */
     public static function getMainDir():string
     {
-        // self::$_event
-        // $v = self::$_event->getComposer()->getConfig()->getConfigSource()->getName();
-        // $n =  strpos($v, 'htdocs');
-        // return dirname(substr($v, $n + 7));
         return self::$_mainDir;
     }
 
@@ -89,19 +85,23 @@ class Script
 
                 }else if ($arg == 'g' || $arg == 'generate'){
 
+                    $composer = json_decode(file_get_contents('composer.json'));
+                    $dir_src = trim($composer->autoload->{'psr-4'}->{'App\\'}, '/');
+                    
                     $cmd = self::getArgment();
-                    if (file_exists('api.json')){
-                        $_ENV['api-dir'] = self::$_mainDir;
-                        $_ENV['api-dir-src'] = self::$_srcDir;
+                    if (file_exists("$dir_src/app.json")){
+
+                        $_ENV['api-rest'] = (object)[
+                            'dir' => $dir_src,
+                            'config' => json_decode(file_get_contents("$dir_src/app.json"))
+                        ];
+
                         self::$_apiConfig  = new ApiConfig();
     
                         switch ($cmd) {
                             case 'c':
                                 # code...
                                 Generate::controller();
-                                break;
-                            case 'db':
-                                Generate::db();
                                 break;
                             case 'm':
                                 Generate::model();
@@ -117,41 +117,9 @@ class Script
                                 break;
                         }
                     }else{
-                        Console::error("Se de instalar la aplicación");
+                        Console::error("Se debe instalar la aplicación");
                     }
             
-                }else if ($arg == 'r' || $arg == 'route'){
-                    $cmd = self::getArgment();
-                    if (file_exists('api.json')){
-                        $_ENV['api-dir'] = self::$_mainDir;
-                        $_ENV['api-dir-src'] = self::$_srcDir;
-                        self::$_apiConfig  = new ApiConfig();
-    
-                        switch ($cmd) {
-                            case 'c':
-                                # code...
-                                // Generate::controller();
-                                break;
-                            case 'r':
-                                // Generate::db();
-                                break;
-                            case 'm':
-                                // Generate::model();
-                                break;
-                            case 'route':
-                                // Generate::route();
-                                break;
-                            case 'r':
-                                // Generate::route();
-                                break;
-                            default:
-                                # code...
-                                break;
-                        }
-                    }else{
-                        Console::error("Se de instalar la aplicación");
-                    }
-
                 }else{
                     Console::error("nv: '$arg' is not a nv command.");
                 }

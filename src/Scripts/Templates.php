@@ -26,25 +26,12 @@ class Templates
 
     public static function getWWWIndex(string $rotue):string
     {
-        return str_replace('ruote', "$rotue/index.api.php", file_get_contents(self::$_dir . 'www/index.php'));
+        return str_replace('ruote', "$rotue/app.php", file_get_contents(self::$_dir . 'www/index.php'));
     }
 
     public static function getWWWHtaccess():string
     {
         return file_get_contents(self::$_dir . 'www/.htaccess');
-    }
-
-    public static function getBaseController(string $namespace = "ApiRest"):string
-    {
-        return str_replace('HNnamespace', $namespace, file_get_contents(self::$_dir . 'BaseController.php'));
-    }
-    public static function getBaseModel(string $namespace = "ApiRest"):string
-    {
-        return str_replace('HNnamespace', $namespace, file_get_contents(self::$_dir . 'BaseModel.php'));
-    }
-    public static function getBaseDB(string $namespace = "ApiRest"):string
-    {
-        return str_replace('HNnamespace', $namespace, file_get_contents(self::$_dir . 'BaseDB.php'));
     }
 
     public static function getController($name, $namespace, $long = "")
@@ -61,12 +48,6 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Guard.php'));
     }
 
-    //
-    public static function getObjectDB($name, $namespace):string{
-        $searh = ['HNnamespace', 'Name'];
-        $replace = [$namespace, $name];
-        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'DB/ObjectDB.php'));
-    }
 
     public static function getModel($name, $namespace ,$namespace_long):string
     {
@@ -75,35 +56,7 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Models/Model.php'));
     }
 
-    public static function getRouteIndex($name, $namespace = "ApiRest"):string
-    {
-        $searh =["HNnamespace", "Name"];
-        $replace = [$namespace, $name];
-        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/Route.php'));
+    public static function getRoute():string{
+        return file_get_contents(self::$_dir . "Routes/.routes.php");
     }
-    public static function getRouteGuard($name, $namespace = "ApiRest"):string
-    {
-        $searh =["HNnamespace", "Name"];
-        $replace = [$namespace, $name];
-        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteGuard.php'));
-    }
-    public static function getRouteBaseController($name, $namespace = "ApiRest"):string
-    {
-        $searh =["HNnamespace", "Name"];
-        $replace = [$namespace, $name];
-        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteBaseController.php'));
-    }
-    public static function getRouteBaseDB($name, $namespace = "ApiRest"):string
-    {
-        $searh =["HNnamespace", "Name"];
-        $replace = [$namespace, $name];
-        return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Routes/Route/RouteBaseDB.php'));
-    }
-    public static function getRouteRoutes():string
-    {
-        // $searh =["HNnamespace", "Namse"];
-        // $replace = [$namespace, $name];
-        return file_get_contents(self::$_dir . 'Routes/Route/Routes.php');
-    }
-
 }
