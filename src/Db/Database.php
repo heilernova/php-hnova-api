@@ -27,6 +27,7 @@ class Database
     private string $_lastCommandSQL = "";
     private array $_errors = [];
     private string $defaultTable;
+    private string $charField = "";
 
     /**
      * Soporte para MySQl y PostgreSQl
@@ -43,8 +44,10 @@ class Database
 
             if ($data->type == "mysql"){
                 $dns = "mysql:host=$host; dbname=$db";
+                $this->charField = '`';
             }else if ($data->type == "postgresql"){
                 $dns = "pgsql:host=$host; dbname=$db";
+                $this->charField = '"';
             }
 
             $this->_pdo = new PDO($dns, $username, $password);
@@ -99,7 +102,7 @@ class Database
             }
         } catch (\Throwable $th) {
            
-            return new ApiException(["Error al ejecuta la consulta SQL: $sql"],$th);
+            throw new ApiException(["Error al ejecuta la consulta SQL: $sql", $params],$th);
         }
     }
 
@@ -112,13 +115,13 @@ class Database
         $fields = '';
         $values = '';
         foreach ($params as $key=>$value){
-            $fields .= ", $key";
+            $fields .= ', ' . $this->charField . $key . $this->charField;
             $values .= ", :$key";
         }
         $fields = ltrim($fields, ', ');
         $values = ltrim($values, ', ');
 
-        return $this->query("INSERT INTO $table($fields) VALUES($values)", $params);
+        return $this->query("INSERT INTO $table ($fields) VALUES($values)", $params);
     }
 
     /**
