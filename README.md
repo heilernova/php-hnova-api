@@ -39,12 +39,9 @@ Debería quedar com se muestra el la imgamen.
 ### Script disponibles
 
 * `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
-* `composer nv g c (name)` => Crea un controldor en la API para la ruta por defecto
-* `composer nv g m (name) (name)` => Crea un modelo en API para la ruta por defecto
-* `composer nv g route (name)` => Crea una nueva ruta de acceso.
-* `composer nv route c (name) [name-rute]` => Crea un nuevo controlador para ruta de acceso.
-* `composer nv route m (name) [name-rute]` => Crea un nuevo modelo para la ruta de acceso.
-* `composer nv route db (name) [name-rute]` => Crea una nueva ruta de acceso.
+* `composer nv g c (name)` => Crea un controldor.
+* `composer nv g m (name)` => Crea un modelo.
+* `composer nv g r (name)` => Crea una nueva ruta de acceso ejeml "admin/panel".
 
 #### composer nv install / composer nv i
 Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la carpeta src donde alojara el código para gestion de la API.
@@ -83,7 +80,7 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
     "name": "Applicaction name",
     "timezone": "UTC",
     "user": {
-        "username": "admin",
+        "username": "$2y$04$509QXMvRyLa6c6IkMt/D.exs/.S2UrQIvdl2QJ2pcr.GlYCU3QzrG",
         "password": "$2y$04$509QXMvRyLa6c6IkMt/D.exs/.S2UrQIvdl2QJ2pcr.GlYCU3QzrG",
         "email": null
     },
@@ -107,10 +104,9 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
         }
     },
     "routes": {
-        "default": {
-            "disable": false,
-            "dirResources": "",
+        "./": {
             "database": "test",
+            "disable": false,
             "cors": {
                 "origin": null,
                 "headers": null,
@@ -121,16 +117,23 @@ En el fichero `api.json` contiene un objeto JSON con las configuraciones para el
 }
 ```
 
-En este archivo podremos 
-
 ## Rutas
-Las rutas de acceso a la api de deberan definir en el archivo `routes.php` encontrado en la carpeta de cada app, cabe recalcar el nombre del archivo hace referencia al nombre de app por lo tanto el nombre biene definido por el namespace mas -routes.php.
+Las rutas de acceso a la API de deberan definir en el archivo del directorio `Routes` encontrado en la carpeta de cada src.
 
-Para definir las ruta utilizaresmo la clase estaticasa `HNova\Api\Routes`, la cual contiene métodos para agrear rutas según el HTTP METOHOD requerido.
+Para definir las ruta utilizaresmo la clase estaticasa `HNova\Api\Routes`, la cual contiene métodos para agrear rutas según el HTTP METHOD requerido.
 
-Ejemplo del archivo routes: allí podremos detallar el el nombre hacer referencia a la API en este caso de nombre App
+### Descripion
+Clase con métodos estaticos para agregar rutas de accesoo
+```php
+\HNova\Api\Routes::get(string $path, callable|array $action, array canActive);
+```
 
-<img src="img/ejemplo-routes.png"  width="600px">
+### Parametros
+* string : ruta de acceso
+* callable|array : Acción a ejecutar , el array se agregar en el primer item el namespace de la clase y le segundo item el método a ejecturar.
+* array : un array de callable los cuales se ejecutan hacer de la acción de la ruta, en caso de que uno de ellos retorne un valor diferente a null no se continuara con la acción de la ruta
+
+### Ejemplops
 
 En este archivo entraremos el siguiente código.
 
@@ -140,28 +143,32 @@ En este archivo entraremos el siguiente código.
  */
 namespace App\Controllers;
 
-use App\AppGuards;
-use HNova\Api\Response;
 use HNova\Api\Routes;
 
-Routes::get("test", function(){ 
-  return new Response("Hola mundo tetst"); 
+Routes::get("test", function(){
+  return "Hola mundo";
 });
 
-Routes::get("test/saludo/{nombre:string}", function(string $nombre){ 
-  return new Response("Hola mundo  $nombre");
+// El signo de "?" define el parametro con opcional en la URL
+Routes::get("test/hello/:name?", function(string $name = ''){
+  return "Hola como estas $name";
 });
+
+// Para hacer el llamdo a un cotrolador
+Routes::get("test/controller", [NameController::class, 'get']);
+
+// En caso de no definir el método a ejecutar buscar acorde al método de la ruta en este caso  "get"
+Routes::get("test/controller", [NameController::class]);
 ```
 
 ## Protección de rutas
+Para protejer la ruta y limitar el acceso a ellas al momento de definirla en agregaremos un al parametro canActive de los métodos de `HNova\Api\Routes` 
 Para limitar el acceso a las rutas utilizaremos los guards los cuales estan alojado en la clase `AppGuards` alojada en el archivo `src/App/AppGuards.php`.
 
 Esta es un clase estatica como métodos que retorna `callable` "funciones" para ejecutarse antes ingresar a la acción de la ruta, estas funciones deben retorna null o un resultado, donde null es permitir el acceso y Objeto es negar el acceso.
 
 ```php
 /**
- * En esta clase puede agregar las restrcicioines de aceceso a las rutas del sistema
- * mediante el uso del los guard almacenso el calse estatica.
  * 
  * todos los método deverar retorna un callable
  */
@@ -202,35 +209,6 @@ Para implementar el guard el ruta debebmos ingresar el llamdo del métodos de lo
 Nota: podremos utilizar mas de un gards en la misma ruta.
 ```php
 Routes::get("test", function(){ return "Hola mundo tetst"; } , [AppGuards::authenticate()]);
-```
-
-### Ruta con parámetros
-Lo parametros se asigna entre llaves el nombre del parametro y serparado por ":" el tipo de dato esperado por defecto se un string ejemplo : "test/{name:string}" , "test/{year:int}"; los tipos de datos que soporta son enteros, decimales y strings (int, float, string)
-
-Importante que los parametros de la funcion ya sean de callable o la clse controlador concuerden con el nombre y el tipo de parametro esperado en la función o métohod
-
-```php
-Routes::get("name/{name:string}", function(string $name){ return "Hola $name"; });
-Routes::get("year/{year:int}", function(int $year){ return "El año es: $name"; });
-
-// Retornaria un error porue el parámetro de la URL es de tipo string y el parámetro de la funcion es int.
-Routes::get("error/{num:string}", function(int $num){ 
-    return "Numero: $num + 1 = " . ($num + 1); 
-});
-```
-#### LLamado a un controlador.
-Para asignarle un controlador a la ruta ingresaremos en el parámetro action un array con el nombre de la clase y el método a ejecutar.
-
-En caso de no definir el método de la clase a ejecutar por defector buscara el método que concuerde la el tipo de la petición HTTP realizada (get, post, delete, put, patch).s
-
-Nota: para obtener le nombre de la clase puese utiliar ::class
-
-Error: retorna error 404 en caso de que el método no se encutre en la clase
-```php
-Routes::get("test/hello", [TestController::class, "hello"]);
-
-// Buscara el método post de la clas TesController
-Routes::post("test/hello", [TestController::class]);
 ```
 
 ## Utilidades integración con Angular
