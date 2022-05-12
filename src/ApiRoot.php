@@ -9,9 +9,7 @@
  */
 namespace HNova\Api;
 
-use Exception;
-use Reflection;
-use ReflectionClass;
+use HNova\Api\Settings\ApiConfig;
 use ReflectionFunction;
 use ReflectionMethod;
 
@@ -20,8 +18,8 @@ class ApiRoot{
     /** 
      * Retorna el objeto de la configuración de la API del app.json
     */
-    public static function getConfig(){
-        return $_ENV['api-rest']->config;
+    public static function getConfig():ApiConfig{
+        return $_ENV['api-rest-objects']->config;
     }
 
     /**
@@ -128,7 +126,6 @@ class ApiRoot{
                         $format = explode(':', preg_replace('/[:,?]/', '', $path_formats[$index]));
                         $params[$format[0]] = $url_items[$index];
 
-
                         $paramsRequiredNum++;
                     }else{
                         // En caso no tener le item correcpondiente
@@ -169,7 +166,6 @@ class ApiRoot{
             
             $route = array_shift($rotes_valids);
 
-
             // Validamos que soporte el método HTTP solicitado
             if (array_key_exists($http_method, $route->methods)){
 
@@ -188,6 +184,9 @@ class ApiRoot{
         }
     }
 
+    /**
+     * Ejecuta la acción de la ruta.
+     */
     private static function routeCallAction(object $route):mixed{
 
         // Validamos los canactives
