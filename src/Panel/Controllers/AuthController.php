@@ -25,14 +25,18 @@ class AuthController extends PanelBaseController
             if (password_verify($data->password, $access->password)){
                 
                 $token = Funs::generateToken(50);
-                Files::addFile($_ENV['api-dir']. "/nv-panel/.access-token.txt", $token);
-                Files::loadFiles(false);
+
+                $dir = $_ENV['api-dir']. "/nv-panel";
+                if (!file_exists($dir)) mkdir($dir);
+
+                $file = fopen("$dir/.access-token.txt", file_exists("$dir/.access-token.txt") ? 'w' : 'a');
+                fputs($file, $token);
                 return $token;
             }else{
-                Response::addMessage("Contraseña incorrecta");
+                Response::message()->addContent("Contraseña incorrecta");
             }
         }else{
-            Response::addMessage("Usuario incorrecto");
+            Response::message()->addContent("Usuario incorrecto");
         }
     }
 }

@@ -14,6 +14,7 @@ use HNova\Api\Funs;
 use HNova\Api\Panel\PanelBaseController;
 use HNova\Api\Response;
 use HNova\Api\Scripts\Files;
+use mysqli;
 
 class DbController extends PanelBaseController
 {
@@ -24,18 +25,63 @@ class DbController extends PanelBaseController
         $databases = [];
 
         foreach (Api::getConfig()->getConfigData()->databases as $key=>$value){
-            $value->name = $key;
-            
-            
-            // Obtenemos la estructura
-            $dir = $_ENV['api-dir'] . "/databases/$key";
-            $value->structure = (object)[
-                'tables'    =>[],
-                'views'     =>[],
-                'procedures'=>[],
-                'functions' =>[]
+            $dbInfo = (object)[
+                'name'=>$key,
+                'status'=>false,
+                'type'=>'mysql',
+                'dataConnection'=>(object)[
+                    'hostname'=>$value->dataConnection->hostname,
+                    'username'=>$value->dataConnection->username,
+                    'password'=>$value->dataConnection->password,
+                    'database'=>$value->dataConnection->database
+                ],
+                'structure' =>  (object)[
+                    'tables'    =>[],
+                    'views'     =>[],
+                    'procedures'=>[],
+                    'functions' =>[]
+                ],
+                'sqlInstall' => (object)[
+                    'tables'    =>[],
+                    'views'     =>[],
+                    'procedures'=>[],
+                    'functions' =>[]
+                ],
             ];
+            
+            // Test de la conexión de la base de datos.
 
+            try{
+
+                $con = mysqli_connect(
+                    $value->dataConnection->hostname,
+                    $value->dataConnection->username,
+                    $value->dataConnection->password,
+                    $value->dataConnection->database
+                );
+
+                $tables = $con->query("SHOW FULL TABLES")->fetch_all(MYSQLI_NUM);
+
+                foreach ($tables AS $table){
+                    if ($table[1] == "VIEW"){
+                        $dbInfo->structure->views[] = [ 
+                            'name'=>$table[0]
+                        ];
+                    }else{
+                        $dbInfo->structure->tables[] = [
+                            'name'=>$table[0]
+                        ];
+                    }
+                }
+
+                $dbInfo->status = true;
+            } catch (\Throwable $th) {
+                $dbInfo->errorConnection = $th->getMessage();
+            }
+            
+
+            // Definirmo el directorio de las estruture de la base de datos
+            $dir = $_ENV['api-dir'] . "/databases/$key";
             $structure_files = [];
             $structure = "";
 
@@ -68,70 +114,37 @@ class DbController extends PanelBaseController
                     }
                 }
 
-            }
-            $structure = explode(';', $structure);
-            $tables = [];
-            $views = [];
-            foreach ($structure as $sql){
-                $sql = trim($sql);
-                if (str_starts_with($sql, 'CREATE TABLE')){
-                    $temp = substr($sql, strpos($sql, '`') + 1);
-                    $temp = substr($temp, 0, strpos($temp, '`'));
-                    // $tables[] = $temp . ' :: ' .$sql ;
-                    $tables[] = [
-                        'name'=>$temp,
-                        'drop'=>"DROP TABLE IF EXISTS `$temp`",
-                        'creationCode'=>$sql,
-                    ];
-                }else if(str_starts_with($sql, 'CREATE VIEW')){
-                    $temp = substr($sql, strpos($sql, '`') + 1);
-                    $temp = substr($temp, 0, strpos($temp, '`'));
-                    // $tables[] = $temp . ' :: ' .$sql ;
-                    $views[] = [
-                        'name'=>$temp,
-                        'drop'=>"DROP VIEW IF EXISTS `$temp`",
-                        'creationCode'=>$sql,
-                    ];
+                $structure = explode(';', $structure);
+                $tables = [];
+                $views = [];
+                foreach ($structure as $sql){
+                    $sql = trim($sql);
+                    if (str_starts_with($sql, 'CREATE TABLE')){
+                        $temp = substr($sql, strpos($sql, '`') + 1);
+                        $temp = substr($temp, 0, strpos($temp, '`'));
+                        // $tables[] = $temp . ' :: ' .$sql ;
+                        $tables[] = [
+                            'name'=>$temp,
+                            'drop'=>"DROP TABLE IF EXISTS `$temp`",
+                            'creationCode'=>$sql,
+                        ];
+                    }else if(str_starts_with($sql, 'CREATE VIEW')){
+                        $temp = substr($sql, strpos($sql, '`') + 1);
+                        $temp = substr($temp, 0, strpos($temp, '`'));
+                        // $tables[] = $temp . ' :: ' .$sql ;
+                        $views[] = [
+                            'name'=>$temp,
+                            'drop'=>"DROP VIEW IF EXISTS `$temp`",
+                            'creationCode'=>$sql,
+                        ];
+                    }
                 }
+                $dbInfo->sqlInstall->tables = $tables;
+                $dbInfo->sqlInstall->views = $views;
+                $dbInfo->files = $structure_files;
             }
-            $value->structure->tables = $tables;
-            $value->structure->views = $views;
-            // echo json_encode($views); exit;
-            $value->files = $structure_files;
-            // $path = $_ENV['api-dir'] . "/databases/$key/tables/";
 
-            // $dir = opendir($_ENV['api-dir'] . "/databases/$key/tables");
-            // while ($elemento = readdir($dir)){
-            //     // Tratamos los elementos . y .. que tienen todas las carpetas
-            //     if( $elemento != "." && $elemento != ".."){
-
-            //         if( !is_dir($path.$elemento) ){
-            //             $value->structure->tables[] = [
-            //                 'name' => basename($elemento, '.sql'),
-            //                 'creationCode' =>file_get_contents($path.$elemento)
-            //             ];
-
-            //         }
-            //     }
-            // }
-            // $path = $_ENV['api-dir'] . "/databases/$key/views/";
-
-            // $dir = opendir($_ENV['api-dir'] . "/databases/$key/views");
-            // while ($elemento = readdir($dir)){
-            //     // Tratamos los elementos . y .. que tienen todas las carpetas
-            //     if( $elemento != "." && $elemento != ".."){
-
-            //         if( !is_dir($path.$elemento) ){
-            //             $value->structure->views[] = [
-            //                 'name' => basename($elemento, '.sql'),
-            //                 'creationCode' =>file_get_contents($path.$elemento)
-            //             ];
-
-            //         }
-            //     }
-            // }
-
-            $databases[] = $value;
+            $databases[] = $dbInfo;
 
         }
 
@@ -167,8 +180,8 @@ class DbController extends PanelBaseController
                 return true;
             } catch (\Throwable $th) {
 
-                Response::addMessage("Error con los datos de conexión");
-                Response::addMessage("Mensaje: " . $th->getMessage());
+                Response::message()->addContent("Error con los datos de conexión");
+                Response::message()->addContent("Mensaje: " . $th->getMessage());
                 return false;
             }
 
@@ -180,7 +193,7 @@ class DbController extends PanelBaseController
      * Actualiza la los datos de conexión de la base de datos.
      */
     function put(string $name){
-        $data = $this->getBody();
+        $data = $this->getBody(true);
         $config = Api::getConfig();
         
         if (isset($config->getConfigData()->databases->$name)){
@@ -193,18 +206,21 @@ class DbController extends PanelBaseController
                     $data['database']
                 );
 
-                $config->getConfigData()->databases->$name = $data;
+                $config->getConfigData()->databases->$name = [
+                    'type'=>'mysql',
+                    'dataConnection'=>$data
+                ];
                 $config->salve();
                 return true;
             } catch (\Throwable $th) {
 
-                Response::addMessage("Error con los datos de conexión");
-                Response::addMessage("Mensaje: " . $th->getMessage());
+                Response::message()->addContent("Error con los datos de conexión");
+                Response::message()->addContent("Mensaje: " . $th->getMessage());
                 return false;
             }
 
         }else{
-            Response::addMessage("No se encontro la base de datos a la cual aplicar los cambios.");
+            Response::message()->addContent("No se encontro la base de datos a la cual aplicar los cambios.");
             return false;
         }
     }
@@ -219,7 +235,7 @@ class DbController extends PanelBaseController
             unset($config->getConfigData()->databases->$name);
             return true;
         }else{
-            Response::addMessage("No existe el nombre de la base de datos.");
+            Response::message()->addContent("No existe el nombre de la base de datos.");
             return false;
         }
     }

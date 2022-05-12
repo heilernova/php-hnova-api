@@ -14,6 +14,6 @@ class Name
     
     function get()
     {
-        return "Hola mundo";
+        return "Hello world";
     }
 }

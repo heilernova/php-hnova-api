@@ -19,3 +19,5 @@ Routes::add('db', Methods::Get, [DbController::class]);
 Routes::add('db/{name:string}', Methods::Post, [DbController::class]);
 Routes::add('db/{name:string}', Methods::Put, [DbController::class]);
 Routes::add('db/{name:string}', Methods::Delete, [DbController::class]);
+
+Routes::add('db/{db:string}/table-info/{name:string}', Methods::Get, [DbTableController::class]);
