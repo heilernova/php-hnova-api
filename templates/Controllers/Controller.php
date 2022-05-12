@@ -2,16 +2,14 @@
 
 namespace HNnamespace\ControllersLong;
 
-use HNnamespace\BaseController;
-
-class Name extends BaseController
+class Name
 {
     /**
      * Método constructor
      */
     function __construct()
     {
-        parent::__construct();
+        
     }
     
     function get()

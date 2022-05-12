@@ -8,6 +8,7 @@
 
 namespace HNnamespace;
 
+use HNova\Api\Api;
 use HNova\Api\Response;
 
 class NameGuard
@@ -29,7 +30,7 @@ class NameGuard
             }else{
 
                 // Retornameos un Response para negar el acceso.
-                Response::SetHttpResponseCode(401); // Código de estado para usuario no logeados
+                Api::response()->httpResponseCode(401);
                 return "No access";
             }
         };
