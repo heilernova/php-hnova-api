@@ -48,6 +48,8 @@ class Database
             }else if ($data->type == "postgresql"){
                 $dns = "pgsql:host=$host; dbname=$db";
                 $this->charField = '"';
+            }else{
+                throw new ApiException(['No de idefica el tipo de base de datos: ' . $data->type]);
             }
 
             $this->_pdo = new PDO($dns, $username, $password);
@@ -78,7 +80,7 @@ class Database
         return $this->_pdo->commit();
     }
 
-    public function query($sql, $params = null):?PDOStatement{
+    public function query($sql,array $params = null):?PDOStatement{
 
         if ($sql != $this->_lastCommandSQL){
             try {
@@ -134,7 +136,8 @@ class Database
         $params = (array)$params;
         $values = '';
         foreach ($params as $key=>$value){
-            $values .= ", $key=:$key";
+            $filed = $this->charField . $key . $this->charField;
+            $values .= ", $filed=:$key";
         }
 
         $values = ltrim($values, ', ');
@@ -143,26 +146,47 @@ class Database
         }
 
         if (isset($condition[1])) {
-
-            $condition[0] = str_replace(':', ':cnd_', $condition[0]);
-
             foreach ($condition[1] as $key => $value){
                 $params["cnd_$key"] = $value;
             }
         };
 
-        return $this->query("UPDATE $table SET $values WHERE " . $condition[0], $params);
+        $w = $this->formatSqlWhere($condition[0]);
+        return $this->query("UPDATE $table SET $values WHERE $w", $params);
     }
 
     /**
      * Ejecutar un delete
      */
-    public function delete(array|string $condition, $table):PDOStatement{
+    public function delete(array|string $condition, string $table = null):PDOStatement{
         if (!$table) $table = ($this->defaultTable ?? '');
+        
         if (is_string($condition)){
             $condition = [$condition];
         }
+        $params = null;
+        
+        if (isset($condition[1])) {
+            $params = [];
+            foreach ($condition[1] as $key => $value){
+                $params["cnd_$key"] = $value;
+            }
+        };
 
-        return $this->query("DELETE FROM $table WHERE " . $condition[0], $condition[1] ?? null);
+        $w = $this->formatSqlWhere($condition[0]);
+        return $this->query("DELETE FROM $table WHERE $w", $params);
+    }
+
+    private function formatSqlWhere(string $condition):string{
+        
+        $w = str_replace('  ', ' ', $condition);
+        $w = str_replace([' = ', '= ', ' ='], '=', $w);
+        $w = str_replace(':', ':cnd_', $w);
+
+        $w = preg_replace_callback('/\w+=/', function($match){
+            return ( $this->charField . trim(($match[0]), "\t\n\r\0\x0B=") . $this->charField . '=');
+        }, $w);
+
+        return $w;
     }
 }
