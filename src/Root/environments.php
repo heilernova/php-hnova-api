@@ -37,7 +37,7 @@ try {
         'response'=>    (object)[
             'code'          => 200,
             'headers'       => ['nv-data'=>''],
-            'message'       => ['title'=>null, 'content'=>[]],
+            'message'       => (object)['content'=>[]],
             'contentType'   => 'json',
             'file'          => null,
             'body'          => ''

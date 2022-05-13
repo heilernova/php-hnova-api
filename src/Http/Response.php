@@ -10,18 +10,16 @@ namespace HNova\Api\Http;
 
 class Response
 {
+
+    public function __construct(
+        public Message $message = new Message()
+    ){}
+
     /**
      * Establece el código HTTP de estado
      */
     public function httpResponseCode(int $code):void{
         $_ENV['api-rest']->response->code = $code;
-    }
-
-    /**
-     * Mensaje de la API
-     */
-    public function message():object{
-        return $_ENV['api-http-response']->message;
     }
 
     /**

@@ -98,15 +98,26 @@ class ApiResponse
         }
 
         if ($content_type) header("Content-Type: $content_type");
+        $nv_data = [
+            'API' => 'test'
+        ];
+
+        // Agremago el mensaje si lo hay
+        if ($_ENV['api-rest']->response->message->content){
+            $nv_data['message'] = $_ENV['api-rest']->response->message;
+        }
+
+        // Agregamos la información del header nv-data
+        $headers['nv-data'] = json_encode($nv_data);
 
         // We list the headers to exposed to clients
         $expose_headers = '';
         foreach ($headers as $key => $value){
             header("$key: $value");
-            $expose_headers .= ", $value";
+            $expose_headers .= ", $key";
         }
 
-        $expose_headers = ltrim($value, ', ');
+        $expose_headers = ltrim($expose_headers, ', ');
         header("Access-Control-Expose-Headers: $expose_headers");
 
         http_response_code($code);
