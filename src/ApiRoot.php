@@ -172,6 +172,10 @@ class ApiRoot{
                 $route->methods[$http_method]->method =  $http_method;
                 $route->methods[$http_method]->params =  $route->params;
 
+                if ($http_method == "PUT"){
+                    require __DIR__ . '/Http/form-data-put.php';
+                }
+
                 return self::routeCallAction($route->methods[$http_method]);
             }else{
                 Api::response()->httpResponseCode(405);
