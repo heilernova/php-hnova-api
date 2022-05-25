@@ -48,8 +48,8 @@ class Install
 
         Files::addFile("$dir/app.json", str_replace('\/','/', json_encode($api_config, 128)));
         Files::addFile("$dir/app.php", Templates::getIndex());
-        Files::addFile("$dir/Routes/.routes.php", "");
-        Files::addFile("$dir/Guards/AppGuard.php", "");
+        Files::addFile("$dir/Routes/.routes.php", Templates::getRoute());
+        Files::addFile("$dir/Guards/AppGuard.php", Templates::getGuard());
 
         if (!file_exists("$dir/Controllers")) mkdir("$dir/Controllers");
         if (!file_exists("$dir/Bin")) mkdir("$dir/Bin");
@@ -62,6 +62,11 @@ class Install
         Files::addFile('composer.json', str_replace('\/','/', json_encode($composer, 128)));
         Files::loadFiles();
 
-        Console::log("Fin ... ");
+        $dir = "php-hnova-api";
+        $line = "   URL de acceso :  ** http://localhost/$dir/www/ **";
+        Console::log(str_repeat('-', strlen($line)) . "----");
+        Console::log("$line");
+        Console::log(str_repeat('-', strlen($line)) . "----");
+        Console::log(" Ejecución finalizada correctamente ");
     }
 }

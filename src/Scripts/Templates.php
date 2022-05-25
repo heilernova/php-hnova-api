@@ -41,7 +41,7 @@ class Templates
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Controllers/Controller.php'));
     }
 
-    public static function getGuard($name = '', $namespace = "ApiRest"):string
+    public static function getGuard($name = 'App', $namespace = "App"):string
     {
         $searh = ['HNnamespace', 'Name'];
         $replace = [$namespace, $name];
