@@ -179,7 +179,7 @@ class ApiRoot{
                 return self::routeCallAction($route->methods[$http_method]);
             }else{
                 Api::response()->httpResponseCode(405);
-                return "not allowed";
+                return "method not allowed";
             }
         }else{
             // No existe la ruta
