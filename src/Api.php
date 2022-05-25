@@ -11,14 +11,14 @@ namespace HNova\Api;
 
 use HNova\Api\Http\Request;
 use HNova\Api\Http\Response;
-use HNova\Api\Routes\RouteActive;
+use HNova\Api\Routes\ActiveRoute;
 
 class Api
 {
     /**
      * Configuración de la ruta a la que accede.
      */
-    public static function config():RouteActive{
+    public static function config():ActiveRoute{
         return $_ENV['api-rest-objects']->route;
     }
     

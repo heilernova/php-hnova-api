@@ -9,12 +9,11 @@
  */
 namespace HNova\Api\Routes;
 
-use HNova\Api\Api;
 use HNova\Api\ApiException;
 use HNova\Api\ApiRoot;
 use HNova\Api\Db\Database;
 
-class RouteActive
+class ActiveRoute
 {
     /**
      * Retorna URL base de la ruta

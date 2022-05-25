@@ -12,7 +12,7 @@ use HNova\Api\ApiException;
 use HNova\Api\ApiResponse;
 use HNova\Api\Http\Request;
 use HNova\Api\Http\Response;
-use HNova\Api\Routes\RouteActive;
+use HNova\Api\Routes\ActiveRoute;
 use HNova\Api\Settings\ApiConfig;
 
 try {
@@ -48,7 +48,7 @@ try {
     $_ENV['api-rest-objects'] = (object)[
         'response' => new Response(),
         'request'  => new Request(),
-        'route'  => new RouteActive(),
+        'route'  => new ActiveRoute(),
         'config' => new ApiConfig()
     ];
     

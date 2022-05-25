@@ -13,8 +13,7 @@ class ApiConfig
 {
     public function __construct(
         public Databases $databases = new Databases(),
-        public Developers $developers = new Developers(),
-        public Routes $routes = new Routes()
+        public Developers $developers = new Developers()
     ){}
     
 
