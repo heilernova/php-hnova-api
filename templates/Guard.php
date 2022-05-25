@@ -6,10 +6,9 @@
  * todos los método deverar retorna un callable
  */
 
-namespace HNnamespace;
+namespace HNnamespace\Guards;
 
 use HNova\Api\Api;
-use HNova\Api\Response;
 
 class NameGuard
 {
