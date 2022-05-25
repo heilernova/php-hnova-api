@@ -33,9 +33,10 @@ class Database
      * Soporte para MySQl y PostgreSQl
      * @param object $dataConnection array associativo de la conecion
      */
-    public function __construct(object $data, string $table = null)
+    public function __construct(object|array $data, string $table = null)
     {
         try {
+            if (is_object($data)) $data = (object)$data;
             $dns = "";
             $username = $data->dataConnection->username;
             $password = $data->dataConnection->password;
@@ -51,6 +52,8 @@ class Database
             }else{
                 throw new ApiException(['No de idefica el tipo de base de datos: ' . $data->type]);
             }
+
+            if ($table) $this->defaultTable = $table;
 
             $this->_pdo = new PDO($dns, $username, $password);
             
@@ -73,6 +76,10 @@ class Database
         return $this->_errors;
     }
 
+    public function lastInsertId(string|null $name = null):string|false{
+        return $this->_pdo->lastInsertId($name);
+    }
+
     /**
      * Realiza un commit de los cambios
      */
@@ -80,7 +87,19 @@ class Database
         return $this->_pdo->commit();
     }
 
-    public function query($sql,array $params = null):?PDOStatement{
+    /**
+     * Inicia una transacción, para que los cambios se apliquen en la base de datos se deje ejecutar el commit
+     */
+    public function beginTransaction():bool{
+        return $this->_pdo->beginTransaction();
+    }
+
+    /**
+     * Ejecuta un consulta SQL en la base de datos
+     * @param string $slq Comando SQLa ejecutar
+     * @param array|null Array asosiativos
+     */
+    public function query(string $sql, array $params = null): PDOStatement|false{
 
         if ($sql != $this->_lastCommandSQL){
             try {
@@ -101,6 +120,7 @@ class Database
                     'errorCode' => $this->_statement->errorCode(),
                     'errorInfo' => $this->_statement->errorInfo()
                 ];
+                return false;
             }
         } catch (\Throwable $th) {
            
@@ -109,9 +129,11 @@ class Database
     }
 
     /**
-     * @param array|object Objeto o array asosiativo de los valores
+     * @param array|object Objeto o array asosiativo de los valores,  la key del valor debe
+     * hacer referencia al nombre del campo a insertar en la tabla.
+     * @param string|null Nombre de la tabla
      */
-    public function insert(object|array $params, string $table = null):PDOStatement{
+    public function insert(object|array $params, string $table = null): PDOStatement|false{
 
         if (!$table) $table = ($this->defaultTable ?? '');
         $fields = '';
@@ -123,13 +145,17 @@ class Database
         $fields = ltrim($fields, ', ');
         $values = ltrim($values, ', ');
 
-        return $this->query("INSERT INTO $table ($fields) VALUES($values)", $params);
+        return $this->query("INSERT INTO $table ($fields) VALUES($values)", (array)$params);
     }
 
     /**
      * Ejecuta un update de la base de datos
+     * @param object|array $params Objeto o array asociativo con los valores a actulizar, la key del valor debe
+     * hacer referencia al nombre del campo a insertar en la tabla.
+     * @param array|string $condition string de la condifiión o array con la condición y los parametros  ejemplo: [ 'id=:id', [ 'id'=>1 ] ]
+     * @param string|null Nombre de la tabla
      */
-    public function update(object|array $params, array|string $condition, string $table = null):PDOStatement {
+    public function update(object|array $params, array|string $condition, string $table = null): PDOStatement|false {
 
         if (!$table) $table = ($this->defaultTable ?? '');
 
@@ -152,13 +178,15 @@ class Database
         };
 
         $w = $this->formatSqlWhere($condition[0]);
-        return $this->query("UPDATE $table SET $values WHERE $w", $params);
+        return $this->query("UPDATE $table SET $values WHERE $w", (array)$params);
     }
 
     /**
      * Ejecutar un delete
+     * @param array|string $condition string de la condifiión o array con la condición y los parametros  ejemplo: [ 'id=:id', [ 'id'=>1 ] ]
+     * @param string|null Nombre de la tabla
      */
-    public function delete(array|string $condition, string $table = null):PDOStatement{
+    public function delete(array|string $condition, string $table = null): PDOStatement|false{ 
         if (!$table) $table = ($this->defaultTable ?? '');
         
         if (is_string($condition)){
