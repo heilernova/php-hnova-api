@@ -15,8 +15,33 @@ class Request
      * @return ?string Retorna el valor o null en caso de no encotrarse el header con el nombre
      */
     public function getHeader(string $name):?string{
-        $headers = apache_request_headers();
-        return $headers ? ($headers[$name] ?? null) : null ;
+        return $_ENV['api-rest']->request->headers[$name] ??  null ;
+    }
+
+    /**
+     * Retorna un array de los headers de la petición HTTP
+     * @return string[]
+     */
+    public function getHeaderAll():array{
+        return $_ENV['api-rest']->request->headers;
+    }
+
+    /**
+     * Retorna le tipo de contenido de la solicitud HTTP
+     */
+    public function getContentType():string{
+        return $_ENV['api-rest']->request->headers['Content-Type'] ?? '';
+    }
+
+    /**
+     * Retorna los datos del body deacuerdo con su formato de envio.
+     */
+    public function getData():array|object|string|int|float|null|bool{
+        return $_ENV['api-rest']->request->body;
+    }
+
+    public function getFiles():array{
+        return $_FILES;
     }
 
     /**

@@ -9,6 +9,7 @@
  */
 namespace HNova\Api;
 
+use HNova\Api\Http\HttpBody;
 use HNova\Api\Settings\ApiConfig;
 use ReflectionFunction;
 use ReflectionMethod;
@@ -172,10 +173,8 @@ class ApiRoot{
                 $route->methods[$http_method]->method =  $http_method;
                 $route->methods[$http_method]->params =  $route->params;
 
-                // Si la ruta es valida validamos el formData en coso de no ser método POST multipart/form-data
-                if (str_starts_with(Api::request()->getHeader('Content-Type'), 'multipart/form-data') && $http_method != 'POST' ){
-                    // require __DIR__ . '/Http/form-data-put.php';
-                }
+               // Cargamos el contendio del body
+               HttpBody::loadData();
 
                 return self::routeCallAction($route->methods[$http_method]);
             }else{

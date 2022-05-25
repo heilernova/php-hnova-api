@@ -32,7 +32,7 @@ try {
             'ip'        => \HNova\Api\Http\HttpFuns::getIp(),
             'platform'  => \HNova\Api\Http\HttpFuns::getPlatform(),
             'device'    => \HNova\Api\Http\HttpFuns::getDevice(),
-            'body'      => file_get_contents('php://input'),
+            'body'      => null,
         ],
         'response'=>    (object)[
             'code'          => 200,
