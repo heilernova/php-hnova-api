@@ -19,14 +19,16 @@ class ApiConfig
 
     public static function initConfig():Object{
         return (object)[
-            'name' => "API",
+            'name' => "Nombre del projecto",
             'timezone' => 'UTC',
             'user' => (object)[
                 'username'  => '$2y$04$A8dGLVylvwo/0eLebRIam.jJ6xLqfrnMKay2m1xB7cmptEYAyGp9.',
                 'password'  => '$2y$04$A8dGLVylvwo/0eLebRIam.jJ6xLqfrnMKay2m1xB7cmptEYAyGp9.',
                 'email'     => null
             ],
-            'developers' => [],
+            'developers' => [
+                (object)['name'=>'Nombre del desarollador', 'email'=>'correo electrónico']
+            ],
             'debug' => true,
             'databases' => (object)[
                 'test'  => (object)[
@@ -51,6 +53,10 @@ class ApiConfig
                 ]
             ]
         ];
+    }
+
+    public function authenticate(string $username, string $password): bool{
+        return password_verify($username,  $_ENV['api-rest']->config->user->username) && password_verify($password,  $_ENV['api-rest']->config->user->password);
     }
 
     public function getDir():string{

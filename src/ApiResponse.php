@@ -11,8 +11,9 @@ namespace HNova\Api;
 
 use Composer\IO\NullIO;
 use HNova\Api\Http\HttpFuns;
+use HNova\Api\Http\ResponseJson;
+use HNova\Api\Http\ResponseView;
 use SplFileInfo;
-use Throwable;
 
 class ApiResponse
 {
@@ -29,9 +30,10 @@ class ApiResponse
 
         $request = $_ENV['api-rest']->request;
         
-        if ($value  instanceof Throwable){
-            $_ENV['api-rest']->response->body = $_ENV['api-rest-exception']->getTextBody();
-            $_ENV['api-rest']->response->code = $_ENV['api-rest-exception']->getHttpResponseCode();
+        if ($value  instanceof ApiException){
+            // En caso de error lo registamos
+            $_ENV['api-rest']->response->body = $value;
+            $_ENV['api-rest']->response->code = $value->getHttpResponseCode();
 
             // Registramos error el
             $text = "[" . date('Y-m-d h:i:s', time()) . "]";
@@ -42,10 +44,10 @@ class ApiResponse
             $file_error =  fopen("$dir/bin/error.log", 'a');
             fwrite($file_error, "$text\n");
             fclose($file_error);
-
         }else{
             $_ENV['api-rest']->response->body = $value;
         }
+        
         $file_request = fopen("$dir/bin/request.log", 'a');
 
         $text = '['. $request->date . ']';
@@ -69,35 +71,8 @@ class ApiResponse
         $body         = $_ENV['api-rest']->response->body;
         $code         = $_ENV['api-rest']->response->code;
         $headers      = $_ENV['api-rest']->response->headers;
-        $content_type = "application/json, charset=UTF-8";
+        $content_type = "application/json; charset=UTF-8";
 
-        if ($file){
-            $file = new SplFileInfo($file);
-            $content_type = HttpFuns::getContentType($file->getExtension());
-
-            $content_file = file_get_contents($file['path']);
-
-            $body = $content_file ? $content_file : '';
-
-            // Delete the file
-            if ($file['autoDelete']){
-
-                unlink($file['path']);
-            }
-        }else{
-
-            if ($code >= 200 && $code < 300){
-                // encode the JSON format
-                $json = json_encode($body);
-                $body = $json ? $json : '';
-            }else{
-                $content_type = "text; charset=UTF-8";
-                // $content_type = null;
-                $body = is_string($body) ? $body : '';
-            }
-        }
-
-        if ($content_type) header("Content-Type: $content_type");
         $nv_data = [
             'API' => 'test'
         ];
@@ -122,7 +97,21 @@ class ApiResponse
 
         http_response_code($code);
 
-        echo $body;
+        // Definimos el contenido del body
+        if ($body instanceof ResponseView){
+            
+            $content_type = $body->getContentType();
+            $body->echo();
+
+        }elseif($body instanceof ApiException){
+            
+            echo $body->getTextBody();
+
+        }else{
+            echo json_encode($body);
+        }
+
+        if ($content_type) header("Content-Type: $content_type");
         exit();
     }
 }

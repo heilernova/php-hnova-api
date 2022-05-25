@@ -45,6 +45,9 @@ class ApiRoot{
             // Establecemos la URL
             $_ENV['api-rest']->request->url = trim($url, '/');
             
+            //Agregamos la ruta por default
+            require __DIR__ . '/ApiRoutesDefault.php';
+
             $result = self::routeExecute();
 
         } catch (ApiException $ex) {
@@ -66,6 +69,21 @@ class ApiRoot{
         $url = (string)$_ENV['api-rest']->request->url;
 
         $routes_config = (array)$_ENV['api-rest']->config->routes;
+
+        // Agregamos la conguracion de la rutas nv-panel
+        if (!array_key_exists('nv-panel', $routes_config)){
+            $routes_config['nv-panel'] = (object)[
+                'database'=> '',
+                'routes'=> __DIR__ . '/Panel/.routes.php',
+                'disable'=>false,
+                'cors'=>(object)[
+                    'origin'  =>  '*',
+                    'headers' => '*',
+                    'methods' => '*'
+                ]
+            ];
+        }
+
         $route_select = null;
         foreach ($routes_config as $key => $value){
             if (str_starts_with($url, $key)){
@@ -73,7 +91,7 @@ class ApiRoot{
                 $route_select = $value;
                 break;
             }
-        }
+        } //echo json_encode($routes_config); exit;
 
         if ($route_select == null){
             $route_select = $routes_config['./'];
@@ -103,7 +121,7 @@ class ApiRoot{
         
         $routes_file = str_replace('/', '-', ltrim($route_select->baseURL, './'));
 
-        require Api::getDir() . "/Routes/$routes_file.routes.php";
+        require $route_select->routes ?? Api::getDir() . "/Routes/$routes_file.routes.php";
 
         $rotes_valids = [];
 

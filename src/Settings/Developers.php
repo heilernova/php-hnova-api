@@ -10,5 +10,15 @@
 namespace HNova\Api\Settings;
 class Developers
 {
-    
+    public function getList():array{
+        return (array)$_ENV['api-rest']->config->developers;
+    }
+
+    public function remove(int $index):bool{
+        return true;
+    }
+
+    public function add($name, $email, $homepage): bool{
+        return true;
+    }
 }

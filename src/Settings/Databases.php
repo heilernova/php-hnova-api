@@ -37,6 +37,10 @@ class Databases
         }
     }
 
+    public function update():void{
+        
+    }
+
     /**
      * Retorna un array de las bases de datos.
      * @return DbInfo[]
