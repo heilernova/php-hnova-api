@@ -12,10 +12,9 @@ namespace HNova\Api\Settings;
 class ApiConfig
 {
     public function __construct(
-        public Databases $databases = new Databases(),
+        public ConfigDatabases $databases = new ConfigDatabases(),
         public Developers $developers = new Developers()
     ){}
-    
 
     public static function initConfig():Object{
         return (object)[
@@ -66,7 +65,7 @@ class ApiConfig
     public function getName():string{
         return $_ENV['api-rest']->config->name;
     }
-    
+
     public function setName(string $name):void{
         $_ENV['api-rest']->config->name = $name;
     }
@@ -90,5 +89,16 @@ class ApiConfig
      */
     public function isDebug():bool{
         return $_ENV['api-rest']->config->debug;
+    }
+
+    public static function salve():void{
+        $dir = $_ENV['app-src-dir'] . "/app.json";
+        
+        $file = fopen($dir, 'w');
+
+        $v = ['\/','\u00f3', '\u00e1', '\u00c1', '\u00d3', '\u00e9', '\u00c9'];
+        $r = ['/', 'ó', 'á', 'Á',  'Ó', 'é', 'É'];
+        fputs($file, str_replace($v, $r, json_encode($_ENV['api-rest']->config, JSON_PRETTY_PRINT) ) );
+        fclose($file);
     }
 }
