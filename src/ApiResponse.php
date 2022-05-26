@@ -93,25 +93,27 @@ class ApiResponse
         }
 
         $expose_headers = ltrim($expose_headers, ', ');
+        if ($content_type) header("Content-Type: $content_type");
         header("Access-Control-Expose-Headers: $expose_headers");
 
         http_response_code($code);
 
         // Definimos el contenido del body
         if ($body instanceof ResponseView){
-            
             $content_type = $body->getContentType();
+            header("Content-Type: $content_type");
             $body->echo();
 
         }elseif($body instanceof ApiException){
             
+            header("Content-Type: text");
             echo $body->getTextBody();
 
         }else{
+            header("Content-Type: application/json; charset=UTF-8");
             echo json_encode($body);
         }
 
-        if ($content_type) header("Content-Type: $content_type");
         exit();
     }
 }
