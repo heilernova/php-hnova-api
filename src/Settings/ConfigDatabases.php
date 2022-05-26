@@ -11,7 +11,7 @@ namespace HNova\Api\Settings;
 
 use HNova\Api\Settings\Db\DbInfo;
 
-class Databases
+class ConfigDatabases
 {
     public function add(string $name, string $type, array $dataConnection):void{
         $_ENV['api-rest']->config->databases->$name = (object)[
@@ -31,7 +31,7 @@ class Databases
 
         if (isset($_ENV['api-rest']->config->databases->$name)){
             $db = $_ENV['api-rest']->config->databases->$name;
-            return new DbInfo($name, $db->type, $db->dataConnection);
+            return new DbInfo($name, $db->type, $db->dataConnection, $db->descrption ?? '');
         }else{
             return null;
         }
@@ -50,7 +50,7 @@ class Databases
         $arr = [];
 
         foreach ($_ENV['api-rest']->config->databases as $key => $value){
-            $arr[] = new DbInfo($key, $value->type, $value->dataConnection);
+            $arr[] = new DbInfo($key, $value->type, $value->dataConnection, $value->description ?? '');
         }
 
         return $arr;

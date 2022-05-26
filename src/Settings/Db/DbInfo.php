@@ -6,6 +6,7 @@ class DbInfo{
     public function __construct(
         public string $name,
         public string $type,
-        public object $dataConnection
+        public object $dataConnection,
+        public string $description
     ){}
 }
