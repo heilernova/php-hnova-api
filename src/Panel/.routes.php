@@ -13,11 +13,24 @@ use HNova\Api\Panel\PanelGuard;
 use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
 
-Routes::get ('auth', [AuthController::class]);
+Routes::post ('auth', [AuthController::class]);
 
 // <<< Rutas de las base de datos >>>
-Routes::get('db', [DbController::class, 'get']);
+Routes::get     ('db', [DbController::class, 'get']);
+Routes::post    ('db', [DbController::class, 'post']);
+Routes::post    ('db/test-connection', [DbController::class, 'test']);
+Routes::put     ('db/:name', [DbController::class, 'put']);
+Routes::delete  ('db/:name', [DbController::class, 'delete']);
 
+###### RUTAS PAR VER LA OCNDIFURACION DE LAUTA #######
+Routes::get('routes', [RoutesController::class, 'get']);
+Routes::put('routes/:id', []);
+
+Routes::patch('routes/:id/disable', []);
+Routes::patch('routes/:id/enable', []);
+
+## Errores
+Routes::get('errors', [ErrorsController::class, 'get']);
 
 // Routes::add('db', Methods::Get, [DbController::class]);
 // Routes::add('db/{name:string}', Methods::Post, [DbController::class]);
