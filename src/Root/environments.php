@@ -75,6 +75,9 @@ try {
         }
     }
     
-} catch (\Throwable $th) {
-    throw new ApiResponse(['Error al establecer la variables de entorno'],$th);
+} catch (ApiException $ex){
+    throw $ex;
+}
+ catch (\Throwable $th) {
+    throw new ApiResponse(['Error al establecer la variables de entorno'], $th);
 }
