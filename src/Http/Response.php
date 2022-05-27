@@ -43,7 +43,9 @@ class Response
         $body = $this->_body;
 
         $api_data = [
-            'messge' => $this->_messages
+            'message' => [
+                'content'=>$this->_messages
+            ]
         ];
 
         $headers['nv-data'] = json_encode($api_data);
