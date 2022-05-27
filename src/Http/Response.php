@@ -63,6 +63,10 @@ class Response
                 break;
             case 'html':
                 $headers['Content-Type'] = "text/html; charset=UFT-8";
+            case 'php':
+                $headers['Content-Type'] = "text/html; charset=UFT-8";
+                require $body;
+                $body = null;
             default:
                 break;
         }

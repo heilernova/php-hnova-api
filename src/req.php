@@ -18,6 +18,10 @@ class req
         return $_ENV['api-rest']->request->body;
     }
 
+    public static function file():array{
+        return $_FILES;
+    }
+
     public static function method():string{
         return $_ENV['api-rest']->request->method;
     }

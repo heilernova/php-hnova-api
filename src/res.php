@@ -31,4 +31,8 @@ class res{
     public static function html(string $html_string):Response{
         return new Response($html_string,['type'=>'html']);
     }
+
+    public static function php(string $path):Response{
+        return new Response($path, ['type'=>'php']);
+    }
 }
