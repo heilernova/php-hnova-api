@@ -2,6 +2,9 @@
 
 namespace HNnamespace\ControllersLong;
 
+use HNova\Api\req;
+use \HNova\Api\res;
+
 class Name
 {
     /**
@@ -14,6 +17,6 @@ class Name
     
     function get()
     {
-        return "Hello world";
+        return res::json('Hola mundo');
     }
 }

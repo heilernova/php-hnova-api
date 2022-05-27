@@ -9,6 +9,8 @@
 namespace HNnamespace\Guards;
 
 use HNova\Api\Api;
+use HNova\Api\req;
+use HNova\Api\res;
 
 class NameGuard
 {
@@ -29,8 +31,7 @@ class NameGuard
             }else{
 
                 // Retornameos un Response para negar el acceso.
-                Api::response()->httpResponseCode(401);
-                return "No access";
+                return res::send('not access')->status(401);
             }
         };
     }
