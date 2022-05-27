@@ -14,6 +14,7 @@ use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
 
 Routes::post ('auth', [AuthController::class]);
+Routes::put  ('auth', [AuthController::class]);
 
 // <<< Rutas de las base de datos >>>
 Routes::get     ('db', [DbController::class, 'get']);

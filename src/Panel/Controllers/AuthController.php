@@ -12,6 +12,7 @@ namespace HNova\Api\Panel\Controllers;
 use HNova\Api\Api;
 use HNova\Api\ApiRoot;
 use HNova\Api\Panel\Panel;
+use HNova\Api\req;
 use HNova\Api\res;
 
 class AuthController
@@ -24,5 +25,16 @@ class AuthController
         }else{
             return res::json(null)->addMessage("Credenciales incorrectas");
         }
-    }   
+    }
+
+    function put(){
+        $data = req::body();
+        $_ENV['api-rest']->config->user = (object)[
+            'username' => password_hash($data->username, PASSWORD_DEFAULT, ['cos'=>5]),
+            'password' => password_hash($data->password, PASSWORD_DEFAULT, ['cos'=>5])
+        ];
+
+        ApiRoot::getConfig()->salve();
+        return res::json(true);
+    }
 }

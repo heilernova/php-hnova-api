@@ -225,7 +225,7 @@ class ApiRoot{
         }else{
             // Es un array o un string
             $controller_namespace = $action[0] ?? '';
-            $controller_method = $action[1] ?? $route->method;
+            $controller_method = $action[1] ?? strtolower($route->method);
 
             // Inicalizamos el controlador
             try {
