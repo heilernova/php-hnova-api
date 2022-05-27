@@ -110,8 +110,7 @@ class ApiRoot{
 
         if ($route_select->disable){
             // En caso de que el acceso a ruta se encuentre bloqueado.
-            Api::response()->httpResponseCode(503);
-            return "route disable - ";
+            return res::send("[ Route desaible ]")->status(503);
         }
         
         Api::config()->loadCORS();
@@ -196,13 +195,12 @@ class ApiRoot{
 
                 return self::routeCallAction($route->methods[$http_method]);
             }else{
-                Api::response()->httpResponseCode(405);
-                return "method not allowed";
+                
+                return res::send("method not allowed")->status(405);
             }
         }else{
-            // No existe la ruta
-            Api::response()->httpResponseCode(404);
-            return "not found";
+            // No existe la rutamethod not allowed
+            return res::send("not found")->status(404);
         }
     }
 
@@ -248,8 +246,7 @@ class ApiRoot{
         $route_num_params = count($route->params); // Número de parametros de la ruta
 
         if ($reflection_num_params_required > $route_num_params){
-            Api::response()->httpResponseCode(400);
-            return "incorret num params";
+            return res::send("incorrent num params")->status(400);
         }else{
 
             // Extraemos los parametso

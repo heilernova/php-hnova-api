@@ -14,6 +14,7 @@ use HNova\Api\ApiRoot;
 use HNova\Api\Db\Database;
 use HNova\Api\Funs;
 use HNova\Api\Panel\PanelBaseController;
+use HNova\Api\res;
 use HNova\Api\Response;
 use HNova\Api\Scripts\Files;
 use mysqli;
@@ -39,9 +40,9 @@ class DbController
             ApiRoot::getConfig()->salve();
             return true;
         }else{
-            Api::response()->httpResponseCode(400);
-            Api::response()->message->addContent('El nombre ya esta en uso');
-            return null;            
+            return res::json(null)
+            ->addMessage("El nombre ya esta en uso")
+            ->status(400);
         }
 
     }
@@ -54,8 +55,7 @@ class DbController
             ApiRoot::getConfig()->salve();
             return true;
         }else{
-            Api::response()->httpResponseCode(404);
-            return null;            
+            return res::json(null)->status(404);            
         }
     }
 
@@ -97,16 +97,14 @@ class DbController
             ApiRoot::getConfig()->salve();
             return true;
         }else{
-            Api::response()->httpResponseCode(404);
-            return null;
+            return res::json(null)->status(404);
         }
     }
 
     function test(){
         $data = Api::request()->getData();
-
         $db = new Database($data);
-        return true;
+        return res::json(true);
     }
 
 }

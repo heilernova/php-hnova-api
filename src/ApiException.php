@@ -32,13 +32,13 @@ class ApiException extends Exception
      * @param (string|string[])[] $messages_developer
      * @param Throwable $th exception del cath
      */
-    public function __construct(array $messages_developer, ?Throwable $th = null, string $text_body = null, private int $responeCode = 500)
+    public function __construct(array $messages_developer, ?Throwable $th = null, string $text_body = null, public int $responeCode = 500)
     {
         try {
             
             $this->messageDeveloper = $messages_developer;
             $this->textBody = $text_body ? $text_body : '[ERROR SERVER]';
-            Api::response()->httpResponseCode(1);
+
     
             parent::__construct('', 0, $th);
             if ($th){

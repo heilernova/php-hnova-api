@@ -18,7 +18,6 @@ class HttpBody{
     */
    public static function loadData(): void {
 
-      // echo json_encode(apache_request_headers()); exit;
       $content_type = Api::request()->getContentType();
 
       $content_type = explode(';', $content_type,2);

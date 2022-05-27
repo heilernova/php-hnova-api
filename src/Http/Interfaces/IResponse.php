@@ -7,16 +7,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace HNova\Api\Http;
+namespace HNova\Api\Http\Interfaces;
 
-use HNova\Api\ApiException;
+interface IResponse{
 
-class ResponseJson{
+    function code(int $code);
 
-    function __construct(private string $data)
-    { }
+    function addHeader(string $name, string $value);
 
-    function echo(): void {
-        echo json_encode($this->data);
-    }
+    function echo(): void;
 }

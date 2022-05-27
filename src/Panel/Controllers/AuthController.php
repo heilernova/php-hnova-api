@@ -12,6 +12,7 @@ namespace HNova\Api\Panel\Controllers;
 use HNova\Api\Api;
 use HNova\Api\ApiRoot;
 use HNova\Api\Panel\Panel;
+use HNova\Api\res;
 
 class AuthController
 {
@@ -19,10 +20,9 @@ class AuthController
 
         $data = Api::request()->getData();
         if (ApiRoot::getConfig()->authenticate($data->username, $data->password)){
-            return Panel::generateToken();
+            return res::json(Panel::generateToken());
         }else{
-            Api::response()->message->addContent('Credenciales incorrectas');
-            return null;
+            return res::json(null)->addMessage("Credenciales incorrectas");
         }
     }   
 }
