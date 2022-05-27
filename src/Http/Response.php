@@ -42,11 +42,13 @@ class Response
         $expose_headers = '';
         $body = $this->_body;
 
-        $api_data = [
-            'message' => [
+        $api_data = [];
+
+        if ($this->_messages){
+            $api_data['message'] = [
                 'content'=>$this->_messages
-            ]
-        ];
+            ];
+        }
 
         $headers['nv-data'] = json_encode($api_data);
         
