@@ -144,14 +144,16 @@ En este archivo entraremos el siguiente código.
 namespace App\Controllers;
 
 use HNova\Api\Routes;
+use HNova\Api\res;
+use HNova\Api\req;
 
 Routes::get("test", function(){
-  return "Hola mundo";
+  return res::json('Hola mundo');
 });
 
 // El signo de "?" define el parametro con opcional en la URL
 Routes::get("test/hello/:name?", function(string $name = ''){
-  return "Hola como estas $name";
+  return res::send("Hola como estas $name");
 });
 
 // Para hacer el llamdo a un cotrolador
@@ -175,6 +177,7 @@ Esta es un clase estatica como métodos que retorna `callable` "funciones" para 
 
 namespace App\Guards;
 
+use HNova\Api\res;
 use HNova\Api\Response;
 
 class AppGuard
@@ -196,8 +199,7 @@ class AppGuard
             }else{
 
                // Retornameos un Response para negar el acceso.
-                Response::SetHttpResponseCode(401); // Código de estado para usuario si acceso
-                return "No access";
+                return res::send('no access')->status(401);
             }
         };
     }
