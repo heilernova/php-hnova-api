@@ -16,6 +16,11 @@ use HNova\Api\res;
 use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
 
+# Ruta para la aplicación del Panel
+Routes::get('', function(){
+    return res::php(__DIR__.'/Html/index.php');
+});
+
 Routes::post ('auth', [AuthController::class]);
 Routes::put  ('auth', [AuthController::class]);
 

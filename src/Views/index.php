@@ -34,6 +34,9 @@
         align-items: center;
         justify-content: space-evenly;
     }
+    header .login{
+        cursor: pointer;
+    }
     .content{
         margin: 30px 0;
         display: flex;
@@ -84,8 +87,11 @@
         <h1>
             NOVA | CODE - API REST
         </h1>
-        <div>
-            <span class="material-icons">logout</span>
+        <div class="login">
+            
+            <a href="<?php echo $_SERVER['REDIRECT_URL'] . 'nv-panel'; ?>">
+                <span class="material-icons">logout</span>
+            </a>
         </div>
     </header>
     <div class="content">
