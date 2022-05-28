@@ -9,8 +9,10 @@
  */
 namespace HNova\Api\Panel\Controllers;
 
+use HNova\Api\Api;
 use HNova\Api\ApiLog;
 use HNova\Api\Panel\PanelGuard;
+use HNova\Api\res;
 use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
 
@@ -39,9 +41,9 @@ Routes::get('logs/request', function(){
     return ApiLog::getRequest();
 });
 
-// Routes::add('db', Methods::Get, [DbController::class]);
-// Routes::add('db/{name:string}', Methods::Post, [DbController::class]);
-// Routes::add('db/{name:string}', Methods::Put, [DbController::class]);
-// Routes::add('db/{name:string}', Methods::Delete, [DbController::class]);
-
-// Routes::add('db/{db:string}/table-info/{name:string}', Methods::Get, [DbTableController::class]);
+// Elimina todos los registros
+Routes::delete('logs/request', function(){
+    $dir = Api::getDir() . "/Bin/request.log";
+    if (file_exists($dir)) unlink($dir);
+    return res::json(true);
+});

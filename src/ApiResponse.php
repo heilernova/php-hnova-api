@@ -12,10 +12,6 @@ namespace HNova\Api;
 use Composer\IO\NullIO;
 use HNova\Api\Http\HttpFuns;
 use HNova\Api\Http\Response;
-use HNova\Api\Http\ResponseFile;
-use HNova\Api\Http\ResponseJson;
-use HNova\Api\Http\ResponseText;
-use HNova\Api\Http\ResponseView;
 use SplFileInfo;
 
 class ApiResponse
@@ -26,8 +22,7 @@ class ApiResponse
         // Regitramos la solicitud
         $dir = Api::getDir();
         if (!file_exists($dir . "/bin")) mkdir($dir . "/bin");
-        if (!file_exists($dir . "/bin/error.log")) fopen("$dir/bin/error.log", 'a');
-        if (!file_exists($dir . "/bin/request.log")) fopen("$dir/bin/request.log", 'a');
+
         if ($value instanceof ApiException){
             $this->value = res::send($value->getTextBody())->status($value->getHttpResponseCode());
         }
