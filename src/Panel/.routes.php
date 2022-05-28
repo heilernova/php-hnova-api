@@ -52,3 +52,16 @@ Routes::delete('logs/request', function(){
     if (file_exists($dir)) unlink($dir);
     return res::json(true);
 });
+
+# assents
+Routes::get('assets/:name', function(string $name){
+
+    $path = __DIR__ . "/Html/assets/$name";
+
+    if (file_exists($path)){
+        return res::file($path);
+    }else{
+        return res::send('not-found')->status(404);
+    }
+
+});
