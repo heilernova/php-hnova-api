@@ -8,6 +8,8 @@
  */
 namespace HNova\Api\Http;
 
+use SplFileInfo;
+
 class Response
 {
     private mixed $_body = null;
@@ -64,7 +66,12 @@ class Response
                 $body = json_encode($body);
                 break;
             case 'file':
-                $auto_delete = $this->config['auto-delete'] ?? true;
+                $auto_delete = $this->config['auto-delete'] ?? false;
+                $path = $body;
+                $file = new SplFileInfo($body);
+                $headers['Content-Type'] = HttpFuns::getContentType($file->getExtension());
+                $body = file_get_contents($path);
+                if ($auto_delete) unlink($path);
                 break;
             case 'html':
                 $headers['Content-Type'] = "text/html; charset=UFT-8";

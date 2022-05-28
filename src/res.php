@@ -24,8 +24,9 @@ class res{
         return new Response($value);
     }
 
-    public static function file(string $path, bool $auto_delete =  true){
-
+    public static function file(string $path, bool $auto_delete =  false):Response{
+        if (!file_exists($path)) throw new ApiException(['No es econtro el archivo para retornar por la API'], null, 'not found', 404);
+        return new Response($path, ['type'=>'file', 'auto-delete'=>$auto_delete]);
     }
 
     public static function html(string $html_string):Response{
