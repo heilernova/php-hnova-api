@@ -9,8 +9,6 @@
  */
 namespace HNova\Api;
 
-use Composer\IO\NullIO;
-use HNova\Api\Http\HttpFuns;
 use HNova\Api\Http\Response;
 use SplFileInfo;
 
@@ -40,7 +38,7 @@ class ApiResponse
         if ($res instanceof Response){
             $res->echo();
         }else{
-            //  Por default respondemos JSO
+            //  Por default respondemos JSON
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode($res);
         }
