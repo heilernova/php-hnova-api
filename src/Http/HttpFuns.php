@@ -111,6 +111,7 @@ class HttpFuns
             case 'jpg': return "image/$extension";
             case 'jpeg': return "image/$extension";
             case 'git': return "image/$extension";
+            case 'svg': return "image/svg+xml";
 
             case 'pdf': return 'application/pdf';
 
@@ -150,7 +151,7 @@ class HttpFuns
             
             case 'mdb': return "application/vnd.ms-access";
 
-            default: null;
+            default: return null;
         }
     }
 }
