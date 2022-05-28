@@ -66,6 +66,7 @@ class ApiRoot{
      * Buscar la configuración de la ruta.
      */
     private static function routeExecute():mixed{
+        date_default_timezone_set($_ENV['api-rest']->config->timezone ?? 'UTC');
         $url = (string)$_ENV['api-rest']->request->url;
 
         $routes_config = (array)$_ENV['api-rest']->config->routes;

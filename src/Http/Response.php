@@ -23,6 +23,7 @@ class Response
 
     public function status(int $code):Response{
         $this->_code = $code;
+        $_ENV['api-rest']->response->code = $code;
         return $this;
     }
 

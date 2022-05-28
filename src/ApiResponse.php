@@ -38,12 +38,7 @@ class ApiResponse
      */
     public function echo():never{
 
-        // $type         = $_ENV['api-rest']->response->contentType;
-        // $file         = $_ENV['api-rest']->response->file;
-        // $body         = $_ENV['api-rest']->response->body;
-        // $code         = $_ENV['api-rest']->response->code;
-        // $headers      = $_ENV['api-rest']->response->headers;
-        // $content_type = "application/json; charset=UTF-8";
+        // Registamos la soliciutad.
 
         $res = $this->value;
 
@@ -54,7 +49,7 @@ class ApiResponse
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode($res);
         }
-
+        ApiLog::request();
         exit();
     }
 }

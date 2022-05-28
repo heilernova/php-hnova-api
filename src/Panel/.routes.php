@@ -9,6 +9,7 @@
  */
 namespace HNova\Api\Panel\Controllers;
 
+use HNova\Api\ApiLog;
 use HNova\Api\Panel\PanelGuard;
 use HNova\Api\Routes;
 use HNova\Api\Routes\Methods;
@@ -32,6 +33,11 @@ Routes::patch('routes/:id/enable', []);
 
 ## Errores
 Routes::get('errors', [ErrorsController::class, 'get']);
+
+## Logs
+Routes::get('logs/request', function(){
+    return ApiLog::getRequest();
+});
 
 // Routes::add('db', Methods::Get, [DbController::class]);
 // Routes::add('db/{name:string}', Methods::Post, [DbController::class]);
