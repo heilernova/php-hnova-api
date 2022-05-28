@@ -37,13 +37,15 @@ class ApiConfig
                         'username' => 'root',
                         'password' => '',
                         'database' => 'test'
-                    ]
+                    ],
+                    'description' => ''
                 ]
             ],
             'routes' => (object)[
                 './' => (object)[
                     'database' => 'test',
                     'disable' => false,
+                    'description' => '',
                     'cors' => (object)[
                         'origin'  => null,
                         'headers' => null,
