@@ -1,8 +1,9 @@
 <?php
 namespace App\Controllers;
 
+use HNova\Api\res;
 use HNova\Api\Routes;
 
 Routes::get('test', function(){ 
-    return "Hola mundo"; 
+    return res::json("Hola mundo"); 
 });
