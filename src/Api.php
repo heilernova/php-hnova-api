@@ -21,7 +21,7 @@ class Api
     public static function config():ActiveRoute{
         return $_ENV['api-rest-objects']->route;
     }
-    
+
     /**
      * Retrona el directorio que aloga app.php
      */

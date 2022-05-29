@@ -10,7 +10,6 @@
 
 namespace HNova\Api\Utils;
 
-
 class Funs
 {
     /**
@@ -32,5 +31,4 @@ class Funs
     {
         return new DateFunctions($date);
     }
-
 }

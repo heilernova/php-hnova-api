@@ -23,7 +23,6 @@ class Templates
         return file_get_contents(self::$_dir . 'routes.php');
     }
 
-
     public static function getWWWIndex(string $rotue):string
     {
         return str_replace('ruote', "$rotue/app.php", file_get_contents(self::$_dir . 'www/index.php'));
@@ -47,7 +46,6 @@ class Templates
         $replace = [$namespace, $name];
         return str_replace($searh, $replace, file_get_contents(self::$_dir . 'Guard.php'));
     }
-
 
     public static function getModel($name, $namespace ,$namespace_long):string
     {

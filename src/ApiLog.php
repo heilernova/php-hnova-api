@@ -43,7 +43,6 @@ class ApiLog
 
     }
 
-
     public static function getRequest():array{
         $dir = Api::getDir() . "/Bin/request.log";
         $content = file_get_contents($dir);

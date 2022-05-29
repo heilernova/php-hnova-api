@@ -16,7 +16,6 @@ class Files
     /** @var object[] */
     private static array $_files = [];
 
-
     public static function addFile(string $path, string $content):void
     {
         self::$_files[] = (object)["path"=>$path, 'content'=>$content];

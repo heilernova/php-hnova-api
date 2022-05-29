@@ -22,9 +22,7 @@ class Script
     private static Event $_event;
     /** @var string[] */
     private static array $_args = [];
-
     private static ApiConfig $_apiConfig;
-    
 
     /**
      * Este escript solo es para testear en desarrollo.
@@ -119,18 +117,14 @@ class Script
                     }else{
                         Console::error("Se debe instalar la aplicación");
                     }
-            
                 }else{
                     Console::error("nv: '$arg' is not a nv command.");
                 }
-            }else{
-                
+            }else{ 
                 Console::log(" -- Comandos validos");
                 Console::log("g ");
                 Console::log("i ");
             }
-
-
         } catch (\Throwable $th) {
             Console::error("");
             Console::error("Error de ejecución");

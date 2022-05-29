@@ -21,7 +21,6 @@ use PDOStatement;
  * */
 class Database
 {
-
     private PDO $_pdo;
     private PDOStatement $_statement;
     private string $_lastCommandSQL = "";
@@ -56,7 +55,6 @@ class Database
             if ($table) $this->defaultTable = $table;
 
             $this->_pdo = new PDO($dns, $username, $password);
-            
         } catch (\Throwable $th) {
             throw new ApiException(['Error al inizializar la database', "dns: $dns\nusername: $username\npassword: $password"], $th);
         }
@@ -110,7 +108,6 @@ class Database
         }
 
         try {
-
             if ($this->_statement->execute($params)){
                 return $this->_statement;
             }else{
@@ -156,7 +153,6 @@ class Database
      * @param string|null Nombre de la tabla
      */
     public function update(object|array $params, array|string $condition, string $table = null): PDOStatement|false {
-
         if (!$table) $table = ($this->defaultTable ?? '');
 
         $params = (array)$params;

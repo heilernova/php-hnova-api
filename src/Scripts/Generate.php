@@ -17,7 +17,7 @@ class Generate
     public static function controller():void{
         $name = Script::getArgment();
         if ($name){
-    
+
             $name = trim($name, "/");
             $name_explode = explode('/', $name);
     
@@ -25,14 +25,14 @@ class Generate
             foreach ($name_explode as $value){
                 $name_tempo .= "/" . ucfirst($value);
             }
-    
+
             $name_explode = explode('-', $name_tempo);
-    
+
             $name_tempo = "";
             foreach ($name_explode as $value){
                 $name_tempo .= ucfirst($value);
             }
-    
+
             $name_tempo_1 =  ltrim(dirname($name_tempo),"/|.");
             
             $namespace_long = "";
@@ -40,11 +40,11 @@ class Generate
             if ($name_tempo_1){
                 $namespace_long = '\\' . str_replace('/', '\\', $name_tempo_1);
             }
-            
+
             $name_tempo = ltrim($name_tempo,"/|.") . "Controller";
 
             $path = Script::getConfig()->getDir() . "/Controllers/$name_tempo.php";
-            
+
             if (file_exists($path)){
                 Console::error("Comflito: el nombre del controlador ya esta en usuo");
             }else{
@@ -77,15 +77,15 @@ class Generate
         }
 
         $name_tempo_1 =  ltrim(dirname($name_tempo),"/|.");
-        
+
         $namespace_long = "";
 
         if ($name_tempo_1){
             $namespace_long = '\\' . str_replace('/', '\\', $name_tempo_1);
         }
-        
+
         $name_tempo = ltrim($name_tempo,"/|.") . "Model";
-  
+
         $name_tempo = Script::getConfig()->getDir() . "/Models/$name_tempo.php";
         if (file_exists($name_tempo)){
             Console::error("Comflito: el nombre del Modelo ya esta en uso.");
@@ -93,7 +93,7 @@ class Generate
         }
 
         Files::addFile($name_tempo, Templates::getModel(basename($name_tempo, '.php'), "App", $namespace_long));
-        
+
         Files::loadFiles();
     }
 
@@ -106,7 +106,6 @@ class Generate
         $name_route = strtolower(Script::getArgment());
 
         $name_file = str_replace('/', '-', $name_route);
-       
 
         $data = [
             'database'=>'name',

@@ -35,9 +35,7 @@ class ApiRoot{
      * @param string $url 
      */
     public static function run(string $url):ApiResponse{
-
         try {
-            
             // Cargamos la las variables de entorno
             require __DIR__.'/root/environments.php';
             // return new ApiResponse($url);
@@ -108,7 +106,6 @@ class ApiRoot{
         $_ENV['api-rest']->routes->routeActive = $route_select;
 
         /////  Cargamos la configuración de la ruta. /////
-
         if ($route_select->disable){
             // En caso de que el acceso a ruta se encuentre bloqueado.
             return res::send("[ Route desaible ]")->status(503);
@@ -167,7 +164,7 @@ class ApiRoot{
                     }
                 }
             }
-        
+
             // Validación final
             if ($valid &&  ($paramsRequiredNum + $paramsOptionalNum)  >= (count($url_items) - $key_resoucres)){
 

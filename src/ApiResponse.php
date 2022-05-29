@@ -16,7 +16,6 @@ class ApiResponse
 {
     public function __construct(private mixed $value)
     {
-
         // Regitramos la solicitud
         $dir = Api::getDir();
         if (!file_exists($dir . "/bin")) mkdir($dir . "/bin");
@@ -30,9 +29,7 @@ class ApiResponse
      * Imprimire las respuesta de la API y finaliza la ejecución
      */
     public function echo():never{
-
         // Registamos la soliciutad.
-
         $res = $this->value;
 
         if ($res instanceof Response){

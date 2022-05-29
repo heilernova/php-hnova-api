@@ -39,7 +39,6 @@ class ApiException extends Exception
             $this->messageDeveloper = $messages_developer;
             $this->textBody = $text_body ? $text_body : '[ERROR SERVER]';
 
-    
             parent::__construct('', 0, $th);
             if ($th){
                 $this->message = $th->getMessage();
@@ -96,7 +95,7 @@ class ApiException extends Exception
                 }
             }
         }
-        
+
         $text .= "\nMessage error:\n";
         $text .= "  " . $this->message . "\n\n";
         $text .= "Code: " . $this->code . "\n";

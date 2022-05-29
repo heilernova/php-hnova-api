@@ -119,7 +119,6 @@
                             <i class="material-icons">email</i>
                             <div><?php echo $elemnt->email ?? 'Sin correo'  ?></div>
                         </div>
-
                     </li>
                 <?php } ?>
             </ul>

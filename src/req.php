@@ -33,15 +33,16 @@ class req
     public static function ip():string{
         return $_ENV['api-rest']->request->ip;
     }
+
     public static function platform():string{   
         return $_ENV['api-rest']->request->platform;
     }
+
     public static function device():int{   
         return $_ENV['api-rest']->request->device;
     }
     
     public static function headers():array{
         return [];
-    }
-    
+    }    
 }

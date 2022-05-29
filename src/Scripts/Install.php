@@ -17,7 +17,6 @@ class Install
     {
         Console::log("Instalando paquetes");
         $dir = Script::getAppDir();
-        
 
         // Validamos que la instalación no se halla ejecutado
         if ($dir != "api"){
@@ -39,7 +38,6 @@ class Install
             }
         }
 
-    
         $api_config = ApiConfig::initConfig();
 
         // Archivo públicos

@@ -46,7 +46,6 @@ class ConfigDatabases
      * @return DbInfo[]
      */
     public function getAll():array{
-
         $arr = [];
 
         foreach ($_ENV['api-rest']->config->databases as $key => $value){

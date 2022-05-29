@@ -148,7 +148,7 @@ class HttpFuns
             case 'pptm': return "application/vnd.ms-powerpoint.presentation.macroEnabled.12";
             case 'potm': return "application/vnd.ms-powerpoint.template.macroEnabled.12";
             case 'ppsm': return "application/vnd.ms-powerpoint.slideshow.macroEnabled.12";
-            
+
             case 'mdb': return "application/vnd.ms-access";
 
             default: return null;

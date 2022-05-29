@@ -39,7 +39,6 @@ class HttpBody{
             $data = file_get_contents('php://input');
             break;
       }
-      
       $_ENV['api-rest']->request->body = $data;
    }
 

@@ -99,7 +99,6 @@ try {
                 $data[$name] = substr($body, 0, strlen($body) - 2);
             }
         }
-
     }
     return $data;
 } catch (\Throwable $th) {
