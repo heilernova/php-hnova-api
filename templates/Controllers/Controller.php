@@ -2,8 +2,7 @@
 
 namespace HNnamespace\ControllersLong;
 
-use HNova\Api\req;
-use \HNova\Api\res;
+use HNova\Api\{req, res};
 
 class Name
 {

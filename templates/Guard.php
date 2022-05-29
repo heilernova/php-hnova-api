@@ -8,9 +8,7 @@
 
 namespace HNnamespace\Guards;
 
-use HNova\Api\Api;
-use HNova\Api\req;
-use HNova\Api\res;
+use HNova\Api\{Api, req, res};
 
 class NameGuard
 {
