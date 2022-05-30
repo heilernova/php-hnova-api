@@ -16,8 +16,7 @@ class NameGuard
          * Guard is a function that returns null to give access to the system.
          * in case of returning a HNova\Api\Response, it will not be possible access the acction of the route
          *
-         * en este caso todas la ruta que implemento el el guard authenticate dependerar de que el
-         * randim_int sea igual a 1 para acceder al controladroa asosiado a la ruta. 
+         * In this case, all routes that implement guard::authenticate() deny access if the random_int function returns 2
          */
         return function(){
             if (random_int(1,2) == 1){

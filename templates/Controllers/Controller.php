@@ -16,6 +16,6 @@ class Name
     
     function get()
     {
-        return res::json('Hola mundo');
+        return res::json('Hello world');
     }
 }
