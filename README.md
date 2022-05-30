@@ -1,6 +1,6 @@
 # HNova - Api
 
-Librería de PHP para el desarrollo de apis
+Librería de PHP para el desarrollo de API's REST
 
 package de compsoser [Aquí](https://packagist.org/packages/hnova/api)
 
@@ -12,7 +12,7 @@ package de compsoser [Aquí](https://packagist.org/packages/hnova/api)
 * [Postman](https://www.postman.com) : Applicación para testear las rutas de la API, pude realizar la descarga [aquí](https://www.postman.com/downloads/)
 
 ## Recomendaciones
-En caso de utilizar [Visual Studio Code](https://code.visualstudio.com/), pude utilizar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
+En caso de utilizar [Visual Studio Code](https://code.visualstudio.com/), pude instalar las siguienstes extenciones para facilitar el desarrollo y la comprensión del código.
 * [Bracket Pair Colorizer 2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
 * [Material Icon Theme ](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
 * [PHP Intelephense](https://marketplace.visualstudio.com/items?itemName=bmewburn.vscode-intelephense-client)
@@ -23,7 +23,7 @@ Para instalar la librería en tu proyecto debe ejecutar el siguiente comando en 
 ```powershell
 composer require hnova/api dev-main
 ```
-Una vez terminada la ejecución del comando anterior se debe agregar los scripts al composer.json de su proyecto para acceder a los script de la libreria HNova/api.
+Una vez terminada la ejecución del comando anterior se debe agregar los scripts al composer.json de su proyecto para acceder a los script de la libreria HNova\A pi.
 
 Pegue el siguiente código el su archivo composer.json.
 ```json
@@ -39,7 +39,7 @@ Debería quedar com se muestra el la imgamen.
 ### Script disponibles
 
 * `composer nv install` o `composer nv i` => Crea los ficheros necesarios para el el funcionamiento de la API
-* `composer nv g c (name)` => Crea un controldor.
+* `composer nv g c (name)` => Crea un controlador.
 * `composer nv g m (name)` => Crea un modelo.
 * `composer nv g r (name)` => Crea una nueva ruta de acceso ejeml "admin/panel".
 
@@ -48,7 +48,7 @@ Ambos formatos son valitos "i" y "install", al ejecutar este comando creara la c
 
 Nota: En caso de la carpeta src este creada y tenga contenido no se ejecutara la instalación.
 
-Importante: Una vez ejecutado el script de debe actualar el autoload de composer ejecutando el comando `composer dump-autoload`
+Importante: Una vez ejecutado el script de debe actualizar el autoload de composer ejecutando el comando `composer dump-autoload`
 
 #### composer nv g c (name)
 Crea un controlador para ser accedito por la ruta. al ejecutar este comando creara un archivo con el nombre ingredado en caso de que el controlador ya se encuentre creado retornara un error informando que le nombre del controlador ya esta en uso
@@ -143,9 +143,7 @@ En este archivo entraremos el siguiente código.
  */
 namespace App\Controllers;
 
-use HNova\Api\Routes;
-use HNova\Api\res;
-use HNova\Api\req;
+use HNova\Api\{Routes, res, req};
 
 Routes::get("test", function(){
   return res::json('Hola mundo');
@@ -182,24 +180,23 @@ use HNova\Api\Response;
 
 class AppGuard
 {
-    public static function authenticate():callable
+   public static function authenticate():callable
     {
         /**
-         * el guard es un función que retunr null para dar acceso al sistema.
-         * en caso de retrona un Response no se podra accesder al controlador de la ruta.
+         * Guard is a function that returns null to give access to the system.
+         * in case of returning a HNova\Api\Response, it will not be possible access the acction of the route
          *
-         * en este caso todas la ruta que implemento el el guard authenticate dependerar de que el
-         * randim_int sea igual a 1 para acceder al controlador asignado a la ruta. 
+         * In this case, all routes that implement guard::authenticate() deny access if the random_int function returns 2
          */
         return function(){
             if (random_int(1,2) == 1){
 
-                // Retornamos null para que dar acceso.
+                // We return null to give access
                 return null;
             }else{
 
-               // Retornameos un Response para negar el acceso.
-                return res::send('no access')->status(401);
+                // We return a HNova\Api\Response to deny access
+                return res::send('access denied')->status(401);
             }
         };
     }
@@ -223,6 +220,12 @@ Retorna un objeto con la configuración de la ruta en ejecución
 Retorna un objeto con información de la dela solicitud HTTP del cliente
 #### Api::response()
 Retorna un objeto para configurar la respuesta a la solicitud HTTP
+
+#### Clase res
+`HNova\Api\res` clase estatica utilizada para retorna los resultados de las rutas
+
+#### Clase req
+`HNova\Api\req` clase estatica utilizada para obtener datos de la las request.
 
 ### Database
 `HNova\Api\Database`, Clase para ejecutar consulta SQL en la base de datos cuenta con fucniones de ayuda par afacilitar a ejecutar consultas preparadas.
