@@ -46,6 +46,7 @@ class Install
 
         Files::addFile("$dir/app.json", str_replace('\/','/', json_encode($api_config, 128)));
         Files::addFile("$dir/app.php", Templates::getIndex());
+        Files::addFile("$dir/.gitignore", '/Bin/');
         Files::addFile("$dir/Routes/.routes.php", Templates::getRoute());
         Files::addFile("$dir/Guards/AppGuard.php", Templates::getGuard());
 
