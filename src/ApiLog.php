@@ -10,13 +10,11 @@
  */
 namespace HNova\Api;
 
-use DateTime;
-
 class ApiLog
 {
-    public static function request():void{
+    public static function addRequest():void{
         $dir = Api::getDir() . "/Bin/request.log";
-        $file = fopen($dir, 'a  ');
+        $file = fopen($dir, 'a');
 
         $date = date('Y-m-d H:i:s P', time());
         $ip =  str_pad(req::ip(), 15) ;
@@ -39,24 +37,72 @@ class ApiLog
         fclose($file);
     }
 
-    public static function error():void{
+    public static function addError(ApiException $exe):void{
+        $dir = Api::getDir() . "/Bin/errors.log";
+        $file = fopen($dir, 'a');
 
+        $date = date('Y-m-d H:i:s P', time());
+
+        $json = json_encode([
+            'data' => date('Y-m-d H:i:s P', time()),
+            'ip'=> req::ip(),
+            'platform' => req::platform(),
+            'device' => req::device(),
+            'messageDeveloper' => $exe->getMessageDeveloper(),
+            'info' => [
+                'code' => $exe->getCode(),
+                'message' => $exe->getMessage(),
+                'file' => $exe->getFile(),
+                'line' => $exe->getLine(),
+                'trace' => $exe->getTrace(),
+            ]
+        ]);
+
+        fputs($file, "$json\n");
+        fclose($file);
     }
 
     public static function getRequest():array{
         $dir = Api::getDir() . "/Bin/request.log";
         $content = file_get_contents($dir);
-        $lines = explode("\n", $content);
 
         $logs = [];
 
-        foreach ($lines as $line){
-            $part = explode('{', $line);
-            if (isset($part[1])){
-                $logs[] = json_decode( '{' .$part[1]);
+        if ($content){
+            $lines = explode("\n", $content);
+            foreach ($lines as $line){
+                $part = explode('{', $line);
+                if (isset($part[1])){
+                    $logs[] = json_decode( '{' .$part[1]);
+                }
             }
         }
-
         return $logs;
+    }
+
+    public static function getErrors():array{
+        $dir = Api::getDir() . "/Bin/request.log";
+        $content = file_get_contents($dir);
+
+        $logs = [];
+        if ($content){
+            $lines = explode("\n", $content);
+            foreach ($lines as $line){
+                $logs[] = json_decode($line);
+            }
+        }
+        return $logs;
+    }
+
+    public static function clearRequest():void{
+        if (file_exists(Api::getDir() . "/Bin/request.log")){
+            unlink(Api::getDir() . "/Bin/request.log");
+        }
+    }
+
+    public static function clearErrors():void {
+        if (file_exists(Api::getDir() . "/Bin/errors.log")){
+            unlink(Api::getDir() . "/Bin/errors.log");
+        }
     }
 }

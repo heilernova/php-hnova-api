@@ -10,7 +10,6 @@
 namespace HNova\Api;
 
 use HNova\Api\Http\Response;
-use SplFileInfo;
 
 class ApiResponse
 {
@@ -21,6 +20,7 @@ class ApiResponse
         if (!file_exists($dir . "/bin")) mkdir($dir . "/bin");
 
         if ($value instanceof ApiException){
+            ApiLog::addError($value);
             $this->value = res::send($value->getTextBody())->status($value->getHttpResponseCode());
         }
     }
@@ -39,7 +39,7 @@ class ApiResponse
             header('Content-Type: application/json; charset=UTF-8');
             echo json_encode($res);
         }
-        ApiLog::request();
+        ApiLog::addRequest();
         exit();
     }
 }
