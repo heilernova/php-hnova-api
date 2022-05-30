@@ -1,13 +1,13 @@
 <?php
 /**
- * Script de entrada para el manejo de la API.
+ * Entry scriupt for handling the API
  */
 
 use HNova\Api\ApiRoot;
 
-require_once __DIR__.'./../vendor/autoload.php'; // Llamamos el autoload de composer.
+require_once __DIR__.'./../vendor/autoload.php'; // We call composer autoload
 
 /**
- * La ruta esta definida por el archivo .htaccess de la carpeta www
+ * The path is defined by the .htaccess file in the www
  */
 ApiRoot::run($_GET['api-rest-path'])->echo();

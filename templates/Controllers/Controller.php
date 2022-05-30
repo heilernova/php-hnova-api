@@ -7,7 +7,7 @@ use HNova\Api\{req, res};
 class Name
 {
     /**
-     * Método constructor
+     * Construct method
      */
     function __construct()
     {
