@@ -11,7 +11,7 @@
  */
 namespace HNova\Api\Scripts;
 
-class Console
+class console
 {
 
     public static function log(string $text):void
